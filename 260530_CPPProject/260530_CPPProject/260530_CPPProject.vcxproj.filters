@@ -13,5 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="SY">
+      <UniqueIdentifier>{f484400e-9cb4-43ce-a7d5-2a081481c60e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SY\소스 파일">
+      <UniqueIdentifier>{5037cfd2-bdc7-422d-a930-a6371e400e88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SY\헤더 파일">
+      <UniqueIdentifier>{6a24a808-9829-4ccd-9e96-275b6cde3852}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Console.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop.cpp">
+      <Filter>SY\소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Console.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop.h">
+      <Filter>SY\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
