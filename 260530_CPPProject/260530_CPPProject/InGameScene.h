@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "GameState.h"
+#include "Position.h";
 
 using std::string;
 

@@ -39,6 +39,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>HJ\Player</Filter>
     </ClCompile>
+    <ClCompile Include="InGameScene.cpp">
+      <Filter>SY\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -52,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>HJ\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameScene.h">
+      <Filter>SY\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>SY\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

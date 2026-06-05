@@ -17,7 +17,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 	}
 }
 
-bool TryPlayerMove(GameState& state)
+bool TryPlayerMove(GameState& state, Position)
 {
 	Player& player = state.player;
 }
