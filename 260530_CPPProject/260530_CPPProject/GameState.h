@@ -1,19 +1,35 @@
 #pragma once
 #include<Windows.h>
 
-constexpr int MAP_W = 21;
-constexpr int MAP_H = 20;
-constexpr int WIDTH = 160;
-constexpr int HEIGHT = 45;
+//Map
+constexpr int MAP_W = 31;
+constexpr int MAP_H = 30;
+enum class Block 
+{
+	EMPTY = 0, 
+	START = 1, 
+	BRICK = 2, 
+	LASER = 3
+};
 
-enum class Scene { NONE, TITLE, INGAME };
-enum class Block {EMPTY, START, BRICK, LASER};
+enum class Scene 
+{ 
+	NONE, 
+	TITLE, 
+	INGAME 
+};
+
+struct Player
+{
+
+};
 
 struct GameState
 {
-	Scene	prevScene = Scene::NONE;
-	Scene	curScene = Scene::INGAME;
-	bool	isRunning = true;
-	Block	map[MAP_H][MAP_W] = {};
+	Scene	  prevScene = Scene::NONE;
+	Scene	  curScene = Scene::INGAME;
+	bool	  isRunning = true;
+	Block	  map[MAP_H][MAP_W] = {};
+	Player	  player;
 	ULONGLONG curTime;
 };
