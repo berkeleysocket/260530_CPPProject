@@ -28,6 +28,9 @@
     <Filter Include="HJ\Player">
       <UniqueIdentifier>{ec5688d3-6849-4f99-8014-ca29f2a43f9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HJ\Clone">
+      <UniqueIdentifier>{b66a33cd-6922-4f3c-b7b2-412121c5dd5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp">
@@ -38,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>HJ\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Clone.cpp">
+      <Filter>HJ\Clone</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +57,18 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>HJ\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Dir.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Clone.h">
+      <Filter>HJ\Clone</Filter>
+    </ClInclude>
+    <ClInclude Include="IMoveable.h">
       <Filter>HJ\Player</Filter>
     </ClInclude>
   </ItemGroup>

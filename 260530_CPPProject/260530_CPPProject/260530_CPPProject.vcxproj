@@ -123,12 +123,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Clone.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Prop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Clone.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="Dir.h" />
+    <ClInclude Include="IMoveable.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Prop.h" />
