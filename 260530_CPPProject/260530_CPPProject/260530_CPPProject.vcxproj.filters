@@ -22,6 +22,12 @@
     <Filter Include="SY\헤더 파일">
       <UniqueIdentifier>{6a24a808-9829-4ccd-9e96-275b6cde3852}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HJ">
+      <UniqueIdentifier>{eaa53d3b-046a-4e71-8232-1487c6347999}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HJ\Player">
+      <UniqueIdentifier>{ec5688d3-6849-4f99-8014-ca29f2a43f9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp">
@@ -30,6 +36,9 @@
     <ClCompile Include="Prop.cpp">
       <Filter>SY\소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>HJ\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -37,6 +46,12 @@
     </ClInclude>
     <ClInclude Include="Prop.h">
       <Filter>SY\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>HJ\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
