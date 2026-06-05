@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <iomanip> // 조작자
 #include <string> // 내부적으로 메서드를 쓰고 싶으면 include
+#include"Color.h"
 #pragma comment(lib, "winmm.lib")
 
 using std::cout;
@@ -38,13 +39,7 @@ BOOL IsGotoXY(int x, int y);
 // c+++에서는 헤더쪽에 넣어야 함.
 void SetCursorVisible(bool visible, DWORD size = 1);
 int GetCursorX();
-enum class Color
-{
-    BLACK, BLUE, GREEN, SKYBLUE, RED,
-    VIOLET, YELLOW, LIGHT_GRAY, GRAY, LIGHT_BLUE,
-    LIGHT_GREEN, CYAN, LIGHT_RED, LIGHT_VIOLET,
-    LIGHT_YELLOW, WHITE, END
-};
+
 
 // 색상
 void SetColor(Color textColor = Color::WHITE, Color bgColor = Color::BLACK);
