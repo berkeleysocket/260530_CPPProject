@@ -16,6 +16,8 @@ void Player::Render()
 
 void Player::Move(Dir dir)
 {
+	prevPos = pos;
+
 	switch (dir)
 	{
 	case Dir::UP:
