@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="Clone.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="IMoveable.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Prop.cpp" />
   </ItemGroup>

@@ -45,6 +45,9 @@
     <ClCompile Include="Clone.cpp">
       <Filter>HJ\Clone</Filter>
     </ClCompile>
+    <ClCompile Include="IMoveable.cpp">
+      <Filter>HJ\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
