@@ -14,11 +14,10 @@ private:
 	Color bodyClr;
 
 public:
-	const Position GetPos()
+	const Position GetPos() const
 	{
 		return pos;
 	}
 	void Render();
 	void Move(Dir dir) override;
 };
-
