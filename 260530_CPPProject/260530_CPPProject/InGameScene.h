@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
+#include <algorithm>
 #include "GameState.h"
-#include "Position.h";
+#include "Position.h"
 
 using std::string;
 
 void LoadMap(GameState& state, const string gameMap[MAP_H]);
-bool TryPlayerMove(GameState& state);
+bool TryPlayerMove(GameState& state, Position dir);

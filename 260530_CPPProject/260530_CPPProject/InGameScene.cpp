@@ -17,9 +17,23 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 	}
 }
 
-bool TryPlayerMove(GameState& state, Position)
+bool TryPlayerMove(GameState& state, Position dir)
 {
 	Player& player = state.player;
+
+    if (dir == Position{ 0,0 })
+        return;
+
+    Position next =
+    {
+       std::clamp(player.pos.x + dir.x, 0, MAP_W - 1),
+       std::clamp(player.pos.y + dir.y, 0, MAP_H - 1)
+    };
+    if (!CanMove(state.map, next.x, next.y))
+        return;
+    // 최종 갱신
+    p.pos = next;
+    p.lastMoveTime = state.curTime;
 }
 
 

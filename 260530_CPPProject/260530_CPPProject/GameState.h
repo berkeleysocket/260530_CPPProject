@@ -1,5 +1,6 @@
 #pragma once
 #include<Windows.h>
+#include "Player.h"
 
 //Map
 constexpr int MAP_W = 31;
@@ -17,11 +18,6 @@ enum class Scene
 	NONE, 
 	TITLE, 
 	INGAME 
-};
-
-struct Player
-{
-
 };
 
 struct GameState
