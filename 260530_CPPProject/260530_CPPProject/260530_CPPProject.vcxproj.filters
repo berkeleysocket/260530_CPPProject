@@ -54,8 +54,11 @@
     <ClCompile Include="testHJMain.cpp">
       <Filter>HJ</Filter>
     </ClCompile>
+    <ClCompile Include="Blocks.cpp">
+      <Filter>SY\소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="InGameScene.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>SY\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,14 +86,14 @@
     <ClInclude Include="Player.h">
       <Filter>HJ\Actor\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Blocks.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Blocks.h">
+      <Filter>SY\헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="InGameScene.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>SY\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

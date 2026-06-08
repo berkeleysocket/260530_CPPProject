@@ -1,24 +1,14 @@
 #pragma once
 #include <Windows.h>
-#include <map>
+#include <vector>
 #include "Player.h"
 #include "Blocks.h"
 
-using std::map;
+using std::vector;
 
 //Map
 constexpr int MAP_W = 31;
 constexpr int MAP_H = 30;
-
-enum class BlockType
-{
-	EMPTY = 0,
-	START = 1,
-	BRICK = 2,
-	LASERCORE = 3,
-	LASER_VERTICAL = 4,
-	LASER_HORIZONTAL = 5
-};
 
 enum class Scene
 {
@@ -33,7 +23,7 @@ struct GameState
 	Scene	  curScene = Scene::INGAME;
 	bool	  isRunning = true;
 	BlockType map[MAP_H][MAP_W] = {};
-	Block blocks[MAP_H][MAP_W] = {};
+	vector<vector<Block&>> blocks;
 	Player	  player;
 	ULONGLONG curTime;
 };

@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="Clone.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="IMoveable.cpp" />
