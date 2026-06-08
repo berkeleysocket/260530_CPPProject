@@ -4,9 +4,9 @@
 class IMoveable
 {
 private :
-	int moveCooltime;
+	int moveCooltime = 2;
 public:
 	virtual ~IMoveable() = default;
-	virtual void Move(Dir dir);
-	int nextMoveTime;
+	virtual void Move(Dir dir) abstract;
+	int nextMoveTime = 0;
 };

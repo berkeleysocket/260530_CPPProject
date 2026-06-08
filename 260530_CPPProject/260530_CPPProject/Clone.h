@@ -4,10 +4,22 @@
 #include"IMoveable.h"
 #include"Position.h"
 
-const int CLONE_MOVE_COOLDOWN;
 class Clone:IMoveable
 {
+public:
+	Clone(Position pos)
+	{
+		this->pos = pos;
+	}
+
 private:
+	Position pos = { 0,0 };
+	Position prevPos = { 0,0 };
+
+	bool isActive;
+
+	Color bodyClr = Color::YELLOW;
+
 	std::queue<Dir> moveQ;
 
 public:

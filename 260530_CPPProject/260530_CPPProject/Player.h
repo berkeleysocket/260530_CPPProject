@@ -5,16 +5,22 @@
 
 class Player:public IMoveable
 {
+public:
+	Player(Color bodyClr, Position pos)
+	{
+		this->pos = pos;
+		this->bodyClr = bodyClr;
+	}
 private:
 	Position pos = { 0,0 };
 	Position prevPos = { 0,0 };
 
-	bool isActive;
+	bool isActive = true;
 
-	Color bodyClr;
+	Color bodyClr = Color::WHITE;
 
 public:
-	const Position GetPos()
+	const Position GetPos() const
 	{
 		return pos;
 	}

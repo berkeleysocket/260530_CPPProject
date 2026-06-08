@@ -48,6 +48,9 @@
     <ClCompile Include="IMoveable.cpp">
       <Filter>HJ\Player</Filter>
     </ClCompile>
+    <ClCompile Include="testHJMain.cpp">
+      <Filter>HJ</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -59,9 +62,6 @@
     <ClInclude Include="Position.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>HJ\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -72,6 +72,9 @@
       <Filter>HJ\Clone</Filter>
     </ClInclude>
     <ClInclude Include="IMoveable.h">
+      <Filter>HJ\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
       <Filter>HJ\Player</Filter>
     </ClInclude>
   </ItemGroup>
