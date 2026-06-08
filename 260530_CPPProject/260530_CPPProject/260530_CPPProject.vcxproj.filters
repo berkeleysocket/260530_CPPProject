@@ -25,11 +25,14 @@
     <Filter Include="HJ">
       <UniqueIdentifier>{eaa53d3b-046a-4e71-8232-1487c6347999}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HJ\Player">
-      <UniqueIdentifier>{ec5688d3-6849-4f99-8014-ca29f2a43f9d}</UniqueIdentifier>
+    <Filter Include="HJ\Actor">
+      <UniqueIdentifier>{a944b005-181a-493e-96b2-6b1394274c81}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HJ\Clone">
+    <Filter Include="HJ\Actor\Clone">
       <UniqueIdentifier>{b66a33cd-6922-4f3c-b7b2-412121c5dd5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HJ\Actor\Player">
+      <UniqueIdentifier>{ec5688d3-6849-4f99-8014-ca29f2a43f9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,16 +43,19 @@
       <Filter>SY\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>HJ\Player</Filter>
+      <Filter>HJ\Actor\Player</Filter>
     </ClCompile>
     <ClCompile Include="Clone.cpp">
-      <Filter>HJ\Clone</Filter>
+      <Filter>HJ\Actor\Clone</Filter>
     </ClCompile>
     <ClCompile Include="IMoveable.cpp">
-      <Filter>HJ\Player</Filter>
+      <Filter>HJ\Actor\Player</Filter>
     </ClCompile>
     <ClCompile Include="testHJMain.cpp">
       <Filter>HJ</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameScene.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,13 +75,22 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Clone.h">
-      <Filter>HJ\Clone</Filter>
+      <Filter>HJ\Actor\Clone</Filter>
     </ClInclude>
     <ClInclude Include="IMoveable.h">
-      <Filter>HJ\Player</Filter>
+      <Filter>HJ\Actor\Player</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>HJ\Player</Filter>
+      <Filter>HJ\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Blocks.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameScene.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
