@@ -27,4 +27,3 @@ public:
 	void Render();
 	void Move(Dir dir) override;
 };
-
