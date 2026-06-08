@@ -1,15 +1,35 @@
 #pragma once
-
-class Laser
+class Block
 {
 private:
 	Position position;
-	Position dir;
+	string image;
 public:
 	const Position GetPos() const
 	{
 		return position;
 	}
+	const string GetImage() const
+	{
+		return image;
+	}
+};
+
+class Empty : Block
+{
+
+};
+
+class Brick : Block
+{
+
+};
+
+class Laser : Block
+{
+private:
+	Position dir;
+
 	const Position GetDirection() const
 	{
 		return dir;
