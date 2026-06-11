@@ -8,7 +8,7 @@
 class Actor:public IMoveable
 {
 public:
-	Actor(Position pos = { 0,0 });
+	Actor(Position cursorPos = { 0,0 }, Position mapPos = { 0,0 });
 	virtual ~Actor() = default;
 
 	virtual void Tick(float deltaTime) abstract;
@@ -16,12 +16,18 @@ public:
 public:
 	virtual void Move(Dir _dir) abstract;
 public:
-	const Position& GetPos() const
+	const Position& GetCursorPos() const
 	{
-		return m_pos;
+		return m_cursorPos;
 	}
+	const Position& GetMapPos() const
+	{
+		return m_cursorPos;
+	}
+
 protected:
-	Position m_pos;
+	Position m_cursorPos;
 	Position m_prevPos;
+	Position m_mapPos;
 };
 

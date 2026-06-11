@@ -3,48 +3,56 @@
 
 void Clone::Render() const
 {
-	if (!m_isActive) return;
+	if (!isActive) return;
 	SetDefaultMode();
 	SetColor();
 	GotoXY(m_prevPos.x, m_prevPos.y);
 	cout << " ";
 
 	SetUniCodeMode();
-	SetColor(m_bodyClr);
-	GotoXY(m_pos.x, m_pos.y);
+	SetColor(bodyClr);
+	GotoXY(m_cursorPos.x, m_cursorPos.y);
 	wcout << L"😊";
 }
 
+void Clone::PushMoveData(Dir dir)
+{
+	moveQ.push(dir);
+}
 
 void Clone::Move(Dir dir)
 {
-	m_prevPos = m_pos;
+
+
+	m_prevPos = m_cursorPos;
 
 	switch (dir)
 	{
 	case Dir::UP:
-		m_pos.y-=2;
+		m_cursorPos.y--;
 		break;
 	case Dir::DOWN:
-		m_pos.y+=2;
+		m_cursorPos.y++;
 		break;
 	case Dir::LEFT:
-		m_pos.x-=2;
+		m_cursorPos.x--;
 		break;
 	case Dir::RIGHT:
-		m_pos.x+=2;
+		m_cursorPos.x++;
 		break;
 	}
 }
 
-void Clone::Tick(float deltaTime)
+void Clone::Tick(ULONGLONG curTick)
 {
-	nextMoveTime -= deltaTime;
-	if (nextMoveTime >= 0)
+	if (isActive = true);
+	if (nextMoveTime > curTick)
 		return;
 
-	nextMoveTime = moveCooltime;
-	MoveData data = m_moveRecord.front();
-	m_moveRecord.pop();
-	Move(data.dir);
+	if (moveQ.size() == 0)return;
+
+	Dir dir = moveQ.front();
+	moveQ.pop();
+	Move(dir);
+	nextMoveTime = moveCooltime + curTick;
 }
