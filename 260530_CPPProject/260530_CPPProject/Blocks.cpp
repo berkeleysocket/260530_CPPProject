@@ -29,7 +29,7 @@ Block GenerateBlock(BlockType type)
 	{
 		break;
 	}
+	}
 
 	return block;
-	}
 }

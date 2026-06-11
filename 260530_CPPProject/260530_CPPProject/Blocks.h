@@ -17,7 +17,7 @@ enum class BlockType
 
 class Block
 {
-private:
+protected:
 	//Position position;
 	string image;
 	Color color;
@@ -38,12 +38,22 @@ public:
 
 class Empty : public Block
 {
-
+public:
+	Empty()
+	{
+		image = "  ";
+		color = Color::WHITE;
+	}
 };
 
 class Brick : public Block
 {
-
+public:
+	Brick()
+	{
+		image = "бс";
+		color = Color::GRAY;
+	}
 };
 
 class LaserCore : public Block

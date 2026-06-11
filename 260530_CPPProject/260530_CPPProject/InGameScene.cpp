@@ -1,4 +1,5 @@
 #include "InGameScene.h"
+#include"Player.h"
 
 void LoadMap(GameState& state, const string gameMap[MAP_H])
 {
@@ -46,19 +47,19 @@ void DrawBlock(GameState& state, int x, int y)
 	{
 		break;
 	}
-	case BlockType::LASERCORE:
-	{
-		Position pos = (((LaserCore&)block).GetDir());
-		Position nPos = { pos.x, pos.y };
+	//case BlockType::LASERCORE:
+	//{
+	//	Position pos = (((LaserCore&)block).GetDir());
+	//	Position nPos = { pos.x, pos.y };
 
-		BlockType blockT = nPos.x != 0 ? BlockType::LASER_HORIZONTAL : BlockType::LASER_VERTICAL;
-		while (!IsEdge(nPos.x, nPos.y) && state.map[nPos.y][nPos.x] == BlockType::EMPTY)
-		{
-			state.map[nPos.y][nPos.x] = blockT;
-			nPos += pos;
-		}
-		break;
-	}
+	//	BlockType blockT = nPos.x != 0 ? BlockType::LASER_HORIZONTAL : BlockType::LASER_VERTICAL;
+	//	while (!IsEdge(nPos.x, nPos.y) && state.map[nPos.y][nPos.x] == BlockType::EMPTY)
+	//	{
+	//		state.map[nPos.y][nPos.x] = blockT;
+	//		nPos += pos;
+	//	}
+	//	break;
+	//}
 	}
 
 	SetColor(block.GetColor());
@@ -71,12 +72,11 @@ bool IsEdge(int x, int y)
 		x >= MAP_W || y >= MAP_H;
 }
 
-bool TryDrawPlayer(const GameState& state, int x, int y)
+bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetPos() == Position{x,y})
 	{
-		SetColor(Color::LIGHT_YELLOW);
-		cout << "¡×";
+		state.player.Render();
 		return true;
 	}
 	return false;

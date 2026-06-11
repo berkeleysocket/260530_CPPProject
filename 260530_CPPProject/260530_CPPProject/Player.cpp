@@ -12,6 +12,7 @@ void Player::Render()
 	SetColor(bodyClr);
 	GotoXY(pos.x, pos.y);
 	wcout << L"⁜";
+	SetDefaultMode();
 }
 
 void Player::Move(Dir dir)
