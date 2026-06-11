@@ -24,25 +24,33 @@ void Update(GameState& state)
 	{
 		dir = Dir::UP;
 		if (TryPlayerMove(state, dir))
+		{
 			state.player.Move(dir);
+		}
 	}
 	if (GetKeyDown('S'))
 	{
 		dir = Dir::DOWN;
 		if (TryPlayerMove(state, dir))
+		{
 			state.player.Move(dir);
+		}
 	}
 	if (GetKeyDown('A'))
 	{
 		dir = Dir::LEFT;
 		if (TryPlayerMove(state, dir))
+		{
 			state.player.Move(dir);
+		}
 	}
 	if (GetKeyDown('D'))
 	{
 		dir = Dir::RIGHT;
 		if (TryPlayerMove(state, dir))
+		{
 			state.player.Move(dir);
+		}
 	}
 }
 

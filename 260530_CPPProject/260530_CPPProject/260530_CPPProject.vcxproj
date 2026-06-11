@@ -125,10 +125,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="Clone.cpp" />
     <ClCompile Include="Console.cpp" />
-    <ClCompile Include="IMoveable.cpp" />
     <ClCompile Include="InGameScene.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -146,6 +146,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="Clone.h" />
     <ClInclude Include="Color.h" />

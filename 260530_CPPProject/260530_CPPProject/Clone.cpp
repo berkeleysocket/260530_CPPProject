@@ -11,7 +11,7 @@ void Clone::Render() const
 
 	SetUniCodeMode();
 	SetColor(bodyClr);
-	GotoXY(m_pos.x, m_pos.y);
+	GotoXY(m_cursorPos.x, m_cursorPos.y);
 	wcout << L"😊";
 }
 
@@ -24,21 +24,21 @@ void Clone::Move(Dir dir)
 {
 
 
-	m_prevPos = m_pos;
+	m_prevPos = m_cursorPos;
 
 	switch (dir)
 	{
 	case Dir::UP:
-		m_pos.y--;
+		m_cursorPos.y--;
 		break;
 	case Dir::DOWN:
-		m_pos.y++;
+		m_cursorPos.y++;
 		break;
 	case Dir::LEFT:
-		m_pos.x--;
+		m_cursorPos.x--;
 		break;
 	case Dir::RIGHT:
-		m_pos.x++;
+		m_cursorPos.x++;
 		break;
 	}
 }

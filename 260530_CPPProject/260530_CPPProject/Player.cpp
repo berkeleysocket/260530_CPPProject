@@ -7,12 +7,13 @@ void Player::Render() const
 		SetDefaultMode();
 		SetColor();
 		GotoXY(m_prevPos.x, m_prevPos.y);
-		cout << " ";
+		cout << "◆";
 
-		SetUniCodeMode();
+		//SetUniCodeMode();
 		SetColor(bodyClr);
-		GotoXY(m_pos.x, m_pos.y);
-		wcout << L"⁜";
+		GotoXY(m_cursorPos.x, m_cursorPos.y);
+		//wcout << L"⁜";
+		cout << "□";
 
 		clone.Render();
 }
@@ -20,21 +21,25 @@ void Player::Render() const
 
 void Player::Move(Dir dir)
 {
-	m_prevPos = m_pos;
+	m_prevPos = m_cursorPos;
 
 	switch (dir)
 	{
 	case Dir::UP:
-		m_pos.y--;
+		m_mapPos.y--;
+		m_cursorPos.y --;
 		break;
 	case Dir::DOWN:
-		m_pos.y++;
+		m_mapPos.y++;
+		m_cursorPos.y++;
 		break;
 	case Dir::LEFT:
-		m_pos.x--;
+		m_mapPos.x--;
+		m_cursorPos.x -= 2;
 		break;
 	case Dir::RIGHT:
-		m_pos.x++;
+		m_mapPos.x++;
+		m_cursorPos.x += 2;
 		break;
 	}
 

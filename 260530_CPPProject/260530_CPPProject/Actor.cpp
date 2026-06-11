@@ -1,8 +1,8 @@
-
-
 #include "Actor.h"
 
-Actor::Actor(Position pos)
+Actor::Actor(Position cursorPos, Position mapPos)
 {
-	m_pos = pos;
+	m_cursorPos = cursorPos;
+	m_prevPos = Position{ 0,0 };
+	m_mapPos = mapPos;
 }

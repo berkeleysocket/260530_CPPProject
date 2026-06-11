@@ -20,14 +20,13 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 
 void DrawMap(GameState& state)
 {
-	Position pos = state.player.GetPos();
+	Position pos = state.player.GetCursorPos();
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
-			if (TryDrawPlayer(state, x, y))
-				continue;
 			DrawBlock(state, x, y);
+			TryDrawPlayer(state, x, y);
 		}
 		cout << endl;
 	}
@@ -77,7 +76,7 @@ bool IsEdge(int x, int y)
 
 bool TryDrawPlayer(GameState& state, int x, int y)
 {
-	if (state.player.GetPos() == Position{ x, y } )
+	if (state.player.GetMapPos() == Position{ x, y } )
 	{
 		SetDefaultMode();
 		SetColor();
@@ -90,32 +89,36 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 
 bool TryPlayerMove(GameState& state, Dir dir)
 {
-	int x(0);
-	int y(0);
+	int dirX(0);
+	int dirY(0);
 
 	switch (dir)
 	{
 	case Dir::UP:
-		y--;
+		dirY--;
 		break;
 	case Dir::DOWN:
-		y++;
+		dirY++;
 		break;
 	case Dir::LEFT:
-		x--;
+		dirX--;
 		break;
 	case Dir::RIGHT:
-		x++;
+		dirX++;
 		break;
 	}
 
-	Player& player = state.player;
+	Position playerPos = state.player.GetMapPos();
 
     Position next =
     {
-       std::clamp(player.GetPos().x + x, 0, MAP_W - 1),
-       std::clamp(player.GetPos().y + y, 0, MAP_H - 1)
+       std::clamp(playerPos.x + dirX, 0, MAP_W - 1),
+       std::clamp(playerPos.y + dirY, 0, MAP_H - 1)
     };
+
+	if (IsEdge(next.x, next.y))
+		return false;
+
 	BlockType nextBlock = state.map[next.y][next.x];
 	if (nextBlock != BlockType::EMPTY)
 	{
