@@ -48,14 +48,14 @@
     <ClCompile Include="Clone.cpp">
       <Filter>HJ\Actor\Clone</Filter>
     </ClCompile>
-    <ClCompile Include="IMoveable.cpp">
-      <Filter>HJ\Actor\Player</Filter>
-    </ClCompile>
     <ClCompile Include="testHJMain.cpp">
       <Filter>HJ</Filter>
     </ClCompile>
     <ClCompile Include="InGameScene.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>HJ\Actor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +77,6 @@
     <ClInclude Include="Clone.h">
       <Filter>HJ\Actor\Clone</Filter>
     </ClInclude>
-    <ClInclude Include="IMoveable.h">
-      <Filter>HJ\Actor\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>HJ\Actor\Player</Filter>
     </ClInclude>
@@ -91,6 +88,12 @@
     </ClInclude>
     <ClInclude Include="InGameScene.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="IMoveable.h">
+      <Filter>HJ\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>HJ\Actor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

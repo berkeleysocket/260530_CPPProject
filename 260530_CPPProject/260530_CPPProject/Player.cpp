@@ -1,36 +1,47 @@
 ﻿#include "Player.h"
 #include "Console.h"
 
-void Player::Render()
-{
-	SetDefaultMode();
-	SetColor();
-	GotoXY(prevPos.x, prevPos.y);
-	cout << " ";
 
-	SetUniCodeMode();
-	SetColor(bodyClr);
-	GotoXY(pos.x, pos.y);
-	wcout << L"⁜";
+void Player::Render() const
+{
+		SetDefaultMode();
+		SetColor();
+		GotoXY(m_prevPos.x, m_prevPos.y);
+		cout << " ";
+
+		SetUniCodeMode();
+		SetColor(bodyClr);
+		GotoXY(m_pos.x, m_pos.y);
+		wcout << L"⁜";
+
+		clone.Render();
 }
+
 
 void Player::Move(Dir dir)
 {
-	prevPos = pos;
+	m_prevPos = m_pos;
 
 	switch (dir)
 	{
 	case Dir::UP:
-		pos.y--;
+		m_pos.y--;
 		break;
-	case Dir::DOWN: 
-		pos.y++;
+	case Dir::DOWN:
+		m_pos.y++;
 		break;
 	case Dir::LEFT:
-		pos.x--;
+		m_pos.x--;
 		break;
 	case Dir::RIGHT:
-		pos.x++;
+		m_pos.x++;
 		break;
 	}
+
+	clone.PushMoveData(dir);
+}
+
+void Player::Tick(ULONGLONG curTick)
+{
+	clone.Tick(curTick);
 }
