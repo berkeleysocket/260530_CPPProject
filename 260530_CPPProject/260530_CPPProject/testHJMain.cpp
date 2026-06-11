@@ -1,11 +1,6 @@
 #include"Player.h"
 #include"Console.h"
-
-
-struct GameState
-{
-	Player player;
-};
+#include"GameState.h"
 
 void Init();
 void Update(GameState& state);
@@ -14,7 +9,7 @@ void Render(GameState& state);
 
 int main()
 {
-	GameState state ;
+	GameState state;
 
 	Init();
 	while (true)

@@ -14,6 +14,7 @@ using std::endl;
 //map
 void LoadMap(GameState& state, const string gameMap[MAP_H]);
 void DrawMap(const GameState& state);
+void DrawBlock(GameState& state, int x, int y);
 bool IsEdge(int x, int y);
 
 //player

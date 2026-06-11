@@ -84,9 +84,6 @@ bool TryDrawPlayer(const GameState& state, int x, int y)
 
 bool TryPlayerMove(GameState& state, Position dir)
 {
-    if (dir == Position{ 0,0 })
-        return;
-	
 	Player& player = state.player;
 
     Position next =

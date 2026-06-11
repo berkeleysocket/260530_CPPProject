@@ -11,6 +11,7 @@ public:
 		this->pos = pos;
 		this->bodyClr = bodyClr;
 	}
+	Player() = default;
 private:
 	Position pos = { 0,0 };
 	Position prevPos = { 0,0 };

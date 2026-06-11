@@ -23,7 +23,7 @@ struct GameState
 	Scene	  curScene = Scene::INGAME;
 	bool	  isRunning = true;
 	BlockType map[MAP_H][MAP_W] = {};
-	vector<vector<Block&>> blocks;
+	vector<vector<Block>> blocks;
 	Player	  player;
 	ULONGLONG curTime;
 };
