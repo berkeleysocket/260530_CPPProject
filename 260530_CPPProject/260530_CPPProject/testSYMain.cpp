@@ -18,22 +18,31 @@ void Init(GameState& state)
 
 void Update(GameState& state)
 {
+	Dir dir;
 	UpdateInput();
 	if (GetKeyDown('W'))
 	{
-		state.player.Move(Dir::UP);
+		dir = Dir::UP;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
 	}
 	if (GetKeyDown('S'))
 	{
-		state.player.Move(Dir::DOWN);
+		dir = Dir::DOWN;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
 	}
 	if (GetKeyDown('A'))
 	{
-		state.player.Move(Dir::LEFT);
+		dir = Dir::LEFT;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
 	}
 	if (GetKeyDown('D'))
 	{
-		state.player.Move(Dir::RIGHT);
+		dir = Dir::RIGHT;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
 	}
 }
 

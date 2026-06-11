@@ -1,37 +1,36 @@
 ﻿#include "Player.h"
 #include "Console.h"
+#include "InGameScene.h"
 
 void Player::Render()
 {
 	SetDefaultMode();
 	SetColor();
-	GotoXY(prevPos.x, prevPos.y);
-	cout << " ";
+	GotoXY(m_prevPos.x, m_prevPos.y);
+	cout << "  ";
 
-	SetUniCodeMode();
 	SetColor(bodyClr);
-	GotoXY(pos.x, pos.y);
-	wcout << L"⁜";
-	SetDefaultMode();
+	GotoXY(m_pos.x, m_pos.y);
+	cout << "□";
 }
 
 void Player::Move(Dir dir)
 {
-	prevPos = pos;
+    m_prevPos = m_pos;
 
-	switch (dir)
-	{
-	case Dir::UP:
-		pos.y--;
-		break;
-	case Dir::DOWN: 
-		pos.y++;
-		break;
-	case Dir::LEFT:
-		pos.x--;
-		break;
-	case Dir::RIGHT:
-		pos.x++;
-		break;
-	}
+    switch (dir)
+    {
+    case Dir::UP:
+        m_pos.y -= 2;
+        break;
+    case Dir::DOWN:
+        m_pos.y += 2;
+        break;
+    case Dir::LEFT:
+        m_pos.x -= 2;
+        break;
+    case Dir::RIGHT:
+        m_pos.x += 2;
+        break;
+    }
 }

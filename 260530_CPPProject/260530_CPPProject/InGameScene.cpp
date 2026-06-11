@@ -20,6 +20,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 
 void DrawMap(GameState& state)
 {
+	Position pos = state.player.GetPos();
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
@@ -35,6 +36,9 @@ void DrawMap(GameState& state)
 
 void DrawBlock(GameState& state, int x, int y)
 {
+	SetDefaultMode();
+	SetColor();
+
 	Block& block = state.blocks[y][x];
 
 	switch (state.map[y][x])
@@ -75,17 +79,10 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetPos() == Position{ x, y } )
 	{
-		//state.player.Render();
 		SetDefaultMode();
 		SetColor();
-		//cout << " ";
+		state.player.Render();
 
-		//SetUniCodeMode();
-		SetColor(Color::GREEN);
-		//GotoXY(pos.x, pos.y);
-		//wcout << L"⁜";
-		//SetDefaultMode();
-		cout << "□";
 		return true;
 	}
 	return false;
@@ -119,7 +116,7 @@ bool TryPlayerMove(GameState& state, Dir dir)
        std::clamp(player.GetPos().x + x, 0, MAP_W - 1),
        std::clamp(player.GetPos().y + y, 0, MAP_H - 1)
     };
-	BlockType nextBlock = state.map[next.x][next.y];
+	BlockType nextBlock = state.map[next.y][next.x];
 	if (nextBlock != BlockType::EMPTY)
 	{
 		HandleBlockInteraction(state, nextBlock);

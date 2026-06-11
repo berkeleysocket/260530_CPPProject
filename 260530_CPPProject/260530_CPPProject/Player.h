@@ -8,13 +8,13 @@ class Player:public IMoveable
 public:
 	Player(Color bodyClr, Position pos)
 	{
-		this->pos = pos;
+		this->m_pos = pos;
 		this->bodyClr = bodyClr;
 	}
 	Player() = default;
 private:
-	Position pos = { 0,0 };
-	Position prevPos = { 0,0 };
+	Position m_pos = { 0,0 };
+	Position m_prevPos = { 0,0 };
 
 	bool isActive = true;
 
@@ -23,7 +23,7 @@ private:
 public:
 	const Position GetPos() const
 	{
-		return pos;
+		return m_pos;
 	}
 	void Render();
 	void Move(Dir dir) override;
