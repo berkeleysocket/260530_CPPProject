@@ -6,22 +6,20 @@
 class Clone:public Actor
 {
 public:
-	Clone() = default;
+	Clone(const std::queue<MoveData>& record)
+	{
+		m_moveRecord = record;
+	}
 
 private:
-
-	Color bodyClr = Color::YELLOW;
-
-	std::queue<Dir> moveQ;
+	Color m_bodyClr = Color::YELLOW;
+	bool m_isActive = false;
+	std::queue<MoveData> m_moveRecord;
 
 private:
 	void Move(Dir dir) override;
 public:
-public:
-	bool isActive = false;
-
 	void Render() const override;
-	void Tick(ULONGLONG curTick) override;
-	void PushMoveData(Dir dir);
+	void Tick(float deltaTime) override;
 };
 

@@ -10,11 +10,9 @@ void Player::Render() const
 		cout << " ";
 
 		SetUniCodeMode();
-		SetColor(bodyClr);
+		SetColor(m_bodyClr);
 		GotoXY(m_pos.x, m_pos.y);
-		wcout << L"⁜";
-
-		clone.Render();
+		wcout << L"□";
 }
 
 
@@ -25,23 +23,20 @@ void Player::Move(Dir dir)
 	switch (dir)
 	{
 	case Dir::UP:
-		m_pos.y--;
+		m_pos.y -= 2;
 		break;
 	case Dir::DOWN:
-		m_pos.y++;
+		m_pos.y += 2;
 		break;
 	case Dir::LEFT:
-		m_pos.x--;
+		m_pos.x -= 2;
 		break;
 	case Dir::RIGHT:
-		m_pos.x++;
+		m_pos.x += 2;
 		break;
 	}
-
-	clone.PushMoveData(dir);
 }
 
-void Player::Tick(ULONGLONG curTick)
+void Player::Tick(float deltaTime)
 {
-	clone.Tick(curTick);
 }

@@ -1,17 +1,25 @@
 #include"Player.h"
 #include"Console.h"
 #include"GameState.h"
+#include "MoveDataRecord.h"
 
-void Init();
-void Update(GameState& state);
-void Render(GameState& state);
+void Init(HJTestState& state);
+void Update(HJTestState& state);
+void Render(HJTestState& state);
+
+struct HJTestState
+{
+	Player player;
+	Clone* clone;
+	MoveDataRecord record;
+};
 
 
 int main()
 {
-	GameState state;
+	HJTestState state;
 
-	Init();
+	Init(state);
 	while (true)
 	{
 		Update(state);
@@ -19,12 +27,12 @@ int main()
 	}
 }
 
-void Init()
+void Init(HJTestState& state)
 {
 	SetCursorVisible(false);
 }
 
-void Update(GameState& state)
+void Update(HJTestState& state)
 {
 	UpdateInput();
 	if (GetKeyDown('W'))
@@ -43,9 +51,13 @@ void Update(GameState& state)
 	{
 		state.player.Move(Dir::RIGHT);
 	}
+	if(GetKeyDown('R'))
+	{
+		state.clone = new Clone(state.record.GetRecord());
+	}
 }
 
-void Render(GameState& state)
+void Render(HJTestState& state)
 {
 	state.player.Render();
 }
