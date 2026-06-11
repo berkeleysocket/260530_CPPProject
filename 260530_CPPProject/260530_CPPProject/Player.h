@@ -1,30 +1,22 @@
 #pragma once
-#include"Position.h"
 #include "Color.h"
-#include"IMoveable.h"
+#include"Actor.h"
+#include "Clone.h"
 
-class Player:public IMoveable
+class Player:public Actor
 {
 public:
-	Player(Color bodyClr, Position pos)
-	{
-		this->m_pos = pos;
-		this->bodyClr = bodyClr;
-	}
 	Player() = default;
 private:
-	Position m_pos = { 0,0 };
-	Position m_prevPos = { 0,0 };
-
 	bool isActive = true;
-
 	Color bodyClr = Color::WHITE;
-
+	Clone clone;
 public:
-	const Position GetPos() const
+	void TestGenerateClone()
 	{
-		return m_pos;
+		clone.isActive = true;
 	}
-	void Render();
-	void Move(Dir dir) override;
+	void Render() const	 override;
+	void Move(Dir dir)  override;
+	void Tick(ULONGLONG curTick) override;
 };

@@ -1,30 +1,27 @@
 #pragma once
 #include<queue>
 #include"Color.h"
-#include"IMoveable.h"
-#include"Position.h"
+#include"Actor.h"
 
-class Clone:IMoveable
+class Clone:public Actor
 {
 public:
-	Clone(Position pos)
-	{
-		this->pos = pos;
-	}
+	Clone() = default;
 
 private:
-	Position pos = { 0,0 };
-	Position prevPos = { 0,0 };
-
-	bool isActive;
 
 	Color bodyClr = Color::YELLOW;
 
 	std::queue<Dir> moveQ;
 
+private:
+	void Move(Dir dir) override;
 public:
-	int nextMoveTime;
+public:
+	bool isActive = false;
+
+	void Render() const override;
+	void Tick(ULONGLONG curTick) override;
 	void PushMoveData(Dir dir);
-	void Move(Dir dir)override;
 };
 
