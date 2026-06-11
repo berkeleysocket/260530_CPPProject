@@ -3,16 +3,17 @@
 #include"GameState.h"
 #include "MoveDataRecord.h"
 
-void Init(HJTestState& state);
-void Update(HJTestState& state);
-void Render(HJTestState& state);
-
 struct HJTestState
 {
 	Player player;
 	Clone* clone;
 	MoveDataRecord record;
 };
+
+void Init(HJTestState& state);
+void Update(HJTestState& state);
+void Render(HJTestState& state);
+
 
 
 int main()

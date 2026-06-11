@@ -3,23 +3,16 @@
 
 void Clone::Render() const
 {
-	if (!isActive) return;
 	SetDefaultMode();
 	SetColor();
 	GotoXY(m_prevPos.x, m_prevPos.y);
 	cout << " ";
 
 	SetUniCodeMode();
-	SetColor(bodyClr);
+	SetColor(m_bodyClr);
 	GotoXY(m_cursorPos.x, m_cursorPos.y);
 	wcout << L"😊";
 }
-
-void Clone::PushMoveData(Dir dir)
-{
-	moveQ.push(dir);
-}
-
 void Clone::Move(Dir dir)
 {
 
@@ -43,16 +36,7 @@ void Clone::Move(Dir dir)
 	}
 }
 
-void Clone::Tick(ULONGLONG curTick)
+void Clone::Tick(float deltaTime)
 {
-	if (isActive = true);
-	if (nextMoveTime > curTick)
-		return;
 
-	if (moveQ.size() == 0)return;
-
-	Dir dir = moveQ.front();
-	moveQ.pop();
-	Move(dir);
-	nextMoveTime = moveCooltime + curTick;
 }

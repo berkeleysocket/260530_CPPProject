@@ -10,12 +10,10 @@ void Player::Render() const
 		cout << "◆";
 
 		//SetUniCodeMode();
-		SetColor(bodyClr);
+		SetColor(m_bodyClr);
 		GotoXY(m_cursorPos.x, m_cursorPos.y);
 		//wcout << L"⁜";
 		cout << "□";
-
-		clone.Render();
 }
 
 
@@ -43,10 +41,8 @@ void Player::Move(Dir dir)
 		break;
 	}
 
-	clone.PushMoveData(dir);
 }
 
-void Player::Tick(ULONGLONG curTick)
+void Player::Tick(float deltaTime)
 {
-	clone.Tick(curTick);
 }
