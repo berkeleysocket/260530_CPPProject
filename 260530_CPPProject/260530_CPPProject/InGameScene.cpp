@@ -1,5 +1,4 @@
-#include "InGameScene.h"
-#include"Player.h"
+﻿#include "InGameScene.h"
 
 void LoadMap(GameState& state, const string gameMap[MAP_H])
 {
@@ -74,22 +73,51 @@ bool IsEdge(int x, int y)
 
 bool TryDrawPlayer(GameState& state, int x, int y)
 {
-	if (state.player.GetPos() == Position{x,y})
+	if (state.player.GetPos() == Position{ x, y } )
 	{
-		state.player.Render();
+		//state.player.Render();
+		SetDefaultMode();
+		SetColor();
+		//cout << " ";
+
+		//SetUniCodeMode();
+		SetColor(Color::GREEN);
+		//GotoXY(pos.x, pos.y);
+		//wcout << L"⁜";
+		//SetDefaultMode();
+		cout << "□";
 		return true;
 	}
 	return false;
 }
 
-bool TryPlayerMove(GameState& state, Position dir)
+bool TryPlayerMove(GameState& state, Dir dir)
 {
+	int x(0);
+	int y(0);
+
+	switch (dir)
+	{
+	case Dir::UP:
+		y--;
+		break;
+	case Dir::DOWN:
+		y++;
+		break;
+	case Dir::LEFT:
+		x--;
+		break;
+	case Dir::RIGHT:
+		x++;
+		break;
+	}
+
 	Player& player = state.player;
 
     Position next =
     {
-       std::clamp(player.GetPos().x + dir.x, 0, MAP_W - 1),
-       std::clamp(player.GetPos().y + dir.y, 0, MAP_H - 1)
+       std::clamp(player.GetPos().x + x, 0, MAP_W - 1),
+       std::clamp(player.GetPos().y + y, 0, MAP_H - 1)
     };
 	BlockType nextBlock = state.map[next.x][next.y];
 	if (nextBlock != BlockType::EMPTY)

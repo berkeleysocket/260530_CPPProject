@@ -6,6 +6,7 @@
 #include "Console.h"
 #include "GameState.h"
 #include "Position.h"
+#include "Dir.h";
 
 using std::string;
 using std::cout;
