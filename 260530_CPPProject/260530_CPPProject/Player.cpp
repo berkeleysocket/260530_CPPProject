@@ -7,7 +7,7 @@ void Player::Render() const
 		SetDefaultMode();
 		SetColor();
 		GotoXY(m_prevPos.x, m_prevPos.y);
-		cout << "◆";
+		cout << "  ";
 
 		//SetUniCodeMode();
 		SetColor(m_bodyClr);

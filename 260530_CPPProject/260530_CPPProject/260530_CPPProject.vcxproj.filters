@@ -66,6 +66,9 @@
     <ClCompile Include="Actor.cpp">
       <Filter>HJ\Actor</Filter>
     </ClCompile>
+    <ClCompile Include="MoveData.cpp">
+      <Filter>HJ</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -103,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>HJ\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveData.h">
+      <Filter>HJ</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveDataRecord.h">
+      <Filter>HJ</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
