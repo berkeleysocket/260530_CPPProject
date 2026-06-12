@@ -50,36 +50,22 @@ void DrawBlock(GameState& state, int x, int y)
 	{
 	case BlockType::EMPTY:
 	case BlockType::BRICK:
-	case BlockType::LASER_HORIZONTAL:
-	case BlockType::LASER_VERTICAL:
+	case BlockType::LASERBEAM_HORIZONTAL:
+	case BlockType::LASERBEAM_VERTICAL:
 	{
 		break;
 	}
-	case BlockType::LASERCORE:
+	case BlockType::LASERCORE_RED:
+	case BlockType::LASERCORE_BLUE:
 	{
-		Position dir = ((LaserCore*)block)->GetDir();
-		Position createLaserPos = { x + dir.x, y + dir.y };
-		//cout << createLaserPos.x << "," << createLaserPos.y;
-
-		BlockType castingLaserT = dir.x != 0 ? BlockType::LASER_HORIZONTAL : BlockType::LASER_VERTICAL;
-		while (!IsEdge(createLaserPos.x, createLaserPos.y) 
-			&& state.map[createLaserPos.y][createLaserPos.x] == BlockType::EMPTY)
-		{
-			state.map[createLaserPos.y][createLaserPos.x] = castingLaserT;
-			createLaserPos += dir;
-		}
+		LaserCore* laserCore = (LaserCore*)block;
+		laserCore-> Cast(state, x, y);
 		break;
 	}
 	}
 
-	SetColor((*block).GetColor());
-	cout << (*block).GetImage();
-}
-
-bool IsEdge(int x, int y)
-{
-	return x < 0 || y < 0 ||
-		x >= MAP_W || y >= MAP_H;
+	SetColor(block->GetColor());
+	cout << (block->GetImage());
 }
 
 bool TryDrawPlayer(GameState& state, int x, int y)
@@ -142,12 +128,13 @@ void HandleBlockInteraction(GameState& state, BlockType block)
 	{
 		break;
 	}
-	case BlockType::LASERCORE:
+	case BlockType::LASERCORE_RED:
+	case BlockType::LASERCORE_BLUE:
 	{
 		break;
 	}
-	case BlockType::LASER_HORIZONTAL:
-	case BlockType::LASER_VERTICAL:
+	case BlockType::LASERBEAM_HORIZONTAL:
+	case BlockType::LASERBEAM_VERTICAL:
 	{
 		break;
 	}

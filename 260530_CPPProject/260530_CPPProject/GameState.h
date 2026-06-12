@@ -3,7 +3,7 @@
 #include <vector>
 #include "Player.h"
 #include "Blocks.h"
-#include"Enums.h"
+#include "Enums.h"
 
 using std::vector;
 
@@ -12,8 +12,6 @@ constexpr int MAP_W = 21;
 constexpr int MAP_H = 20;
 constexpr int WIDTH = 160;
 constexpr int HEIGHT = 45;
-
-
 
 struct GameState
 {
@@ -51,3 +49,5 @@ struct MapBox
     "22222222222222222222"
 };
 };
+
+bool IsEdge(int x, int y);
