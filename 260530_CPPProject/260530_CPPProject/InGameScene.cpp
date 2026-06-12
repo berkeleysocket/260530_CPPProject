@@ -18,18 +18,27 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 	}
 }
 
+void InitInGame(GameState& state)
+{
+	SetConsoleSize(MAP_W * 3, MAP_H * 2);
+}
+
 void DrawMap(GameState& state)
 {
-	Position pos = state.player.GetCursorPos();
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
+			if (TryDrawPlayer(state, x, y))
+			{
+				//state.player.Render();
+				continue;
+			}
 			DrawBlock(state, x, y);
-			TryDrawPlayer(state, x, y);
 		}
 		cout << endl;
 	}
+
 	SetColor();
 }
 
@@ -78,10 +87,8 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
 	{
-		SetDefaultMode();
-		SetColor();
-		state.player.Render();
-
+		SetColor(Color::GREEN);
+		cout << "□";
 		return true;
 	}
 	return false;

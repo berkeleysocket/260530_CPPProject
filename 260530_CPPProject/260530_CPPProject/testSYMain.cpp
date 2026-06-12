@@ -65,8 +65,8 @@ int main()
 	MapBox maps;
 	GameState state;
 	Init(state);
+	InitInGame(state);
 	LoadMap(state, maps.gameMap1);
-	SetConsoleSize(MAP_W * 3, MAP_H * 2);
 
 	while (true)
 	{

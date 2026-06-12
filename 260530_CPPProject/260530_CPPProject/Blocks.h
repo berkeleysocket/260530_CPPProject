@@ -12,7 +12,9 @@ enum class BlockType
 	BRICK = 2,
 	LASERCORE = 3,
 	LASER_VERTICAL = 4,
-	LASER_HORIZONTAL = 5
+	LASER_HORIZONTAL = 5,
+	PORTAL_ONE = 6,
+	PORTAL_TWO = 7
 };
 
 class Block

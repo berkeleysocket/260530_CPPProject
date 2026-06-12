@@ -6,8 +6,11 @@ void Player::Render() const
 {
 		SetDefaultMode();
 		SetColor();
-		GotoXY(m_prevPos.x, m_prevPos.y);
-		cout << "◆";
+		if (!(m_prevPos == m_cursorPos))
+		{
+			GotoXY(m_prevPos.x, m_prevPos.y);
+			cout << "  ";
+		}
 
 		//SetUniCodeMode();
 		SetColor(m_bodyClr);
@@ -25,7 +28,7 @@ void Player::Move(Dir dir)
 	{
 	case Dir::UP:
 		m_mapPos.y--;
-		m_cursorPos.y --;
+		m_cursorPos.y--;
 		break;
 	case Dir::DOWN:
 		m_mapPos.y++;
