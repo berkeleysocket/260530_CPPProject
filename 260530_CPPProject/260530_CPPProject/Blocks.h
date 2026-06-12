@@ -71,7 +71,7 @@ public:
 		image = "¡Ø";
 		color = Color::LIGHT_GRAY;
 	}
-	LaserCore(Position castingDir)
+	LaserCore(Dir dir)
 	{
 		dir = castingDir;
 		image = "¡Ø";
@@ -103,5 +103,5 @@ public:
 	}
 };
 
-Block GenerateBlock(BlockType type);
+Block* GenerateBlock(BlockType type);
 

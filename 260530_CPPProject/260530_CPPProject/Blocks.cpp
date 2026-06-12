@@ -1,36 +1,39 @@
 #include "Blocks.h"
 
-Block GenerateBlock(BlockType type)
+Block* GenerateBlock(BlockType type)
 {
-	Block block;
+	Block* block = nullptr;
 
 	switch (type)
 	{
 	case BlockType::EMPTY:
 	{
-		block = Empty();
+		block = new Empty();
 		break;
 	}
 	case BlockType::BRICK:
 	{
-		block = Brick();
+		block = new Brick();
 		break;
 	}
 	case BlockType::LASERCORE:
 	{
-		block = LaserCore(Position{0,-1});
+		block = new LaserCore(Dir::DOWN);
 		break;
 	}
 	case BlockType::LASER_VERTICAL:
 	{
-		block = VerticalLaser();
+		block = new VerticalLaser();
 		break;
 	}
 	case BlockType::LASER_HORIZONTAL:
 	{
-		block = HorizontalLaser();
+		block = new HorizontalLaser();
 		break;
 	}
+	default:
+		block = new Empty();
+		break;
 	}
 
 	return block;

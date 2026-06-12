@@ -8,7 +8,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 		{
 			int data = gameMap[y][x] - '0';
 			state.map[y][x] = (BlockType)data;
-			state.blocks[y][x] = &GenerateBlock((BlockType)data);
+			state.blocks[y][x] = GenerateBlock((BlockType)data);
 			if (state.map[y][x] == BlockType::START)
 			{
 				//state.player.pos = { x,y };
@@ -57,17 +57,16 @@ void DrawBlock(GameState& state, int x, int y)
 	}
 	case BlockType::LASERCORE:
 	{
-		Position dir = ((LaserCore&)block).GetDir();
+		Position dir = ((LaserCore*)block)->GetDir();
 		Position createLaserPos = { x + dir.x, y + dir.y };
-
-		cout << "(" << createLaserPos.x << "," << createLaserPos.y << ")";
+		//cout << createLaserPos.x << "," << createLaserPos.y;
 
 		BlockType castingLaserT = dir.x != 0 ? BlockType::LASER_HORIZONTAL : BlockType::LASER_VERTICAL;
-		while (!IsEdge(createLaserPos.x, createLaserPos.y) && state.map[createLaserPos.y][createLaserPos.x] == BlockType::EMPTY)
+		while (!IsEdge(createLaserPos.x, createLaserPos.y) 
+			&& state.map[createLaserPos.y][createLaserPos.x] == BlockType::EMPTY)
 		{
 			state.map[createLaserPos.y][createLaserPos.x] = castingLaserT;
 			createLaserPos += dir;
-
 		}
 		break;
 	}
@@ -88,8 +87,6 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 	if (state.player.GetMapPos() == Position{ x, y } )
 	{
 		state.player.Render();
-		//SetColor(Color::GREEN);
-		//cout << "□";
 		return true;
 	}
 	return false;
