@@ -1,5 +1,9 @@
 #pragma once
-enum class Dir
-{
+enum class Menu { START, QUIT };
 
+enum class Scene
+{
+	NONE,
+	TITLE,
+	INGAME
 };

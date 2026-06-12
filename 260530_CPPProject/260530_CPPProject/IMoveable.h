@@ -4,7 +4,7 @@
 class IMoveable
 { 
 protected:
-	int moveCooltime = 2;
+	int moveCooltime = 1000;
 	int nextMoveTime = 0;
 public:
 	virtual ~IMoveable() = default;

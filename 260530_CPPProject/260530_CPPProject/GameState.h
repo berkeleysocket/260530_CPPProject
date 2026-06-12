@@ -3,6 +3,7 @@
 #include <vector>
 #include "Player.h"
 #include "Blocks.h"
+#include"Enums.h"
 
 using std::vector;
 
@@ -12,12 +13,7 @@ constexpr int MAP_H = 20;
 constexpr int WIDTH = 160;
 constexpr int HEIGHT = 45;
 
-enum class Scene
-{
-	NONE,
-	TITLE,
-	INGAME
-};
+
 
 struct GameState
 {

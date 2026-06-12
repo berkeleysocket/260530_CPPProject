@@ -24,7 +24,11 @@ public:
 	{
 		return m_mapPos;
 	}
-
+	void SetPos(const Position& cursorPos, const Position& mapPos)
+	{
+		m_cursorPos = cursorPos;
+		m_mapPos = mapPos;
+	}
 protected:
 	Position m_cursorPos;
 	Position m_prevPos;
