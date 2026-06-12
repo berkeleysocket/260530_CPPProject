@@ -7,8 +7,9 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 		for (int x = 0; x < MAP_W; ++x)
 		{
 			int data = gameMap[y][x] - '0';
-			state.map[y][x] = (BlockType)data;
-			state.blocks[y][x] = GenerateBlock((BlockType)data);
+			BlockType blockType = (BlockType)data;
+			state.map[y][x] = blockType;
+			state.blocks[y][x] = GenerateBlock(blockType);
 			if (state.map[y][x] == BlockType::START)
 			{
 				//state.player.pos = { x,y };
@@ -60,6 +61,11 @@ void DrawBlock(GameState& state, int x, int y)
 	{
 		LaserCore* laserCore = (LaserCore*)block;
 		laserCore-> Cast(state, x, y);
+		break;
+	}
+	case BlockType::PORTAL_RED:
+	case BlockType::PORTAL_BLUE:
+	{
 		break;
 	}
 	}
