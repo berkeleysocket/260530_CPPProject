@@ -128,14 +128,27 @@ void HandleBlockInteraction(GameState& state, BlockType block)
 	{
 		break;
 	}
-	case BlockType::LASERCORE_RED:
-	case BlockType::LASERCORE_BLUE:
-	{
-		break;
-	}
 	case BlockType::LASERBEAM_HORIZONTAL:
 	case BlockType::LASERBEAM_VERTICAL:
 	{
+		//플레이어 죽는 처리
+		ShakeConsoleWindow(25, 100, 25);
+		break;
+	}
+	case BlockType::BUTTON_RED:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				if (state.map[y][x] == BlockType::LASERCORE_RED)
+				{
+					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state, Dir::UP);
+					((LaserCore*)(state.blocks[y][x]))->Cast(state, x, y);
+				}
+			}
+		}
 		break;
 	}
 	}

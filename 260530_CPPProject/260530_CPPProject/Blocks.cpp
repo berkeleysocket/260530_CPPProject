@@ -35,6 +35,11 @@ Block* GenerateBlock(BlockType type)
 		block = new HorizontalLaser();
 		break;
 	}
+	case BlockType::BUTTON_RED:
+	{
+		block = new RedButton();
+		break;
+	}
 	default:
 		block = new Empty();
 		break;
@@ -86,7 +91,7 @@ LaserCore::LaserCore(Dir castingDir)
 
 void LaserCore::Cast(GameState& state, int x, int y)
 {
-	Position dir = DirToMapPosition(m_dir);
+	Position dir = DirToCursorPosition(m_dir);
 	Position createLaserPos = { x + dir.x, y + dir.y };
 	BlockType castingLaserT = dir.x != 0 ? BlockType::LASERBEAM_HORIZONTAL : BlockType::LASERBEAM_VERTICAL;
 
@@ -102,7 +107,31 @@ void LaserCore::Cast(GameState& state, int x, int y)
 
 void LaserCore::ChangeDirection(GameState& state, Dir dir)
 {
+	//m_dir = dir;
+	if (m_dir == Dir::UP)
+		m_dir = Dir::RIGHT;
+	else if (m_dir == Dir::RIGHT)
+		m_dir = Dir::DOWN;
+	else if (m_dir == Dir::DOWN)
+		m_dir = Dir::LEFT;
+	else if (m_dir == Dir::LEFT)
+		m_dir = Dir::UP;
 
+	Position pos { 0,0 };
+	int x(0);
+	int y(0);
+	BlockType empty = BlockType::EMPTY;
+
+	while (!m_beamPosQueue.empty())
+	{
+		pos = m_beamPosQueue.front();
+		m_beamPosQueue.pop();
+		x = pos.x;
+		y = pos.y;
+
+		state.map[y][x] = empty;
+		state.blocks[y][x] = GenerateBlock(empty);
+	}
 }
 
 const Dir LaserCore::GetBeamDirection() const
@@ -125,3 +154,10 @@ VerticalLaser::VerticalLaser()
 }
 #pragma endregion
 
+#pragma region Button
+RedButton::RedButton() 
+{
+	m_image = "£À";
+	m_color = Color::RED;
+}
+#pragma endregion

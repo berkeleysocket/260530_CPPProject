@@ -15,12 +15,17 @@ enum class BlockType
 	EMPTY = 0,
 	START = 1,
 	BRICK = 2,
+
 	LASERCORE_RED = 3,
 	LASERCORE_BLUE = 4,
 	LASERBEAM_VERTICAL = 5,
 	LASERBEAM_HORIZONTAL = 6,
+
 	PORTAL_RED = 7,
-	PORTAL_BLUE = 8
+	PORTAL_BLUE = 8,
+
+	BUTTON_RED = 9,
+	BUTTON_BLUE = 10,
 };
 
 class Block
@@ -69,6 +74,12 @@ class VerticalLaser : public Block
 {
 public:
 	VerticalLaser();
+};
+
+class RedButton : public Block
+{
+public:
+	RedButton();
 };
 
 Block* GenerateBlock(BlockType type);
