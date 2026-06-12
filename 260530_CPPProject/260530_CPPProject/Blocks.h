@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Position.h"
+#include "Dir.h"
 #include "Color.h"
 
 using std::string;
@@ -64,9 +65,41 @@ private:
 	Position dir;
 
 public:
+	LaserCore()
+	{
+		dir = {0,0};
+		image = "¡Ø";
+		color = Color::LIGHT_GRAY;
+	}
+	LaserCore(Position castingDir)
+	{
+		dir = castingDir;
+		image = "¡Ø";
+		color = Color::LIGHT_GRAY;
+	}
 	const Position GetDir() const
 	{
 		return dir;
+	}
+};
+
+class HorizontalLaser : public Block
+{
+public:
+	HorizontalLaser()
+	{
+		image = "¡æ";
+		color = Color::LIGHT_RED;
+	}
+};
+
+class VerticalLaser : public Block
+{
+public:
+	VerticalLaser()
+	{
+		image = "¡è";
+		color = Color::LIGHT_RED;
 	}
 };
 

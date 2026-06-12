@@ -129,6 +129,7 @@
     <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="Clone.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="InGameScene.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -152,6 +153,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Dir.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="IMoveable.h" />
     <ClInclude Include="InGameScene.h" />

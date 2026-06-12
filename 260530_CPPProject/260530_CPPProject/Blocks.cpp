@@ -18,15 +18,17 @@ Block GenerateBlock(BlockType type)
 	}
 	case BlockType::LASERCORE:
 	{
-		block = LaserCore();
+		block = LaserCore(Position{0,-1});
 		break;
 	}
 	case BlockType::LASER_VERTICAL:
 	{
+		block = VerticalLaser();
 		break;
 	}
 	case BlockType::LASER_HORIZONTAL:
 	{
+		block = HorizontalLaser();
 		break;
 	}
 	}

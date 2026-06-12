@@ -8,7 +8,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 		{
 			int data = gameMap[y][x] - '0';
 			state.map[y][x] = (BlockType)data;
-			state.blocks[y][x] = GenerateBlock((BlockType)data);
+			state.blocks[y][x] = &GenerateBlock((BlockType)data);
 			if (state.map[y][x] == BlockType::START)
 			{
 				//state.player.pos = { x,y };
@@ -30,15 +30,12 @@ void DrawMap(GameState& state)
 		for (int x = 0; x < MAP_W; ++x)
 		{
 			if (TryDrawPlayer(state, x, y))
-			{
-				//state.player.Render();
 				continue;
-			}
+
 			DrawBlock(state, x, y);
 		}
 		cout << endl;
 	}
-
 	SetColor();
 }
 
@@ -47,7 +44,7 @@ void DrawBlock(GameState& state, int x, int y)
 	SetDefaultMode();
 	SetColor();
 
-	Block& block = state.blocks[y][x];
+	Block* block = state.blocks[y][x];
 
 	switch (state.map[y][x])
 	{
@@ -58,23 +55,26 @@ void DrawBlock(GameState& state, int x, int y)
 	{
 		break;
 	}
-	//case BlockType::LASERCORE:
-	//{
-	//	Position pos = (((LaserCore&)block).GetDir());
-	//	Position nPos = { pos.x, pos.y };
+	case BlockType::LASERCORE:
+	{
+		Position dir = ((LaserCore&)block).GetDir();
+		Position createLaserPos = { x + dir.x, y + dir.y };
 
-	//	BlockType blockT = nPos.x != 0 ? BlockType::LASER_HORIZONTAL : BlockType::LASER_VERTICAL;
-	//	while (!IsEdge(nPos.x, nPos.y) && state.map[nPos.y][nPos.x] == BlockType::EMPTY)
-	//	{
-	//		state.map[nPos.y][nPos.x] = blockT;
-	//		nPos += pos;
-	//	}
-	//	break;
-	//}
+		cout << "(" << createLaserPos.x << "," << createLaserPos.y << ")";
+
+		BlockType castingLaserT = dir.x != 0 ? BlockType::LASER_HORIZONTAL : BlockType::LASER_VERTICAL;
+		while (!IsEdge(createLaserPos.x, createLaserPos.y) && state.map[createLaserPos.y][createLaserPos.x] == BlockType::EMPTY)
+		{
+			state.map[createLaserPos.y][createLaserPos.x] = castingLaserT;
+			createLaserPos += dir;
+
+		}
+		break;
+	}
 	}
 
-	SetColor(block.GetColor());
-	cout << block.GetImage();
+	SetColor((*block).GetColor());
+	cout << (*block).GetImage();
 }
 
 bool IsEdge(int x, int y)
@@ -87,8 +87,9 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
 	{
-		SetColor(Color::GREEN);
-		cout << "□";
+		state.player.Render();
+		//SetColor(Color::GREEN);
+		//cout << "□";
 		return true;
 	}
 	return false;
@@ -117,10 +118,10 @@ bool TryPlayerMove(GameState& state, Dir dir)
 
 	Position playerPos = state.player.GetMapPos();
 
-    Position next =
-    {
-       std::clamp(playerPos.x + dirX, 0, MAP_W - 1),
-       std::clamp(playerPos.y + dirY, 0, MAP_H - 1)
+	Position next =
+	{
+		playerPos.x + dirX,
+		playerPos.y + dirY
     };
 
 	if (IsEdge(next.x, next.y))

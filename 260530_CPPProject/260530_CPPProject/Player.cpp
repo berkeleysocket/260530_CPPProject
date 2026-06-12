@@ -6,11 +6,8 @@ void Player::Render() const
 {
 		SetDefaultMode();
 		SetColor();
-		if (!(m_prevPos == m_cursorPos))
-		{
-			GotoXY(m_prevPos.x, m_prevPos.y);
-			cout << "  ";
-		}
+		GotoXY(m_prevPos.x, m_prevPos.y);
+		cout << "  ";
 
 		//SetUniCodeMode();
 		SetColor(m_bodyClr);
