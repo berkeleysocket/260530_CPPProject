@@ -35,14 +35,15 @@ Block* GenerateBlock(BlockType type)
 		block = new HorizontalLaser();
 		break;
 	}
+	case BlockType::PORTAL_RED:
+	{
+		block = new RedPortal();
+		break;
+	}
 	case BlockType::BUTTON_RED:
 	{
 		block = new RedButton();
 		break;
-	}
-	case BlockType::PORTAL_RED:
-	{
-		block = new RedPortal();
 	}
 	default:
 		block = new Empty();
