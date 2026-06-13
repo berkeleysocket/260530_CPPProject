@@ -12,6 +12,10 @@ using std::string;
 using std::cout;
 using std::endl;
 
+
+//Init
+void InitInGame(GameState& state);
+
 //map
 void LoadMap(GameState& state, const string gameMap[MAP_H]);
 void DrawMap(GameState& state);

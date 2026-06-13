@@ -1,72 +1,86 @@
 #pragma once
 #include <string>
+#include <queue>
 #include "Position.h"
+#include "Dir.h"
 #include "Color.h"
 
 using std::string;
+using std::queue;
+
+struct GameState;
 
 enum class BlockType
 {
 	EMPTY = 0,
 	START = 1,
 	BRICK = 2,
-	LASERCORE = 3,
-	LASER_VERTICAL = 4,
-	LASER_HORIZONTAL = 5
+
+	LASERCORE_RED = 3,
+	LASERCORE_BLUE = 4,
+	LASERBEAM_VERTICAL = 5,
+	LASERBEAM_HORIZONTAL = 6,
+
+	PORTAL_RED = 7,
+	PORTAL_BLUE = 8,
+
+	BUTTON_RED = 9,
+	BUTTON_BLUE = 10,
 };
 
 class Block
 {
 protected:
-	//Position position;
-	string image;
-	Color color;
+	string m_image;
+	Color m_color;
 public:
-	//const Position GetPos() const
-	//{
-	//	return position;
-	//}
-	const string GetImage() const
-	{
-		return image;
-	}
-	const Color GetColor() const
-	{
-		return color;
-	}
+	const string GetImage() const;
+	const Color GetColor() const;
 };
 
 class Empty : public Block
 {
 public:
-	Empty()
-	{
-		image = "  ";
-		color = Color::WHITE;
-	}
+	Empty();
 };
 
 class Brick : public Block
 {
 public:
-	Brick()
-	{
-		image = "бс";
-		color = Color::GRAY;
-	}
+	Brick();
 };
 
 class LaserCore : public Block
 {
 private:
-	Position dir;
+	Dir m_dir;
+	queue<Position> m_beamPosQueue;
 
 public:
-	const Position GetDir() const
-	{
-		return dir;
-	}
+	LaserCore();
+	LaserCore(Dir castingDir);
+	void Cast(GameState& state, int x, int y);
+	void ChangeDirection(GameState& state, Dir dir);
+	const Dir GetBeamDirection() const;
 };
 
-Block GenerateBlock(BlockType type);
+class HorizontalLaser : public Block
+{
+public:
+	HorizontalLaser();
+};
+
+class VerticalLaser : public Block
+{
+public:
+	VerticalLaser();
+};
+
+class RedButton : public Block
+{
+public:
+	RedButton();
+};
+
+Block* GenerateBlock(BlockType type);
 

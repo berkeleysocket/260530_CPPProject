@@ -1,4 +1,6 @@
 #pragma once
+#include "Position.h"
+
 enum class Dir
 {
 	UP,
@@ -6,3 +8,6 @@ enum class Dir
 	LEFT,
 	RIGHT
 };
+
+Position DirToCursorPosition(Dir dir);
+Position DirToMapPosition(Dir dir);

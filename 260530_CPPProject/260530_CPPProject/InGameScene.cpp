@@ -18,15 +18,21 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 	}
 }
 
+void InitInGame(GameState& state)
+{
+	SetConsoleSize(MAP_W * 3, MAP_H * 2);
+}
+
 void DrawMap(GameState& state)
 {
-	Position pos = state.player.GetCursorPos();
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
+			if (TryDrawPlayer(state, x, y))
+				continue;
+
 			DrawBlock(state, x, y);
-			TryDrawPlayer(state, x, y);
 		}
 		cout << endl;
 	}
@@ -38,50 +44,35 @@ void DrawBlock(GameState& state, int x, int y)
 	SetDefaultMode();
 	SetColor();
 
-	Block& block = state.blocks[y][x];
+	Block* block = state.blocks[y][x];
 
 	switch (state.map[y][x])
 	{
 	case BlockType::EMPTY:
 	case BlockType::BRICK:
-	case BlockType::LASER_HORIZONTAL:
-	case BlockType::LASER_VERTICAL:
+	case BlockType::LASERBEAM_HORIZONTAL:
+	case BlockType::LASERBEAM_VERTICAL:
 	{
 		break;
 	}
-	//case BlockType::LASERCORE:
-	//{
-	//	Position pos = (((LaserCore&)block).GetDir());
-	//	Position nPos = { pos.x, pos.y };
-
-	//	BlockType blockT = nPos.x != 0 ? BlockType::LASER_HORIZONTAL : BlockType::LASER_VERTICAL;
-	//	while (!IsEdge(nPos.x, nPos.y) && state.map[nPos.y][nPos.x] == BlockType::EMPTY)
-	//	{
-	//		state.map[nPos.y][nPos.x] = blockT;
-	//		nPos += pos;
-	//	}
-	//	break;
-	//}
+	case BlockType::LASERCORE_RED:
+	case BlockType::LASERCORE_BLUE:
+	{
+		LaserCore* laserCore = (LaserCore*)block;
+		laserCore-> Cast(state, x, y);
+		break;
+	}
 	}
 
-	SetColor(block.GetColor());
-	cout << block.GetImage();
-}
-
-bool IsEdge(int x, int y)
-{
-	return x < 0 || y < 0 ||
-		x >= MAP_W || y >= MAP_H;
+	SetColor(block->GetColor());
+	cout << (block->GetImage());
 }
 
 bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
 	{
-		SetDefaultMode();
-		SetColor();
 		state.player.Render();
-
 		return true;
 	}
 	return false;
@@ -110,10 +101,10 @@ bool TryPlayerMove(GameState& state, Dir dir)
 
 	Position playerPos = state.player.GetMapPos();
 
-    Position next =
-    {
-       std::clamp(playerPos.x + dirX, 0, MAP_W - 1),
-       std::clamp(playerPos.y + dirY, 0, MAP_H - 1)
+	Position next =
+	{
+		playerPos.x + dirX,
+		playerPos.y + dirY
     };
 
 	if (IsEdge(next.x, next.y))
@@ -137,13 +128,27 @@ void HandleBlockInteraction(GameState& state, BlockType block)
 	{
 		break;
 	}
-	case BlockType::LASERCORE:
+	case BlockType::LASERBEAM_HORIZONTAL:
+	case BlockType::LASERBEAM_VERTICAL:
 	{
+		//플레이어 죽는 처리
+		ShakeConsoleWindow(25, 100, 25);
 		break;
 	}
-	case BlockType::LASER_HORIZONTAL:
-	case BlockType::LASER_VERTICAL:
+	case BlockType::BUTTON_RED:
 	{
+		ShakeConsoleWindow(15, 40, 25);
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				if (state.map[y][x] == BlockType::LASERCORE_RED)
+				{
+					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state, Dir::UP);
+					((LaserCore*)(state.blocks[y][x]))->Cast(state, x, y);
+				}
+			}
+		}
 		break;
 	}
 	}

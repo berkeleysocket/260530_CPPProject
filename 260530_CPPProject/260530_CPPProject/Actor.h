@@ -22,7 +22,7 @@ public:
 	}
 	const Position& GetMapPos() const
 	{
-		return m_cursorPos;
+		return m_mapPos;
 	}
 	void SetPos(const Position& cursorPos, const Position& mapPos)
 	{

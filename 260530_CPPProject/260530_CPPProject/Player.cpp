@@ -25,7 +25,7 @@ void Player::Move(Dir dir)
 	{
 	case Dir::UP:
 		m_mapPos.y--;
-		m_cursorPos.y --;
+		m_cursorPos.y--;
 		break;
 	case Dir::DOWN:
 		m_mapPos.y++;

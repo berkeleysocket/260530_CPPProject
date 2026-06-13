@@ -14,8 +14,6 @@ void Clone::Render() const
 }
 void Clone::Move(Dir dir)
 {
-
-
 	m_prevPos = m_cursorPos;
 
 	switch (dir)
