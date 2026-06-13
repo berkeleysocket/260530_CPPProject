@@ -26,6 +26,7 @@ public:
 	}
 	void SetPos(const Position& cursorPos, const Position& mapPos)
 	{
+		m_prevPos = m_cursorPos;
 		m_cursorPos = cursorPos;
 		m_mapPos = mapPos;
 	}

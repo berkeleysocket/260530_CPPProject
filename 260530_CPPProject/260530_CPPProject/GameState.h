@@ -23,6 +23,7 @@ struct GameState
 {
 	Scene	  prevScene = Scene::NONE;
 	Scene	  curScene = Scene::INGAME;
+	Menu      curMenu = Menu::START;
 	bool	  isRunning = true;
 	BlockType map[MAP_H][MAP_W] = {};
 	Block blocks[MAP_H][MAP_W] = {};
