@@ -1,12 +1,16 @@
-﻿#include "TitleScene.h"
-#include "Console.h"
+﻿#include "Console.h"
+#include "TitleScene.h"
 
 void InitTitle()
 {
+	SetConsoleSize(200, 50);
+	SetCursorVisible(false);
+	//SetConsoleWindowStyle(false);
 }
 
 void UpdateTitle(GameState& state)
 {
+	UpdateInput();
 	if (GetKeyDown(VK_UP))
 	{
 		state.curMenu = (Menu)std::max(0, (int)state.curMenu - 1);
@@ -24,9 +28,6 @@ void UpdateTitle(GameState& state)
 			PlayTransition();
 			state.curScene = Scene::INGAME;
 			break;
-		case Menu::INFO:
-			state.curScene = Scene::INFO;
-			break;
 		case Menu::QUIT:
 			state.isRunning = false;
 			break;
@@ -35,40 +36,31 @@ void UpdateTitle(GameState& state)
 }
 void RenderTitle(const GameState& state)
 {
-	RenderAscii(objs);
 	COORD res = GetConsoleResolution();
 	int x = res.X / 2 - 4;
 	int y = res.Y / 3 * 2;
 	SetColor();
 
-	const string labels[] = { "게임 시작", "게임 정보", "게임 종료" };
-	for (int i = 0; i < 3; i++)
+	const string labels[] = { "게임 시작", "게임 종료" };
+	for (int i = 0; i < 2; i++)
 	{
 		GotoXY(x - 2, y + i);
 		cout << (i == (int)state.curMenu ? "> " : "  ") << labels[i];
 	}
 	const wstring title[] =
 	{
-		L" ███████████     ███████    ██████   ██████ ███████████  ██████████ ███████████      ██████   ██████   █████████   ██████   █████",
-		L"▒▒███▒▒▒▒▒███  ███▒▒▒▒▒███ ▒▒██████ ██████ ▒▒███▒▒▒▒▒███▒▒███▒▒▒▒▒█▒▒███▒▒▒▒▒███    ▒▒██████ ██████   ███▒▒▒▒▒███ ▒▒██████ ▒▒███ ",
-		L" ▒███    ▒███ ███     ▒▒███ ▒███▒█████▒███  ▒███    ▒███ ▒███  █ ▒  ▒███    ▒███     ▒███▒█████▒███  ▒███    ▒███  ▒███▒███ ▒███ ",
-		L" ▒██████████ ▒███      ▒███ ▒███▒▒███ ▒███  ▒██████████  ▒██████    ▒██████████      ▒███▒▒███ ▒███  ▒███████████  ▒███▒▒███▒███ ",
-		L" ▒███▒▒▒▒▒███▒███      ▒███ ▒███ ▒▒▒  ▒███  ▒███▒▒▒▒▒███ ▒███▒▒█    ▒███▒▒▒▒▒███     ▒███ ▒▒▒  ▒███  ▒███▒▒▒▒▒███  ▒███ ▒▒██████ ",
-		L" ▒███    ▒███▒▒███     ███  ▒███      ▒███  ▒███    ▒███ ▒███ ▒   █ ▒███    ▒███     ▒███      ▒███  ▒███    ▒███  ▒███  ▒▒█████ ",
-		L" ███████████  ▒▒▒███████▒   █████     █████ ███████████  ██████████ █████   █████    █████     █████ █████   █████ █████  ▒▒█████",
-		L"▒▒▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒▒    ▒▒▒▒▒     ▒▒▒▒▒ ▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒ ▒▒▒▒▒   ▒▒▒▒▒    ▒▒▒▒▒     ▒▒▒▒▒ ▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒ ",
+		L"████████▄     ▄████████    ▄████████ ████████▄     ▄███████▄ ███    █▄   ▄███████▄   ▄███████▄     ▄████████  ▄█",
+		L"███   ▀███   ███    ███   ███    ███ ███   ▀███   ███    ███ ███    ███ ██▀     ▄██ ██▀     ▄██   ███    ███ ███",
+		L"███    ███   ███    █▀    ███    ███ ███    ███   ███    ███ ███    ███       ▄███▀       ▄███▀   ███    █▀  ███",
+		L"███    ███  ▄███▄▄▄       ███    ███ ███    ███   ███    ███ ███    ███  ▀█▀▄███▀▄▄  ▀█▀▄███▀▄▄  ▄███▄▄▄     ███",
+		L"███    ███ ▀▀███▀▀▀     ▀███████████ ███    ███ ▀█████████▀  ███    ███   ▄███▀   ▀   ▄███▀   ▀ ▀▀███▀▀▀     ███",
+		L"███    ███   ███    █▄    ███    ███ ███    ███   ███        ███    ███ ▄███▀       ▄███▀         ███    █▄  ███",
+		L"███   ▄███   ███    ███   ███    ███ ███   ▄███   ███        ███    ███ ███▄     ▄█ ███▄     ▄█   ███    ███ ███▌    ▄",
+		L"████████▀    ██████████   ███    █▀  ████████▀   ▄████▀      ████████▀   ▀████████▀  ▀████████▀   ██████████ █████▄▄██"
 	};
-	int titleX = (res.X - 129) / 2;
-	int titleY = res.Y / 3;
+	int titleX = (res.X - 118) / 2;
+	int titleY = res.Y / 4;
 	SetUniCodeMode();
-
-	//GotoXY(0, 0);
-	//wcout << title[0];
-	//SetDefaultMode();
-	//cout << GetCursorX();
-	//int temp = GetCursorX();
-	//GotoXY(5, 10);
-	//cout << temp << endl;
 
 	for (int i = 0; i < 8; ++i)
 	{
@@ -76,20 +68,6 @@ void RenderTitle(const GameState& state)
 		wcout << title[i];
 	}
 	SetDefaultMode();
-
-	/*GotoXY(x, y);
-	cout << "게임 시작";
-	GotoXY(x, y+1);
-	cout << "게임 정보";
-	GotoXY(x, y+2);
-	cout << "게임 종료";
-
-	GotoXY(x - 2, y);
-	cout << (state.curMenu == Menu::START ? ">" : " ");
-	GotoXY(x - 2, y+1);
-	cout << (state.curMenu == Menu::INFO ? ">" : " ");
-	GotoXY(x - 2, y+2);
-	cout << (state.curMenu == Menu::QUIT ? ">" : " ");*/
 
 }
 
