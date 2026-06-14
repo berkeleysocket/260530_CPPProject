@@ -17,6 +17,7 @@ using std::endl;
 void InitInGame(GameState& state);
 
 //map
+void LoadMap(GameState& state, const vector<string>& gameMap);
 void LoadMap(GameState& state, const string gameMap[MAP_H]);
 void DrawMap(GameState& state);
 void DrawBlock(GameState& state, int x, int y);

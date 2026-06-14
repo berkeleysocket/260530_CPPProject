@@ -3,6 +3,9 @@
 
 void Clone::Render() const
 {
+	if (!m_isActive)
+		return;
+
 	SetDefaultMode();
 	SetColor();
 	GotoXY(m_prevPos.x, m_prevPos.y);
@@ -33,8 +36,26 @@ void Clone::Move(Dir dir)
 	}
 }
 
+void Clone::Spawn(std::queue<MoveData> record)
+{
+	m_isActive = true;
+	m_moveRecord = record;
+}
+
+void Clone::Dead()
+{
+	m_isActive = false;
+
+	//밑에거 다른곳에서 할거면 지워도 상관 ㄴ
+	SetColor();
+	GotoXY(m_cursorPos.x, m_cursorPos.y);
+	cout << " ";
+}
+
 void Clone::Tick(float deltaTime)
 {
+	if (!m_isActive)
+		return;
 	nextMoveTime -= deltaTime;
 	if (nextMoveTime <= 0)
 	{

@@ -7,14 +7,14 @@
 #include"StageManager.h"
 #include"Game.h"
 
-void Init();
+void Initt();
 void Updatee(GameState& state);
 void Renderr(GameState& state);
 
 int main()
 {
 	GameState state;
-	Init();
+	Initt();
 	state.curScene = Scene::STAGE;
 	while (state.isRunning)
 	{
@@ -26,13 +26,12 @@ int main()
 }
 
 
-void Init()
+void Initt()
 {
 	InitTitle();
 	StageManager::GetInst()->LoadStage();
 	MapData mapData;
 	mapData.m_name = "Test Map";
-	mapData.m_desc = "Test Map";
 	mapData.m_map =
 	{
 		"00000000000000000000",
@@ -42,7 +41,6 @@ void Init()
 
 	MapData mapData2;
 	mapData2.m_name = "Test Map2";
-	mapData2.m_desc = "Test Map2";
 	mapData2.m_map =
 	{
 		"00000000000000000000",
@@ -57,14 +55,15 @@ void Updatee(GameState& state)
 {
 	bool sceneChanged = state.prevScene != state.curScene;
 	state.prevScene = state.curScene;
+
 	switch (state.curScene)
 	{
 	case Scene::INGAME:
 		if (sceneChanged)
 		{
-			Init();
+			Init(state);
 			InitInGame(state);
-			//LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
+			LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 		}
 		Update(state);
 			break;
@@ -79,7 +78,7 @@ void Updatee(GameState& state)
 		UpdateTitle(state);
 		break;
 	}
-	//UpdateTitle(state);
+	UpdateTitle(state);
 	if (GetKey('C'))
 	{
 		StageSaveData& stageData = StageManager::GetInst()->GetCurStageSaveData();
@@ -90,6 +89,10 @@ void Updatee(GameState& state)
 
 void Renderr( GameState& state)
 {
+	if (state.prevScene != state.curScene)
+		system("cls");
+	GotoXY(0, 0);
+
 	switch (state.curScene)
 	{
 	case Scene::INGAME:
@@ -111,7 +114,7 @@ void Renderr( GameState& state)
 //	MoveDataRecord record;
 //	float delta;
 //};
-
+//
 //void Init(HJTestState& state);
 //void Update(HJTestState& state);
 //void Render(HJTestState& state);
@@ -168,7 +171,7 @@ void Renderr( GameState& state)
 //	}
 //	if(GetKeyDown('R'))
 //	{
-//		state.clone = new Clone(state.record.GetRecord());
+		//state.clone = new Clone(state.record.GetRecord());
 //
 //	}
 //

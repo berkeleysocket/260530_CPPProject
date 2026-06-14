@@ -4,7 +4,6 @@
 
 void InitStage()
 {
-	system("cls");
 	SetConsoleSize(80, 25);
 	SetCursorVisible(false);
 
