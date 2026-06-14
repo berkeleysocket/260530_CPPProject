@@ -90,6 +90,7 @@ LaserCore::LaserCore()
 LaserCore::LaserCore(Dir castingDir)
 {
 	m_dir = castingDir;
+	m_beamPosQueue = queue<Position>();
 	m_image = "¡Ø";
 	m_color = Color::LIGHT_GRAY;
 }
@@ -130,7 +131,9 @@ void LaserCore::ChangeDirection(GameState& state, Dir dir)
 	while (!m_beamPosQueue.empty())
 	{
 		pos = m_beamPosQueue.front();
+
 		m_beamPosQueue.pop();
+
 		x = pos.x;
 		y = pos.y;
 
