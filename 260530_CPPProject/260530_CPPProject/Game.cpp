@@ -51,5 +51,5 @@ void Update(GameState& state)
 void Render(GameState& state)
 {
 	GotoXY(0, 0);
-	DrawMap(state);
+    DrawMap(state);
 }

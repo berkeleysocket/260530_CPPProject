@@ -14,6 +14,5 @@ struct StageSaveData
 struct MapData
 {
 	string m_name = "";
-	string m_desc = "";
 	vector<string> m_map;
 };;
