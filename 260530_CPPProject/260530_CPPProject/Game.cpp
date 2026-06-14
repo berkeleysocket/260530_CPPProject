@@ -20,6 +20,10 @@ void Update(GameState& state)
 		if (TryPlayerMove(state, dir))
 		{
 			state.player.Move(dir);
+			
+			MoveData moveData;
+			moveData.dir = dir;
+			state.moveDataRecord.Record(moveData);
 		}
 	}
 	if (GetKeyDown('S'))
@@ -28,6 +32,10 @@ void Update(GameState& state)
 		if (TryPlayerMove(state, dir))
 		{
 			state.player.Move(dir);
+
+			MoveData moveData;
+			moveData.dir = dir;
+			state.moveDataRecord.Record(moveData);
 		}
 	}
 	if (GetKeyDown('A'))
@@ -36,6 +44,10 @@ void Update(GameState& state)
 		if (TryPlayerMove(state, dir))
 		{
 			state.player.Move(dir);
+
+			MoveData moveData;
+			moveData.dir = dir;
+			state.moveDataRecord.Record(moveData);
 		}
 	}
 	if (GetKeyDown('D'))
@@ -44,6 +56,10 @@ void Update(GameState& state)
 		if (TryPlayerMove(state, dir))
 		{
 			state.player.Move(dir);
+
+			MoveData moveData;
+			moveData.dir = dir;
+			state.moveDataRecord.Record(moveData);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿#include "InGameScene.h"
-#include"StageManager.h"
+#include "StageManager.h"
 
 void LoadMap(GameState& state, const vector<string>& gameMap)
 {
@@ -80,15 +80,13 @@ void DrawBlock(GameState& state, int x, int y)
 	{
 		break;
 	}
-	case BlockType::LASERCORE_RED:
-	case BlockType::LASERCORE_BLUE:
+	case BlockType::LASERCORE:
 	{
 		LaserCore* laserCore = (LaserCore*)block;
 		laserCore-> Cast(state, x, y);
 		break;
 	}
-	case BlockType::PORTAL_RED:
-	case BlockType::PORTAL_BLUE:
+	case BlockType::PORTAL_RED_ENTER:
 	{
 		break;
 	}
@@ -162,21 +160,18 @@ void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 	case BlockType::LASERBEAM_VERTICAL:
 	{
 		//플레이어 죽는 처리
-		ShakeConsoleWindow(25, 100, 25);
+		HandlePlayerDead(state);
 		break;
 	}
-	case BlockType::PORTAL_RED:
+	case BlockType::PORTAL_RED_ENTER:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 		for (int _y = 0; _y < MAP_H; _y++)
 		{
 			for (int _x = 0; _x < MAP_W; _x++)
 			{
-				cout << _x << endl;
-				if (state.map[_y][_x] == BlockType::PORTAL_RED
-					&& _y != y && _x != x)
+				if (state.map[_y][_x] == BlockType::PORTAL_RED_EXIT)
 				{
-					cout << "BlockType::PORTAL_RED:BlockType::PORTAL_RED:BlockType::PORTAL_RED:BlockType::PORTAL_RED:";
 					Position cursorPos = { 0,0 };
 					for (int i = 0; i < _x; ++i)
 					{
@@ -192,14 +187,38 @@ void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 		}
 		break;
 	}
-	case BlockType::BUTTON_RED:
+	case BlockType::PORTAL_RED_EXIT:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		for (int _y = 0; _y < MAP_H; _y++)
+		{
+			for (int _x = 0; _x < MAP_W; _x++)
+			{
+				if (state.map[_y][_x] == BlockType::PORTAL_RED_ENTER)
+				{
+					Position cursorPos = { 0,0 };
+					for (int i = 0; i < _x; ++i)
+					{
+						cursorPos.x += 2;
+					}
+					for (int i = 0; i < _y; ++i)
+					{
+						cursorPos.y += 2;
+					}
+					state.player.SetPos(cursorPos, { _x, _y });
+				}
+			}
+		}
+		break;
+	}
+	case BlockType::BUTTON_RASERCORE:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 		for (int y = 0; y < MAP_H; ++y)
 		{
 			for (int x = 0; x < MAP_W; ++x)
 			{
-				if (state.map[y][x] == BlockType::LASERCORE_RED)
+				if (state.map[y][x] == BlockType::LASERCORE)
 				{
 					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state, Dir::UP);
 					((LaserCore*)(state.blocks[y][x]))->Cast(state, x, y);
@@ -210,5 +229,21 @@ void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 	}
 
 	}
-	cout << state.player.GetMapPos().x << "," << state.player.GetMapPos().y;
+	//cout << state.player.GetMapPos().x << "," << state.player.GetMapPos().y;
+}
+
+void HandlePlayerDead(GameState& state)
+{
+	state.clone.Spawn(state.moveDataRecord.GetRecord());
+
+	ShakeConsoleWindow(4, 200, 4);
+	//아래코드는 나중에 시작포인트 나올때 바꾸기
+	//state.clone.SetPos()
+	//state.player.SetPos()
+}
+
+void HandleCloneDead(GameState& state)
+{
+	ShakeConsoleWindow(4, 200, 4);
+	state.clone.Dead();
 }

@@ -19,8 +19,7 @@ Block* GenerateBlock(BlockType type)
 		block = new Brick();
 		break;
 	}
-	case BlockType::LASERCORE_RED:
-	case BlockType::LASERCORE_BLUE:
+	case BlockType::LASERCORE:
 	{
 		block = new LaserCore(Dir::DOWN);
 		break;
@@ -35,14 +34,23 @@ Block* GenerateBlock(BlockType type)
 		block = new HorizontalLaser();
 		break;
 	}
-	case BlockType::PORTAL_RED:
+	case BlockType::PORTAL_RED_ENTER:
 	{
-		block = new RedPortal();
+		block = new PortalEnter();
 		break;
 	}
-	case BlockType::BUTTON_RED:
+	case BlockType::PORTAL_RED_EXIT:
 	{
-		block = new RedButton();
+		block = new PortalExit();
+		break;
+	}
+	{
+		block = new PortalEnter();
+		break;
+	}
+	case BlockType::BUTTON_RASERCORE:
+	{
+		block = new PortalButton();
 		break;
 	}
 	default:
@@ -163,7 +171,7 @@ VerticalLaser::VerticalLaser()
 #pragma endregion
 
 #pragma region Button
-RedButton::RedButton() 
+PortalButton::PortalButton() 
 {
 	m_image = "¡Ü";
 	m_color = Color::RED;
@@ -171,10 +179,16 @@ RedButton::RedButton()
 #pragma endregion
 
 #pragma region Portal
-RedPortal::RedPortal() 
+PortalEnter::PortalEnter() 
 {
 	m_image = "£À";
-	m_color = Color::RED;
+	m_color = Color::LIGHT_VIOLET;
+}
+
+PortalExit::PortalExit()
+{
+	m_image = "£À";
+	m_color = Color::LIGHT_VIOLET;
 }
 #pragma endregion
 

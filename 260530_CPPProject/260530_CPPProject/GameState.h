@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Blocks.h"
 #include "Enums.h"
+#include "MoveDataRecord.h"
 
 using std::vector;
 
@@ -23,14 +24,16 @@ struct GameState
 	BlockType map[MAP_H][MAP_W] = {};
 	Block* blocks[MAP_H][MAP_W] = {};
 	Player	  player;
+    Clone     clone;
+    MoveDataRecord moveDataRecord;
 	ULONGLONG curTime;
 };
     
 struct MapBox
 {
 	const string gameMap1[MAP_W] = {
-    "07000000000000000007",
-    "00009000000000000000",
+    "06000000000000000007",
+    "00008000000000000000",
     "00000000000000000000",
     "00200000030000000000",
     "00000000000000000000",
