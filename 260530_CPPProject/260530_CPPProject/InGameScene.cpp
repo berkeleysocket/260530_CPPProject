@@ -33,7 +33,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 			state.blocks[y][x] = GenerateBlock(blockType);
 			if (state.map[y][x] == BlockType::START)
 			{
-				//state.player.pos = { x,y };
+				state.player.startPos = { x,y };
 				state.map[y][x] = BlockType::EMPTY;
 			}
 		}
@@ -53,6 +53,8 @@ void DrawMap(GameState& state)
 		for (int x = 0; x < MAP_W; ++x)
 		{
 			if (TryDrawPlayer(state, x, y))
+				continue;
+			if (TryDrawClone(state, x, y))
 				continue;
 
 			DrawBlock(state, x, y);
@@ -101,6 +103,16 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 	if (state.player.GetMapPos() == Position{ x, y } )
 	{
 		state.player.Render();
+		return true;
+	}
+	return false;
+}
+
+bool TryDrawClone(GameState& state, int x, int y)
+{
+	if (state.clone.GetMapPos() == Position{ x, y })
+	{
+		state.clone.Render();
 		return true;
 	}
 	return false;
@@ -160,7 +172,10 @@ void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 	case BlockType::LASERBEAM_VERTICAL:
 	{
 		//플레이어 죽는 처리
-		HandlePlayerDead(state);
+		if (state.player.GetMapPos() == Position{ x,y })
+			HandlePlayerDead(state);
+		else if (state.clone.GetMapPos() == Position{ x,y })
+			HandleCloneDead(state);
 		break;
 	}
 	case BlockType::PORTAL_RED_ENTER:
@@ -173,14 +188,16 @@ void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 				if (state.map[_y][_x] == BlockType::PORTAL_RED_EXIT)
 				{
 					Position cursorPos = { 0,0 };
-					for (int i = 0; i < _x; ++i)
-					{
-						cursorPos.x += 2;
-					}
-					for (int i = 0; i < _y; ++i)
-					{
-						cursorPos.y += 2;
-					}
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y * 2;
+					//for (int i = 0; i < _x; ++i)
+					//{
+					//	cursorPos.x += 2;
+					//}
+					//for (int i = 0; i < _y; ++i)
+					//{
+					//	cursorPos.y += 2;
+					//}
 					state.player.SetPos(cursorPos, {_x, _y});
 				}
 			}
@@ -234,12 +251,13 @@ void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 
 void HandlePlayerDead(GameState& state)
 {
+	Position startPos = state.player.startPos;
+	Position cursorPos = { startPos.x * 2, startPos.y * 2 };
 	state.clone.Spawn(state.moveDataRecord.GetRecord());
 
 	ShakeConsoleWindow(4, 200, 4);
-	//아래코드는 나중에 시작포인트 나올때 바꾸기
-	//state.clone.SetPos()
-	//state.player.SetPos()
+	state.clone.SetPos(cursorPos, startPos);
+	state.player.SetPos(cursorPos, startPos);
 }
 
 void HandleCloneDead(GameState& state)

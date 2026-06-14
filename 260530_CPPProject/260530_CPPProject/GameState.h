@@ -31,7 +31,8 @@ struct GameState
     
 struct MapBox
 {
-	const string gameMap1[MAP_W] = {
+    Position m_startPosition = {0,0};
+	const string m_gameMap[MAP_W] = {
     "06000000000000000007",
     "00008000000000000000",
     "00000000000000000000",

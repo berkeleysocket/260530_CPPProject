@@ -18,7 +18,9 @@ void InitInGame(GameState& state);
 
 //player
 void HandlePlayerDead(GameState& state);
+void HandleCloneDead(GameState& state);
 bool TryDrawPlayer(GameState& state, int x, int y);
+bool TryDrawClone(GameState& state, int x, int y);
 bool TryPlayerMove(GameState& state, Dir dir);
 void HandleBlockInteraction(GameState& state, BlockType block, int x, int y);
 

@@ -4,12 +4,12 @@
 
 int main()
 {
-	MapBox maps;
+	MapBox map;
 	GameState state;
 
 	Init(state);
 	InitInGame(state);
-	LoadMap(state, maps.gameMap1);
+	LoadMap(state, map.m_gameMap);
 
 	while (true)
 	{

@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include<vector>
+#include "Position.h"
+
 using std::string;
 using std::vector;
 
