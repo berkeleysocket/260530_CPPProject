@@ -82,5 +82,11 @@ public:
 	RedButton();
 };
 
+class RedPortal : public Block
+{
+public:
+	RedPortal();
+};
+
 Block* GenerateBlock(BlockType type);
 

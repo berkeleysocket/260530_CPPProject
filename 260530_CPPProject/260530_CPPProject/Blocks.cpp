@@ -35,6 +35,11 @@ Block* GenerateBlock(BlockType type)
 		block = new HorizontalLaser();
 		break;
 	}
+	case BlockType::PORTAL_RED:
+	{
+		block = new RedPortal();
+		break;
+	}
 	case BlockType::BUTTON_RED:
 	{
 		block = new RedButton();
@@ -157,7 +162,16 @@ VerticalLaser::VerticalLaser()
 #pragma region Button
 RedButton::RedButton() 
 {
+	m_image = "¡Ü";
+	m_color = Color::RED;
+}
+#pragma endregion
+
+#pragma region Portal
+RedPortal::RedPortal() 
+{
 	m_image = "£À";
 	m_color = Color::RED;
 }
 #pragma endregion
+

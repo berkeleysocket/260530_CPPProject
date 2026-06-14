@@ -26,4 +26,4 @@ bool IsEdge(int x, int y);
 //player
 bool TryDrawPlayer(GameState& state, int x, int y);
 bool TryPlayerMove(GameState& state, Dir dir);
-void HandleBlockInteraction(GameState& state, BlockType block);
+void HandleBlockInteraction(GameState& state, BlockType block, int x, int y);

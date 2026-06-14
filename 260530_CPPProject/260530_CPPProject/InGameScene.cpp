@@ -28,8 +28,9 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 		for (int x = 0; x < MAP_W; ++x)
 		{
 			int data = gameMap[y][x] - '0';
-			state.map[y][x] = (BlockType)data;
-			state.blocks[y][x] = GenerateBlock((BlockType)data);
+			BlockType blockType = (BlockType)data;
+			state.map[y][x] = blockType;
+			state.blocks[y][x] = GenerateBlock(blockType);
 			if (state.map[y][x] == BlockType::START)
 			{
 				//state.player.pos = { x,y };
@@ -86,6 +87,11 @@ void DrawBlock(GameState& state, int x, int y)
 		laserCore-> Cast(state, x, y);
 		break;
 	}
+	case BlockType::PORTAL_RED:
+	case BlockType::PORTAL_BLUE:
+	{
+		break;
+	}
 	}
 
 	SetColor(block->GetColor());
@@ -137,14 +143,14 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	BlockType nextBlock = state.map[next.y][next.x];
 	if (nextBlock != BlockType::EMPTY)
 	{
-		HandleBlockInteraction(state, nextBlock);
+		HandleBlockInteraction(state, nextBlock,next.x,next.y);
 		return false;
 	}
 
 	return true;
 }
 
-void HandleBlockInteraction(GameState& state, BlockType block)
+void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 {
 	switch (block)
 	{
@@ -159,6 +165,42 @@ void HandleBlockInteraction(GameState& state, BlockType block)
 		ShakeConsoleWindow(25, 100, 25);
 		break;
 	}
+	case BlockType::PORTAL_RED:
+	{
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		ShakeConsoleWindow(15, 40, 25);
+		for (int _y = 0; _y < MAP_H; ++_y)
+		{
+			for (int _x = 0; _x < MAP_W; ++_x)
+			{
+				if (state.map[_y][_x] == block 
+					&& _y != y && _x != x)
+				{
+					cout << _x << "," << _y;
+					Position cursorPos = { 0,0 };
+					for (int i = 0; i < _x; ++i)
+					{
+						cursorPos.x += 2;
+					}
+					for (int i = 0; i < _y; ++i)
+					{
+						cursorPos.y += 2;
+					}
+					state.player.SetPos(cursorPos, {_x, _y});
+				}
+			}
+		}
+	}
 	case BlockType::BUTTON_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
@@ -166,7 +208,7 @@ void HandleBlockInteraction(GameState& state, BlockType block)
 		{
 			for (int x = 0; x < MAP_W; ++x)
 			{
-				if (state.map[y][x] == BlockType::LASERCORE_RED)
+				if (state.map[y][x] == block)
 				{
 					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state, Dir::UP);
 					((LaserCore*)(state.blocks[y][x]))->Cast(state, x, y);
