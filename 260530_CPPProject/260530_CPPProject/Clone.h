@@ -16,6 +16,10 @@ private:
 private:
 	void Move(Dir dir) override;
 public:
+	const bool GetIsActive() const
+	{
+		return m_isActive;
+	}
 	void Spawn(std::queue<MoveData> record);
 	void Dead();
 	void Render() const override;

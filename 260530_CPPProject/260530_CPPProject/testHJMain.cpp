@@ -15,7 +15,6 @@ int main()
 {
 	GameState state;
 	Initt();
-	state.curScene = Scene::STAGE;
 	while (state.isRunning)
 	{
 		Updatee(state);
@@ -90,7 +89,10 @@ void Updatee(GameState& state)
 void Renderr( GameState& state)
 {
 	if (state.prevScene != state.curScene)
+	{
 		system("cls");
+		return;
+	}
 	GotoXY(0, 0);
 
 	switch (state.curScene)

@@ -32,15 +32,32 @@ void UpdateStage(GameState& state)
 	}
 }
 
-void RenderStage(const GameState& state)
+void RenderStage(GameState& state)
 {
-	COORD res = GetConsoleResolution();
 
-	StageSaveData stageData = StageManager::GetInst()->GetCurStageSaveData();
+	StageSaveData& stageData = StageManager::GetInst()->GetCurStageSaveData();
+	if (state.curStage == state.prevStage)
+	{
+		if (stageData.m_prevClear == stageData.m_isCleared
+			|| stageData.m_prevLock == stageData.m_isLock)
+		{
+			return;
+		}
+		else
+		{
+			stageData.m_prevClear = stageData.m_isCleared;
+			stageData.m_prevLock = stageData.m_isLock;
+		}
+	}
+
+	state.prevStage = state.curStage;
 	MapData mapData = StageManager::GetInst()->GetCurMapData();
 
-	SetColor();
+
+	COORD res = GetConsoleResolution();
+
 	//스테이지 틀 그리기
+	SetColor(); 
 	SetUniCodeMode();
 	const wstring stage[] = {
 L"╔════════════════════════════════╗",
@@ -87,8 +104,8 @@ L"╚═════════════════════════
 	}
 	else
 	{
-		//GotoXY((frameX + 16) - ((mapData.m_name.size())/2-1), frameY + 3);
-		//wcout << wstring(mapData.m_name.begin(), mapData.m_name.end());
+		GotoXY((frameX + 16) - ((mapData.m_name.size())/2-1), frameY + 3);
+		wcout << wstring(mapData.m_name.begin(), mapData.m_name.end());
 
 		GotoXY(frameX + 12, frameY + 8);
 

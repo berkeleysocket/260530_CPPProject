@@ -9,7 +9,9 @@ using std::vector;
 struct StageSaveData
 {
 	bool  m_isLock = true;
+	bool  m_prevLock = false;
 	bool  m_isCleared = false;
+	bool  m_prevClear = true;
 	float m_bestTime = -1;
 }; 
 

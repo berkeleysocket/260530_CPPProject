@@ -4,18 +4,38 @@
 
 void Player::Render() const
 {
+	if (m_prevPos != m_cursorPos)
+	{
 		SetDefaultMode();
 		SetColor();
 		GotoXY(m_prevPos.x, m_prevPos.y);
 		cout << "  ";
-
-		//SetUniCodeMode();
+	}
 		SetColor(m_bodyClr);
 		GotoXY(m_cursorPos.x, m_cursorPos.y);
-		//wcout << L"⁜";
 		cout << "□";
 }
 
+
+void Player::SetSpawnPos(Position spawnPos, Position spawnMapPos)
+{
+	m_spawnMapPos = spawnMapPos;
+	m_spawnPos = spawnPos;
+}
+
+void Player::Spawn()
+{
+	m_prevPos = m_spawnPos;
+	m_cursorPos = m_spawnPos;
+	m_mapPos = m_spawnMapPos;
+	m_isActive = true;
+}
+
+void Player::Dead()
+{
+	m_prevPos = m_cursorPos;
+	m_isActive = false;
+}
 
 void Player::Move(Dir dir)
 {
