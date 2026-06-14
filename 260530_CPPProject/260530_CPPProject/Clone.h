@@ -2,6 +2,7 @@
 #include<queue>
 #include"Color.h"
 #include"Actor.h"
+#include "GameState.h"
 
 class Clone:public Actor
 {
@@ -13,9 +14,8 @@ private:
 	Color m_bodyClr = Color::YELLOW;
 	std::queue<MoveData> m_moveRecord;
 
-private:
-	void Move(Dir dir) override;
 public:
+	void Move(Dir dir) override;
 	const bool GetIsActive() const
 	{
 		return m_isActive;
@@ -23,7 +23,7 @@ public:
 	void Spawn(std::queue<MoveData> record);
 	void Dead();
 	void Render() const override;
-	void Tick(float deltaTime) override;
+	void Tick(GameState& state, float deltaTime);
 	bool IsActive();
 };
 

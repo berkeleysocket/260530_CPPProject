@@ -11,7 +11,7 @@ public:
 	Actor(Position cursorPos = { 0,0 }, Position mapPos = { 0,0 });
 	virtual ~Actor() = default;
 
-	virtual void Tick(float deltaTime) abstract;
+	//virtual void Tick(float deltaTime) abstract;
 	virtual void Render() const abstract;
 public:
 	virtual void Move(Dir _dir) abstract;

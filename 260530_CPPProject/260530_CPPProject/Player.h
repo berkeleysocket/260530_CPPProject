@@ -23,5 +23,5 @@ public:
 	}
 	void Render() const	 override;
 	void Move(Dir dir)  override;
-	void Tick(float deltaTime) override;
+	void Tick(float deltaTime);
 };

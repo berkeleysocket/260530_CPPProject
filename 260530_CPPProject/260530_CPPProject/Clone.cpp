@@ -1,6 +1,7 @@
 ﻿#include "Clone.h"
 #include "Console.h"
 #include "Player.h"
+#include "InGameScene.h"
 
 void Clone::Render() const
 {
@@ -57,7 +58,7 @@ void Clone::Dead()
 	cout << " ";
 }
 
-void Clone::Tick(float deltaTime)
+void Clone::Tick(GameState& state, float deltaTime)
 {
 	if (!m_isActive)
 		return;
@@ -66,7 +67,9 @@ void Clone::Tick(float deltaTime)
 	{
 		if (!m_moveRecord.empty())
 		{
-			Move(m_moveRecord.front().dir);
+			Dir dir = m_moveRecord.front().dir;
+			if(TryCloneMove(state, dir))
+			Move(dir);
 			m_moveRecord.pop();
 			nextMoveTime = moveCooltime;
 		}

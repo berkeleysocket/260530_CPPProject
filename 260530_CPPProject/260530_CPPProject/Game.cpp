@@ -63,7 +63,7 @@ void Update(GameState& state)
 		}
 	}
 
-	state.clone.Tick(state.delta);
+	state.clone.Tick(state, state.delta);
 }
 
 void Render(GameState& state)
