@@ -35,6 +35,8 @@ void StageManager::LoadStage()
 		stageData.m_isLock = isLock;
 		stageData.m_isCleared = isClear;
 		stageData.m_bestTime = bestTime;
+		stageData.m_prevClear = !isClear;
+		stageData.m_prevLock = !isLock;
 
 		m_mapStageSaveData[stage] = std::make_unique<StageSaveData>(stageData);
 	}

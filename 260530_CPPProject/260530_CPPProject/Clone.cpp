@@ -1,15 +1,19 @@
 ﻿#include "Clone.h"
 #include "Console.h"
+#include "Player.h"
 
 void Clone::Render() const
 {
 	if (!m_isActive)
 		return;
 
-	SetDefaultMode();
-	SetColor();
-	GotoXY(m_prevPos.x, m_prevPos.y);
-	cout << "  ";
+	if (m_prevPos != m_cursorPos)
+	{
+		SetDefaultMode();
+		SetColor();
+		GotoXY(m_prevPos.x, m_prevPos.y);
+		cout << "  ";
+	}
 
 	SetColor(m_bodyClr);
 	GotoXY(m_cursorPos.x, m_cursorPos.y);
