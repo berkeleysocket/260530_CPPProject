@@ -16,8 +16,9 @@ constexpr int HEIGHT = 45;
 struct GameState
 {
 	Scene	  prevScene = Scene::NONE;
-	Scene	  curScene = Scene::INGAME;
+	Scene	  curScene = Scene::TITLE;
 	Menu      curMenu = Menu::START;
+	Stage     curStage = Stage::STAGE1;
 	bool	  isRunning = true;
 	BlockType map[MAP_H][MAP_W] = {};
 	Block* blocks[MAP_H][MAP_W] = {};

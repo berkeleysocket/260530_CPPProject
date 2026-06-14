@@ -3,45 +3,105 @@
 #include"GameState.h"
 #include "MoveDataRecord.h"
 #include"TitleScene.h"
+#include"StageScene.h"
+#include"StageManager.h"
+#include"Game.h"
 
 void Init();
-void Update(GameState& state);
-void Render(const GameState& state);
+void Updatee(GameState& state);
+void Renderr(GameState& state);
 
 int main()
 {
 	GameState state;
 	Init();
+	state.curScene = Scene::STAGE;
 	while (state.isRunning)
 	{
-		Update(state);
-		Render(state);
+		Updatee(state);
+		Renderr(state);
+		FrameSync(60);
 	}
+	StageManager::DestroyInst();
 }
 
 
 void Init()
 {
 	InitTitle();
+	StageManager::GetInst()->LoadStage();
+	MapData mapData;
+	mapData.m_name = "Test Map";
+	mapData.m_desc = "Test Map";
+	mapData.m_map =
+	{
+		"00000000000000000000",
+		"00001000000000000000",
+	};
+	StageManager::GetInst()->RegisterStage(Stage::STAGE1, std::make_unique<MapData>(mapData));
+
+	MapData mapData2;
+	mapData2.m_name = "Test Map2";
+	mapData2.m_desc = "Test Map2";
+	mapData2.m_map =
+	{
+		"00000000000000000000",
+		"00001000000000000000",
+	};
+	StageManager::GetInst()->RegisterStage(Stage::STAGE2, std::make_unique<MapData>(mapData2));
+	StageManager::GetInst()->SaveStage();
+	StageManager::GetInst()->ChangeStage(Stage::STAGE1);
 }
 
-void Update(GameState& state)
+void Updatee(GameState& state)
 {
-	UpdateTitle(state);
-	if (GetKey('G'))
+	bool sceneChanged = state.prevScene != state.curScene;
+	state.prevScene = state.curScene;
+	switch (state.curScene)
 	{
-		state.player.SetPos({ 10, 10 }, { 0, 0 });
+	case Scene::INGAME:
+		if (sceneChanged)
+		{
+			Init();
+			InitInGame(state);
+			//LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
+		}
+		Update(state);
+			break;
+	case Scene::STAGE:
+		if (sceneChanged)
+			InitStage();
+		UpdateStage(state);
+		break;
+	case Scene::TITLE:
+		if (sceneChanged)
+			InitTitle();
+		UpdateTitle(state);
+		break;
 	}
-	if (GetKey('H'))
+	//UpdateTitle(state);
+	if (GetKey('C'))
 	{
-		state.player.SetPos({ 20, 20 }, { 0, 0 });
+		StageSaveData& stageData = StageManager::GetInst()->GetCurStageSaveData();
+		stageData.m_isLock = !stageData.m_isLock;
+		StageManager::GetInst()->SaveStage();
 	}
 }
 
-void Render(const GameState& state)
+void Renderr( GameState& state)
 {
-	RenderTitle(state);
-	state.player.Render();
+	switch (state.curScene)
+	{
+	case Scene::INGAME:
+		Render(state);
+		break;
+	case Scene::STAGE:
+		RenderStage(state);
+		break;
+	case Scene::TITLE:
+		RenderTitle(state);
+		break;
+	}
 }
 
 //struct HJTestState

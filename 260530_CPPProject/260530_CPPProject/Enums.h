@@ -5,5 +5,14 @@ enum class Scene
 {
 	NONE,
 	TITLE,
+	STAGE,
 	INGAME
+};
+
+enum class Stage
+{
+	STAGE1,
+	STAGE2,
+	STAGE3,
+	ENDSTAGE,
 };
