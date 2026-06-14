@@ -22,7 +22,10 @@ void HandleCloneDead(GameState& state);
 bool TryDrawPlayer(GameState& state, int x, int y);
 bool TryDrawClone(GameState& state, int x, int y);
 bool TryPlayerMove(GameState& state, Dir dir);
-void HandleBlockInteraction(GameState& state, BlockType block, int x, int y);
+bool TryCloneMove(GameState& state, Dir dir);
+bool TryCloneMove(GameState& state, Dir dir);
+void HandlePlayerBlockInteraction(GameState& state, BlockType block, int x, int y);
+void HandleCloneBlockInteraction(GameState& state, BlockType block);
 
 //map
 void LoadMap(GameState& state, const vector<string>& gameMap);

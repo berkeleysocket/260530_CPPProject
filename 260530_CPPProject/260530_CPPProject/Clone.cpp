@@ -15,6 +15,7 @@ void Clone::Render() const
 	GotoXY(m_cursorPos.x, m_cursorPos.y);
 	cout << "§";
 }
+
 void Clone::Move(Dir dir)
 {
 	m_prevPos = m_cursorPos;
@@ -68,6 +69,11 @@ void Clone::Tick(float deltaTime)
 		else
 		{
 			m_isActive = false;
-				}
+		}
 	}
+}
+
+bool Clone:: IsActive()
+{
+	return m_isActive;
 }

@@ -20,5 +20,6 @@ public:
 	void Dead();
 	void Render() const override;
 	void Tick(float deltaTime) override;
+	bool IsActive();
 };
 

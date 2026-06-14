@@ -62,6 +62,8 @@ void Update(GameState& state)
 			state.moveDataRecord.Record(moveData);
 		}
 	}
+
+	state.clone.Tick(state.delta);
 }
 
 void Render(GameState& state)

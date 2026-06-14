@@ -52,9 +52,9 @@ void DrawMap(GameState& state)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
-			if (TryDrawPlayer(state, x, y))
-				continue;
 			if (TryDrawClone(state, x, y))
+				continue;
+			if (TryDrawPlayer(state, x, y))
 				continue;
 
 			DrawBlock(state, x, y);
@@ -68,7 +68,6 @@ void DrawBlock(GameState& state, int x, int y)
 {
 	SetDefaultMode();
 	SetColor();
-
 	Block* block = state.blocks[y][x];
 
 	if (block == nullptr) return;
@@ -110,7 +109,8 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 
 bool TryDrawClone(GameState& state, int x, int y)
 {
-	if (state.clone.GetMapPos() == Position{ x, y })
+	if (state.clone.GetMapPos() == Position{ x, y }
+		&& state.clone.IsActive())
 	{
 		state.clone.Render();
 		return true;
@@ -153,14 +153,56 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	BlockType nextBlock = state.map[next.y][next.x];
 	if (nextBlock != BlockType::EMPTY)
 	{
-		HandleBlockInteraction(state, nextBlock,next.x,next.y);
+		HandlePlayerBlockInteraction(state, nextBlock, playerPos.x, playerPos.y);
 		return false;
 	}
 
 	return true;
 }
 
-void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
+bool TryCloneMove(GameState& state, Dir dir)
+{
+	int dirX(0);
+	int dirY(0);
+
+	switch (dir)
+	{
+	case Dir::UP:
+		dirY--;
+		break;
+	case Dir::DOWN:
+		dirY++;
+		break;
+	case Dir::LEFT:
+		dirX--;
+		break;
+	case Dir::RIGHT:
+		dirX++;
+		break;
+	}
+
+	Position clonePos = state.clone.GetMapPos();
+
+	Position next =
+	{
+		clonePos.x + dirX,
+		clonePos.y + dirY
+	};
+
+	if (IsEdge(next.x, next.y))
+		return false;
+
+	BlockType nextBlock = state.map[next.y][next.x];
+	if (nextBlock != BlockType::EMPTY)
+	{
+		HandlePlayerBlockInteraction(state, nextBlock, clonePos.x, clonePos.y);
+		return false;
+	}
+
+	return true;
+}
+
+void HandlePlayerBlockInteraction(GameState& state, BlockType block, int x, int y)
 {
 	switch (block)
 	{
@@ -172,9 +214,11 @@ void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 	case BlockType::LASERBEAM_VERTICAL:
 	{
 		//플레이어 죽는 처리
-		if (state.player.GetMapPos() == Position{ x,y })
+		if(state.player.GetMapPos().x == x &&
+			state.player.GetMapPos().y == y)
 			HandlePlayerDead(state);
-		else if (state.clone.GetMapPos() == Position{ x,y })
+		else if (state.clone.GetMapPos().x == x &&
+			state.clone.GetMapPos().y == y)
 			HandleCloneDead(state);
 		break;
 	}
@@ -199,6 +243,84 @@ void HandleBlockInteraction(GameState& state, BlockType block, int x, int y)
 					//	cursorPos.y += 2;
 					//}
 					state.player.SetPos(cursorPos, {_x, _y});
+				}
+			}
+		}
+		break;
+	}
+	case BlockType::PORTAL_RED_EXIT:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		for (int _y = 0; _y < MAP_H; _y++)
+		{
+			for (int _x = 0; _x < MAP_W; _x++)
+			{
+				if (state.map[_y][_x] == BlockType::PORTAL_RED_ENTER)
+				{
+					Position cursorPos = { 0,0 };
+					for (int i = 0; i < _x; ++i)
+					{
+						cursorPos.x += 2;
+					}
+					for (int i = 0; i < _y; ++i)
+					{
+						cursorPos.y += 2;
+					}
+					state.player.SetPos(cursorPos, { _x, _y });
+				}
+			}
+		}
+		break;
+	}
+	case BlockType::BUTTON_RASERCORE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				if (state.map[y][x] == BlockType::LASERCORE)
+				{
+					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state, Dir::UP);
+					((LaserCore*)(state.blocks[y][x]))->Cast(state, x, y);
+				}
+			}
+		}
+		break;
+	}
+
+	}
+	//cout << state.player.GetMapPos().x << "," << state.player.GetMapPos().y;
+}
+
+void HandleCloneBlockInteraction(GameState& state, BlockType block)
+{
+	switch (block)
+	{
+	case BlockType::BRICK:
+	{
+		break;
+	}
+	case BlockType::LASERBEAM_HORIZONTAL:
+	case BlockType::LASERBEAM_VERTICAL:
+	{
+		HandleCloneDead(state);
+		break;
+	}
+	case BlockType::PORTAL_RED_ENTER:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		for (int _y = 0; _y < MAP_H; _y++)
+		{
+			for (int _x = 0; _x < MAP_W; _x++)
+			{
+				if (state.map[_y][_x] == BlockType::PORTAL_RED_EXIT)
+				{
+					Position cursorPos = { 0,0 };
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y * 2;
+
+					state.player.SetPos(cursorPos, { _x, _y });
 				}
 			}
 		}
