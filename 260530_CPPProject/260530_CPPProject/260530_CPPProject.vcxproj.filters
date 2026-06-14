@@ -34,6 +34,9 @@
     <Filter Include="HJ\Actor\Player">
       <UniqueIdentifier>{ec5688d3-6849-4f99-8014-ca29f2a43f9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HJ\Stage">
+      <UniqueIdentifier>{efb07b32-9fe8-4680-b09b-fc5313e1daf5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp">
@@ -68,6 +71,24 @@
     </ClCompile>
     <ClCompile Include="MoveData.cpp">
       <Filter>HJ</Filter>
+    </ClCompile>
+    <ClCompile Include="Dir.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>HJ\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageScene.cpp">
+      <Filter>HJ\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +133,27 @@
     </ClInclude>
     <ClInclude Include="MoveDataRecord.h">
       <Filter>HJ</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Enums.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StageData.h">
+      <Filter>HJ\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageManager.h">
+      <Filter>HJ\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageScene.h">
+      <Filter>HJ\Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 
 void InitTitle()
 {
-	SetConsoleSize(200, 50);
+	SetConsoleSize(120, 50);
 	SetCursorVisible(false);
 	//SetConsoleWindowStyle(false);
 }
@@ -26,7 +26,7 @@ void UpdateTitle(GameState& state)
 		{
 		case Menu::START:
 			PlayTransition();
-			state.curScene = Scene::INGAME;
+			state.curScene = Scene::STAGE;
 			break;
 		case Menu::QUIT:
 			state.isRunning = false;
@@ -37,8 +37,8 @@ void UpdateTitle(GameState& state)
 void RenderTitle(const GameState& state)
 {
 	COORD res = GetConsoleResolution();
-	int x = res.X / 2 - 4;
-	int y = res.Y / 3 * 2;
+	int x = res.X / 2 -4;
+	int y = res.Y / 3 *2;
 	SetColor();
 
 	const string labels[] = { "게임 시작", "게임 종료" };
