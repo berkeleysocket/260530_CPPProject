@@ -34,9 +34,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 {
 	for (int y = 0; y < MAP_H; ++y)
 	{ 
-		int currentLineSize = (int)gameMap[y].size();
-
-		for (int x = 0; x < currentLineSize; ++x)
+		for (int x = 0; x < MAP_W; ++x)
 		{
 			int data = gameMap[y][x];
 			BlockType blockType = (BlockType)data;
@@ -61,7 +59,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 
 void InitInGame(GameState& state)
 {
-	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
+	SetConsoleSize(MAP_W * 5, MAP_H * 2.5);
 	LoadMap(state, state.mapBox.m_gameMap);
 }
 
@@ -192,20 +190,27 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 	case BlockType::PORTAL_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
+
 		for (int _y = 0; _y < MAP_H; _y++)
 		{
 			for (int _x = 0; _x < MAP_W; _x++)
 			{
+				//cout << (char)state.map[_y][_x] << "/";
+				if (state.map[_y][_x] == BlockType::PORTAL_RED)
+				{
+					cout << "Get Portal! : " << _x << "," << _y << endl;
+				}
 				if (state.map[_y][_x] == BlockType::PORTAL_RED
 					&& Position {_x, _y} != blockPos)
 				{
 					Position cursorPos = { 0,0 };
 					cursorPos.x += _x * 2;
-					cursorPos.y += _y;
-
+					cursorPos.y += _y * 2;
+					
 					state.player.SetPos(cursorPos, {_x, _y});
 				}
 			}
+			cout << endl;
 		}
 		break;
 	}
@@ -245,28 +250,31 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 
 void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType)
 {
+	Position blockPos = block->m_position;
 	switch (blockType)
 	{
 	case BlockType::LASERBEAM_HORIZONTAL:
 	case BlockType::LASERBEAM_VERTICAL:
 	{
-		HandleCloneDead(state);
+		HandlePlayerDead(state);
 		break;
 	}
 	case BlockType::PORTAL_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
+
 		for (int _y = 0; _y < MAP_H; _y++)
 		{
 			for (int _x = 0; _x < MAP_W; _x++)
 			{
-				if (state.map[_y][_x] == BlockType::PORTAL_RED)
+				if (state.map[_y][_x] == BlockType::PORTAL_RED
+					&& Position{ _x, _y } != blockPos)
 				{
 					Position cursorPos = { 0,0 };
 					cursorPos.x += _x * 2;
 					cursorPos.y += _y;
 
-					state.clone.SetPos(cursorPos, { _x, _y });
+					state.player.SetPos(cursorPos, { _x, _y });
 				}
 			}
 		}
@@ -279,7 +287,8 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 		{
 			for (int x = 0; x < MAP_W; ++x)
 			{
-				if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON)
+				if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
+					|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
 				{
 					SwitchableBrick* switchableBrick = (SwitchableBrick*)(state.blocks[y][x]);
 					switchableBrick->Toggle(state);
@@ -301,6 +310,7 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 		}
 		break;
 	}
+
 	}
 }
 
