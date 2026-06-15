@@ -73,7 +73,6 @@ void Clone::Tick(GameState& state, float deltaTime)
 		if (!m_moveRecord.empty())
 		{
 			Dir dir = m_moveRecord.front().dir;
-			GotoXY(50, 50);
 			if(TryCloneMove(state, dir))
 				Move(dir);
 			m_moveRecord.pop();
