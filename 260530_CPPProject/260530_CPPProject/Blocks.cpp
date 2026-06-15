@@ -73,7 +73,7 @@ const Color Block::GetColor() const
 #pragma region Empty
 Empty::Empty()
 {
-	m_image = "  ";
+	m_image = "¡Û";
 	m_color = Color::WHITE;
 }
 #pragma endregion
