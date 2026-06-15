@@ -269,8 +269,14 @@ void HandlePlayerBlockInteraction(GameState& state, BlockType block)
 			{
 				if (state.map[y][x] == BlockType::LASERCORE)
 				{
-					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state, Dir::UP);
-					((LaserCore*)(state.blocks[y][x]))->Cast(state, x, y);
+					LaserCore& laserCore = *((LaserCore*)(state.blocks[y][x]));
+					laserCore.ChangeDirection(state, Dir::UP);
+					laserCore.Cast(state, x, y);
+				}
+				else if (state.map[y][x] == BlockType::BRICK_SWITCHABLE)
+				{
+					SwitchableBrick& switchableBrick = *((SwitchableBrick*)(state.blocks[y][x]));
+					switchableBrick.m_isActive = !switchableBrick.m_isActive;
 				}
 			}
 		}

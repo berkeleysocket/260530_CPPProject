@@ -116,7 +116,12 @@ void LaserCore::Cast(GameState& state, int x, int y)
 
 	while (!IsEdge(createLaserPos.x, createLaserPos.y)
 		&& state.map[createLaserPos.y][createLaserPos.x] == BlockType::EMPTY)
+		//|| state.map[createLaserPos.y][createLaserPos.x] == BlockType::BRICK_SWITCHABLE)
 	{
+		//if (state.map[createLaserPos.y][createLaserPos.x] == BlockType::BRICK_SWITCHABLE)
+		//{
+		//	if(state.map[createLaserPos.y][createLaserPos.x] == BlockType::BRICK_SWITCHABLE)
+		//}
 		state.map[createLaserPos.y][createLaserPos.x] = castingLaserT;
 		state.blocks[createLaserPos.y][createLaserPos.x] = GenerateBlock(castingLaserT);
 		m_beamPosQueue.push({ createLaserPos.x, createLaserPos.y });

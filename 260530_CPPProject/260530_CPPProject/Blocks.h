@@ -99,6 +99,8 @@ class SwitchableBrick : public Block
 {
 public:
 	SwitchableBrick();
+public:
+	bool m_isActive;
 };
 
 Block* GenerateBlock(BlockType type);
