@@ -53,6 +53,11 @@ Block* GenerateBlock(BlockType type)
 		block = new PortalButton();
 		break;
 	}
+	case BlockType::BRICK_SWITCHABLE:
+	{
+		block = new SwitchableBrick();
+		break;
+	}
 	default:
 		block = new Empty();
 		break;
@@ -191,4 +196,13 @@ PortalExit::PortalExit()
 	m_color = Color::LIGHT_VIOLET;
 }
 #pragma endregion
+
+#pragma region SwitchableBrick
+SwitchableBrick::SwitchableBrick()
+{
+	m_image = "бс";
+	m_color = Color::LIGHT_RED;
+}
+#pragma endregion
+
 
