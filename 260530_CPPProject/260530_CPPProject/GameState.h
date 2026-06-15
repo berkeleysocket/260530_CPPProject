@@ -5,6 +5,7 @@
 #include "Blocks.h"
 #include "Enums.h"
 #include "MoveDataRecord.h"
+#include "Clone.h"
 
 using std::vector;
 
@@ -22,7 +23,7 @@ struct GameState
 	Stage     curStage = Stage::STAGE1;
 	Stage     prevStage = Stage::STAGE1;
 	bool	  isRunning = true;
-    float     delta = 0;
+    float     delta = 0;    
 	BlockType map[MAP_H][MAP_W] = {};
 	Block* blocks[MAP_H][MAP_W] = {};
 	Player	  player;

@@ -1,7 +1,6 @@
 #pragma once
-#include "Color.h"
 #include"Actor.h"
-#include "Clone.h"
+#include"Color.h"
 
 class Player:public Actor
 {
@@ -20,6 +19,10 @@ public:
 	const bool GetIsActive()const
 	{
 		return m_isActive;
+	}
+	const Position GetStartPos() const
+	{
+		return m_spawnMapPos;
 	}
 	void Render() const	 override;
 	void Move(Dir dir)  override;
