@@ -234,14 +234,7 @@ void HandlePlayerBlockInteraction(GameState& state, BlockType block)
 					Position cursorPos = { 0,0 };
 					cursorPos.x += _x * 2;
 					cursorPos.y += _y * 2;
-					//for (int i = 0; i < _x; ++i)
-					//{
-					//	cursorPos.x += 2;
-					//}
-					//for (int i = 0; i < _y; ++i)
-					//{
-					//	cursorPos.y += 2;
-					//}
+
 					state.player.SetPos(cursorPos, {_x, _y});
 				}
 			}
@@ -258,14 +251,9 @@ void HandlePlayerBlockInteraction(GameState& state, BlockType block)
 				if (state.map[_y][_x] == BlockType::PORTAL_RED_ENTER)
 				{
 					Position cursorPos = { 0,0 };
-					for (int i = 0; i < _x; ++i)
-					{
-						cursorPos.x += 2;
-					}
-					for (int i = 0; i < _y; ++i)
-					{
-						cursorPos.y += 2;
-					}
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y * 2;
+
 					state.player.SetPos(cursorPos, { _x, _y });
 				}
 			}

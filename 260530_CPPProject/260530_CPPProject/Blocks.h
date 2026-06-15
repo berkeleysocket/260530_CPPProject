@@ -24,7 +24,9 @@ enum class BlockType
 	PORTAL_RED_EXIT = 7,
 	
 	BUTTON_RASERCORE = 8,
-	BUTTON_PORTAL = 9,
+	//BUTTON_PORTAL = 9,
+
+	BRICK_SWITCHABLE = 9,
 };
 
 class Block
@@ -91,6 +93,12 @@ class PortalExit : public Block
 {
 public:
 	PortalExit();
+};
+
+class SwitchableBrick : public Block
+{
+public:
+	SwitchableBrick();
 };
 
 Block* GenerateBlock(BlockType type);
