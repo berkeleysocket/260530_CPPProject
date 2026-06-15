@@ -13,7 +13,7 @@ private:
 	Position m_spawnMapPos;//¸Ê¿ë
 	bool m_isActive = true;
 	Color m_bodyClr = Color::WHITE;
-	std::string m_bodyImg = "¡à";
+	std::string m_bodyImg = "¡Ú";
 public:
 	void SetSpawnPos(Position spawnPos, Position spawnMapPos);
 	void Spawn();
