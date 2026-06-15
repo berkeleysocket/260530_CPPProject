@@ -25,9 +25,9 @@ void Player::SetSpawnPos(Position spawnPos, Position spawnMapPos)
 
 void Player::Spawn()
 {
-	m_prevPos = m_spawnPos;
-	m_cursorPos = m_spawnPos;
-	m_mapPos = m_spawnMapPos;
+	//m_prevPos = m_spawnPos;
+	//m_cursorPos = m_spawnPos;
+	//m_mapPos = m_spawnMapPos;
 	m_isActive = true;
 }
 

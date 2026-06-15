@@ -23,21 +23,26 @@ void Clone::Render() const
 
 void Clone::Move(Dir dir)
 {
+
 	m_prevPos = m_cursorPos;
 
 	switch (dir)
 	{
 	case Dir::UP:
 		m_cursorPos.y-=1;
+		m_mapPos.y --;
 		break;
 	case Dir::DOWN:
 		m_cursorPos.y+=1;
+		m_mapPos.y ++;
 		break;
 	case Dir::LEFT:
 		m_cursorPos.x-=2;
+		m_mapPos.x--;
 		break;
 	case Dir::RIGHT:
 		m_cursorPos.x+=2;
+		m_mapPos.x++;
 		break;
 	}
 }
@@ -68,8 +73,10 @@ void Clone::Tick(GameState& state, float deltaTime)
 		if (!m_moveRecord.empty())
 		{
 			Dir dir = m_moveRecord.front().dir;
+			GotoXY(50, 50);
+			cout << (int)dir;
 			if(TryCloneMove(state, dir))
-			Move(dir);
+				Move(dir);
 			m_moveRecord.pop();
 			nextMoveTime = moveCooltime;
 		}

@@ -33,7 +33,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 			state.blocks[y][x] = GenerateBlock(blockType);
 			if (state.map[y][x] == BlockType::START)
 			{
-				state.player.SetSpawnPos({ x,y*2 },{x,y});
+				state.player.SetSpawnPos({ x,y},{x,y});
 				state.map[y][x] = BlockType::EMPTY;
 			}
 		}
