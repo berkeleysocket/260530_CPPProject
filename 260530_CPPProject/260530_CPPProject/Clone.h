@@ -2,8 +2,7 @@
 #include<queue>
 #include"Color.h"
 #include"Actor.h"
-
-class GameState;
+#include<string>
 
 struct GameState;
 
@@ -15,6 +14,7 @@ public:
 private:
 	bool m_isActive = false;
 	Color m_bodyClr = Color::YELLOW;
+	std::string m_bodyImg = "¡×";
 	std::queue<MoveData> m_moveRecord;
 
 public:

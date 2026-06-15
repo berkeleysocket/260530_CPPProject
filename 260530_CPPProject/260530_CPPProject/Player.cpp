@@ -13,7 +13,7 @@ void Player::Render() const
 	}
 		SetColor(m_bodyClr);
 		GotoXY(m_cursorPos.x, m_cursorPos.y);
-		cout << "□";
+		cout << m_bodyImg;
 }
 
 
@@ -28,6 +28,8 @@ void Player::Spawn()
 	//m_prevPos = m_spawnPos;
 	//m_cursorPos = m_spawnPos;
 	//m_mapPos = m_spawnMapPos;
+	m_bodyClr = Color::WHITE;
+	m_bodyImg = "□";
 	m_isActive = true;
 }
 
@@ -35,6 +37,9 @@ void Player::Dead()
 {
 	m_prevPos = m_cursorPos;
 	m_isActive = false;
+	m_bodyClr = Color::RED;
+	m_bodyImg = "※";
+	Render();
 }
 
 void Player::Move(Dir dir)

@@ -1,6 +1,7 @@
 #pragma once
 #include"Actor.h"
 #include"Color.h"
+#include<string>
 
 class Player:public Actor
 {
@@ -12,6 +13,7 @@ private:
 	Position m_spawnMapPos;//¸Ê¿ë
 	bool m_isActive = true;
 	Color m_bodyClr = Color::WHITE;
+	std::string m_bodyImg = "¡à";
 public:
 	void SetSpawnPos(Position spawnPos, Position spawnMapPos);
 	void Spawn();
