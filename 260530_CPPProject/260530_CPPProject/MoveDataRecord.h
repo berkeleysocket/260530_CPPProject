@@ -14,6 +14,13 @@ public:
 	{
 		return m_record;
 	}
+	void ReSet()
+	{
+		while (!m_record.empty())
+		{
+			m_record.pop();
+		}
+	}
 private:
 	std::queue<MoveData> m_record;
 };
