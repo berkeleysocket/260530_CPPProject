@@ -120,6 +120,10 @@ bool TryDrawClone(GameState& state, int x, int y)
 
 bool TryPlayerMove(GameState& state, Dir dir)
 {
+	MoveData moveData;
+	moveData.dir = dir;
+	state.moveDataRecord.Record(moveData);
+
 	int dirX(0);
 	int dirY(0);
 
@@ -193,7 +197,7 @@ bool TryCloneMove(GameState& state, Dir dir)
 		return false;
 
 	BlockType nextBlock = state.map[next.y][next.x];
-	cout << next.x << "," << next.y << "is not Empty?";
+	cout << next.x << "," << next.y << "is not Empty?" << endl;
 	if (nextBlock != BlockType::EMPTY)
 	{
 		HandleCloneBlockInteraction(state, nextBlock);
@@ -373,6 +377,7 @@ void HandlePlayerDead(GameState& state)
 	ShakeConsoleWindow(4, 200, 4);
 	state.clone.SetPos(cursorPos, startPos);
 	state.player.SetPos(cursorPos, startPos);
+	state.moveDataRecord.ReSet();
 }
 
 void HandleCloneDead(GameState& state)
