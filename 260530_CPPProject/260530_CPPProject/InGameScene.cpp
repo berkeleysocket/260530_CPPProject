@@ -59,22 +59,20 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 
 void InitInGame(GameState& state)
 {
-	SetConsoleSize(MAP_W * 5, MAP_H * 2.5);
+	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
 	LoadMap(state, state.mapBox.m_gameMap);
 }
 
-int drawCall = 0;
 void DrawMap(GameState& state)
 {
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
+			GotoXY(x * 2, y);
+
 			if (TryDrawPlayer(state, x, y))
-			{
-				Position playerPos = state.player.GetMapPos();
 				continue;
-			}
 			if (TryDrawClone(state, x, y))
 				continue;
 
@@ -111,7 +109,9 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 	if (state.player.GetMapPos() == Position{ x, y } )
 		//플레이어를 그릴 때도 죽었다면 그리지 말아야 한다.
 	{
-		state.player.Render();
+		SetColor();
+		cout << "★";
+		//state.player.Render();
 		return true;
 	}
 
@@ -138,13 +138,15 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	Position dirToPos = DirToMapPosition(dir);
 	Position playerPos = state.player.GetMapPos();
 	Position nextPos = playerPos + dirToPos;
+	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
+
+	cout << nextPos.x << "," << nextPos.y << " : " << (char)nextBlockType;
 
 	if (IsEdge(nextPos.x, nextPos.y))
 	{
 		return false;
 	}
 
-	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
 	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
 	if (!IsPassable(nextBlock, nextBlockType))
 	{
@@ -195,11 +197,6 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		{
 			for (int _x = 0; _x < MAP_W; _x++)
 			{
-				//cout << (char)state.map[_y][_x] << "/";
-				if (state.map[_y][_x] == BlockType::PORTAL_RED)
-				{
-					cout << "Get Portal! : " << _x << "," << _y << endl;
-				}
 				if (state.map[_y][_x] == BlockType::PORTAL_RED
 					&& Position {_x, _y} != blockPos)
 				{
@@ -274,7 +271,7 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 					cursorPos.x += _x * 2;
 					cursorPos.y += _y;
 
-					state.player.SetPos(cursorPos, { _x, _y });
+					state.clone.SetPos(cursorPos, { _x, _y });
 				}
 			}
 		}
