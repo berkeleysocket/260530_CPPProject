@@ -5,6 +5,8 @@
 
 class GameState;
 
+struct GameState;
+
 class Clone:public Actor
 {
 public:

@@ -120,6 +120,10 @@ bool TryDrawClone(GameState& state, int x, int y)
 
 bool TryPlayerMove(GameState& state, Dir dir)
 {
+	MoveData moveData;
+	moveData.dir = dir;
+	state.moveDataRecord.Record(moveData);
+
 	int dirX(0);
 	int dirY(0);
 
@@ -153,7 +157,7 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	BlockType nextBlock = state.map[next.y][next.x];
 	if (nextBlock != BlockType::EMPTY)
 	{
-		HandlePlayerBlockInteraction(state, nextBlock, playerPos.x, playerPos.y);
+		HandlePlayerBlockInteraction(state, nextBlock);
 		return false;
 	}
 
@@ -193,18 +197,17 @@ bool TryCloneMove(GameState& state, Dir dir)
 		return false;
 
 	BlockType nextBlock = state.map[next.y][next.x];
-	cout << next.x<<" "<<next.y<<endl;
-	cout << (int)nextBlock;
+	cout << next.x << "," << next.y << "is not Empty?" << endl;
 	if (nextBlock != BlockType::EMPTY)
 	{
-		HandlePlayerBlockInteraction(state, nextBlock, clonePos.x, clonePos.y);
+		HandleCloneBlockInteraction(state, nextBlock);
 		return false;
 	}
 
 	return true;
 }
 
-void HandlePlayerBlockInteraction(GameState& state, BlockType block, int x, int y)
+void HandlePlayerBlockInteraction(GameState& state, BlockType block)
 {
 	switch (block)
 	{
@@ -216,12 +219,7 @@ void HandlePlayerBlockInteraction(GameState& state, BlockType block, int x, int 
 	case BlockType::LASERBEAM_VERTICAL:
 	{
 		//플레이어 죽는 처리
-		if(state.player.GetMapPos().x == x &&
-			state.player.GetMapPos().y == y)
-			HandlePlayerDead(state);
-		else if (state.clone.GetMapPos().x == x &&
-			state.clone.GetMapPos().y == y)
-			HandleCloneDead(state);
+		HandlePlayerDead(state);
 		break;
 	}
 	case BlockType::PORTAL_RED_ENTER:
@@ -292,11 +290,11 @@ void HandlePlayerBlockInteraction(GameState& state, BlockType block, int x, int 
 	}
 
 	}
-	//cout << state.player.GetMapPos().x << "," << state.player.GetMapPos().y;
 }
 
 void HandleCloneBlockInteraction(GameState& state, BlockType block)
 {
+	cout << "HandleCloneBlockInteraction";
 	switch (block)
 	{
 	case BlockType::BRICK:
@@ -312,6 +310,7 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 	case BlockType::PORTAL_RED_ENTER:
 	{
 		ShakeConsoleWindow(15, 40, 25);
+		cout << "PORTAL_RED_ENTERPORTAL_RED_ENTER";
 		for (int _y = 0; _y < MAP_H; _y++)
 		{
 			for (int _x = 0; _x < MAP_W; _x++)
@@ -322,7 +321,7 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 					cursorPos.x += _x * 2;
 					cursorPos.y += _y * 2;
 
-					state.player.SetPos(cursorPos, { _x, _y });
+					state.clone.SetPos(cursorPos, { _x, _y });
 				}
 			}
 		}
@@ -330,6 +329,8 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 	}
 	case BlockType::PORTAL_RED_EXIT:
 	{
+		cout << "PORTAL_RED_EXITPORTAL_RED_EXIT";
+
 		ShakeConsoleWindow(15, 40, 25);
 		for (int _y = 0; _y < MAP_H; _y++)
 		{
@@ -338,15 +339,10 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 				if (state.map[_y][_x] == BlockType::PORTAL_RED_ENTER)
 				{
 					Position cursorPos = { 0,0 };
-					for (int i = 0; i < _x; ++i)
-					{
-						cursorPos.x += 2;
-					}
-					for (int i = 0; i < _y; ++i)
-					{
-						cursorPos.y += 2;
-					}
-					state.player.SetPos(cursorPos, { _x, _y });
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y * 2;
+
+					state.clone.SetPos(cursorPos, { _x, _y });
 				}
 			}
 		}
@@ -370,7 +366,6 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 	}
 
 	}
-	//cout << state.player.GetMapPos().x << "," << state.player.GetMapPos().y;
 }
 
 void HandlePlayerDead(GameState& state)

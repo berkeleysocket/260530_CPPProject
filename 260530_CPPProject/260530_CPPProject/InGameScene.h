@@ -24,7 +24,7 @@ bool TryDrawClone(GameState& state, int x, int y);
 bool TryPlayerMove(GameState& state, Dir dir);
 bool TryCloneMove(GameState& state, Dir dir);
 bool TryCloneMove(GameState& state, Dir dir);
-void HandlePlayerBlockInteraction(GameState& state, BlockType block, int x, int y);
+void HandlePlayerBlockInteraction(GameState& state, BlockType block);
 void HandleCloneBlockInteraction(GameState& state, BlockType block);
 
 //map
