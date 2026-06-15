@@ -56,7 +56,7 @@ void Clone::Spawn(std::queue<MoveData> record)
 void Clone::Dead()
 {
 	m_isActive = false;
-
+	nextMoveTime = moveCooltime;
 	//밑에거 다른곳에서 할거면 지워도 상관 ㄴ
 	SetColor();
 	GotoXY(m_cursorPos.x, m_cursorPos.y);
