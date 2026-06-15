@@ -366,16 +366,20 @@ void HandlePlayerDead(GameState& state)
 {
 	Position startPos = state.player.GetStartPos();
 	Position cursorPos = { startPos.x * 2, startPos.y * 2 };
-	state.clone.Spawn(state.moveDataRecord.GetRecord());
+	state.player.Dead();
+	ShakeConsoleWindow(20, 30, 30);
+	Sleep(500);
 
-	ShakeConsoleWindow(4, 200, 4);
 	state.clone.SetPos(cursorPos, startPos);
 	state.player.SetPos(cursorPos, startPos);
+	state.clone.Spawn(state.moveDataRecord.GetRecord());
+	state.player.Spawn();
 	state.moveDataRecord.ReSet();
 }
 
 void HandleCloneDead(GameState& state)
 {
-	ShakeConsoleWindow(4, 200, 4);
 	state.clone.Dead();
+	ShakeConsoleWindow(20, 30, 30);
+	Sleep(500);
 }
