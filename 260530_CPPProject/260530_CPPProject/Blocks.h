@@ -12,21 +12,22 @@ struct GameState;
 
 enum class BlockType
 {
-	EMPTY = 0,
-	START = 1,
-	BRICK = 2,
+	EMPTY = '.',
+	START = 'S',
+	BRICK = '0',
 
-	LASERCORE = 3,
-	LASERBEAM_VERTICAL = 4,
-	LASERBEAM_HORIZONTAL = 5,
+	LASERCORE_RED = 'L',
+	LASERBEAM_VERTICAL = 'V',
+	LASERBEAM_HORIZONTAL = 'H',
 
-	PORTAL_RED_ENTER = 6,
-	PORTAL_RED_EXIT = 7,
+	PORTAL_RED = 'P',
+	PORTAL_BLUE = 'p',
 	
-	BUTTON_RASERCORE = 8,
-	//BUTTON_PORTAL = 9,
+	BUTTOON_RED = 'B',
+	BUTTON_BLUE = 'b',
 
-	BRICK_SWITCHABLE = 9,
+	SWITCHABLEBRICK_RED_ON = 'W',
+	SWITCHABLEBRICK_RED_OFF = 'w'
 };
 
 class Block
@@ -35,6 +36,7 @@ protected:
 	string m_image;
 	Color m_color;
 public:
+	Position m_position;
 	const string GetImage() const;
 	const Color GetColor() const;
 };
@@ -60,7 +62,7 @@ private:
 public:
 	LaserCore();
 	LaserCore(Dir castingDir);
-	void Cast(GameState& state, int x, int y);
+	void TryDrawCast(GameState& state, int x, int y);
 	void ChangeDirection(GameState& state, Dir dir);
 	const Dir GetBeamDirection() const;
 };
@@ -77,31 +79,29 @@ public:
 	VerticalLaser();
 };
 
-class PortalButton : public Block
+class RedButton : public Block
 {
 public:
-	PortalButton();
+	RedButton();
 };
 
-class PortalEnter : public Block
+class Portal : public Block
 {
 public:
-	PortalEnter();
-};
-
-class PortalExit : public Block
-{
-public:
-	PortalExit();
+	Portal();
 };
 
 class SwitchableBrick : public Block
 {
 public:
 	SwitchableBrick();
-public:
+private:
 	bool m_isActive;
+public:
+	bool GetIsActive();
+	void Toggle(GameState& state);
 };
 
 Block* GenerateBlock(BlockType type);
+bool IsPassable(Block* block, BlockType blockType);
 

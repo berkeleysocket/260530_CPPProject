@@ -17,4 +17,8 @@ struct Position
 		x += other.x;  
 		y += other.y;
 	}
+	Position operator+(const Position& other)
+	{
+		return { x + other.x , y + other.y };
+	}
 };

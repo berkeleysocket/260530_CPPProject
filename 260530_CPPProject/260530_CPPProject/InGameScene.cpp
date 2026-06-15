@@ -1,20 +1,29 @@
 ﻿#include "InGameScene.h"
-#include "StageManager.h"
 
 void LoadMap(GameState& state, const vector<string>& gameMap)
 {
 	int w = gameMap[0].size(); // 이렇게 할려면 무조권 맵이 사각형이여야함 (공백으로 체워도 상과 x)
 	int h = gameMap.size();
-	for (int y = 0; y < h; ++y)
+
+	for (int y = 0; y < h; y++)
 	{
-		for (int x = 0; x < w; ++x)
+		for (int x = 0; x < w; x++)
 		{
-			int data = gameMap[y][x] - '0';
-			state.map[y][x] = (BlockType)data;
-			state.blocks[y][x] = GenerateBlock((BlockType)data);
-			if (state.map[y][x] == BlockType::START)
+			int data = gameMap[y][x];
+			BlockType blockType = (BlockType)data;
+			Block* block = GenerateBlock((BlockType)data);
+
+			block->m_position = { x, y };
+
+			state.blocks[y][x] = block;
+			state.map[y][x] = blockType;
+
+			if (blockType == BlockType::START)
 			{
-				//state.player.pos = { x,y };
+				Position cursorPos = { x * 2, y };
+				Position mapPos = { x, y };
+				state.player.SetSpawnPos(cursorPos, mapPos);
+				state.player.SetPos(cursorPos, mapPos);
 				state.map[y][x] = BlockType::EMPTY;
 			}
 		}
@@ -25,15 +34,25 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 {
 	for (int y = 0; y < MAP_H; ++y)
 	{ 
-		for (int x = 0; x < MAP_W; ++x)
+		int currentLineSize = (int)gameMap[y].size();
+
+		for (int x = 0; x < currentLineSize; ++x)
 		{
-			int data = gameMap[y][x] - '0';
+			int data = gameMap[y][x];
 			BlockType blockType = (BlockType)data;
-			state.map[y][x] = blockType;
-			state.blocks[y][x] = GenerateBlock(blockType);
-			if (state.map[y][x] == BlockType::START)
+			Block* block = GenerateBlock((BlockType)data);
+
+			block->m_position = { x, y };
+			
+			state.blocks[y][x] = block;
+			state.map[y][x] = blockType; 
+
+			if (blockType == BlockType::START)
 			{
-				state.player.SetSpawnPos({ x,y},{x,y});
+				Position cursorPos = { x * 2, y };
+				Position mapPos = { x, y };
+				state.player.SetSpawnPos(cursorPos, mapPos);
+				state.player.SetPos(cursorPos, mapPos);
 				state.map[y][x] = BlockType::EMPTY;
 			}
 		}
@@ -42,19 +61,23 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 
 void InitInGame(GameState& state)
 {
-	SetConsoleSize(MAP_W * 3, MAP_H * 2);
+	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
+	LoadMap(state, state.mapBox.m_gameMap);
 }
 
+int drawCall = 0;
 void DrawMap(GameState& state)
 {
-	StageManager::GetInst()->GetCurMapData().m_map;
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
-			if (TryDrawClone(state, x, y))
-				continue;
 			if (TryDrawPlayer(state, x, y))
+			{
+				Position playerPos = state.player.GetMapPos();
+				continue;
+			}
+			if (TryDrawClone(state, x, y))
 				continue;
 
 			DrawBlock(state, x, y);
@@ -66,29 +89,17 @@ void DrawMap(GameState& state)
 
 void DrawBlock(GameState& state, int x, int y)
 {
-	SetDefaultMode();
-	SetColor();
+	BlockType blockType = state.map[y][x];
 	Block* block = state.blocks[y][x];
 
 	if (block == nullptr) return;
 	  
-	switch (state.map[y][x])
+	switch (blockType)
 	{
-	case BlockType::EMPTY:
-	case BlockType::BRICK:
-	case BlockType::LASERBEAM_HORIZONTAL:
-	case BlockType::LASERBEAM_VERTICAL:
-	{
-		break;
-	}
-	case BlockType::LASERCORE:
+	case BlockType::LASERCORE_RED:
 	{
 		LaserCore* laserCore = (LaserCore*)block;
-		laserCore-> Cast(state, x, y);
-		break;
-	}
-	case BlockType::PORTAL_RED_ENTER:
-	{
+		laserCore->TryDrawCast(state, x, y);
 		break;
 	}
 	}
@@ -100,10 +111,12 @@ void DrawBlock(GameState& state, int x, int y)
 bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
+		//플레이어를 그릴 때도 죽었다면 그리지 말아야 한다.
 	{
 		state.player.Render();
 		return true;
 	}
+
 	return false;
 }
 
@@ -124,40 +137,20 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	moveData.dir = dir;
 	state.moveDataRecord.Record(moveData);
 
-	int dirX(0);
-	int dirY(0);
+	Position dirToPos = DirToMapPosition(dir);
+	Position playerPos = state.player.GetMapPos();
+	Position nextPos = playerPos + dirToPos;
 
-	switch (dir)
+	if (IsEdge(nextPos.x, nextPos.y))
 	{
-	case Dir::UP:
-		dirY--;
-		break;
-	case Dir::DOWN:
-		dirY++;
-		break;
-	case Dir::LEFT:
-		dirX--;
-		break;
-	case Dir::RIGHT:
-		dirX++;
-		break;
+		return false;
 	}
 
-	Position playerPos = state.player.GetMapPos();
-
-	Position next =
+	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
+	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
+	if (!IsPassable(nextBlock, nextBlockType))
 	{
-		playerPos.x + dirX,
-		playerPos.y + dirY
-    };
-
-	if (IsEdge(next.x, next.y))
-		return false;
-
-	BlockType nextBlock = state.map[next.y][next.x];
-	if (nextBlock != BlockType::EMPTY)
-	{
-		HandlePlayerBlockInteraction(state, nextBlock);
+		HandlePlayerBlockInteraction(state, nextBlock, nextBlockType);
 		return false;
 	}
 
@@ -166,74 +159,49 @@ bool TryPlayerMove(GameState& state, Dir dir)
 
 bool TryCloneMove(GameState& state, Dir dir)
 {
-	int dirX(0);
-	int dirY(0);
-
-	switch (dir)
-	{
-	case Dir::UP:
-		dirY--;
-		break;
-	case Dir::DOWN:
-		dirY++;
-		break;
-	case Dir::LEFT:
-		dirX--;
-		break;
-	case Dir::RIGHT:
-		dirX++;
-		break;
-	}
-
+	Position dirToPos = DirToMapPosition(dir);
 	Position clonePos = state.clone.GetMapPos();
+	Position nextPos = clonePos + dirToPos;
 
-	Position next =
-	{
-		clonePos.x + dirX,
-		clonePos.y + dirY
-	};
-
-	if (IsEdge(next.x, next.y))
+	if (IsEdge(nextPos.x, nextPos.y))
 		return false;
 
-	BlockType nextBlock = state.map[next.y][next.x];
-	cout << next.x << "," << next.y << "is not Empty?" << endl;
-	if (nextBlock != BlockType::EMPTY)
+	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
+	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
+
+	if (!IsPassable(nextBlock, nextBlockType))
 	{
-		HandleCloneBlockInteraction(state, nextBlock);
+		HandleCloneBlockInteraction(state, nextBlock, nextBlockType);
 		return false;
 	}
 
 	return true;
 }
 
-void HandlePlayerBlockInteraction(GameState& state, BlockType block)
+void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blockType)
 {
-	switch (block)
+	Position blockPos = block-> m_position;
+	switch (blockType)
 	{
-	case BlockType::BRICK:
-	{
-		break;
-	}
 	case BlockType::LASERBEAM_HORIZONTAL:
 	case BlockType::LASERBEAM_VERTICAL:
 	{
-		//플레이어 죽는 처리
 		HandlePlayerDead(state);
 		break;
 	}
-	case BlockType::PORTAL_RED_ENTER:
+	case BlockType::PORTAL_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 		for (int _y = 0; _y < MAP_H; _y++)
 		{
 			for (int _x = 0; _x < MAP_W; _x++)
 			{
-				if (state.map[_y][_x] == BlockType::PORTAL_RED_EXIT)
+				if (state.map[_y][_x] == BlockType::PORTAL_RED
+					&& Position {_x, _y} != blockPos)
 				{
 					Position cursorPos = { 0,0 };
 					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
+					cursorPos.y += _y;
 
 					state.player.SetPos(cursorPos, {_x, _y});
 				}
@@ -241,42 +209,31 @@ void HandlePlayerBlockInteraction(GameState& state, BlockType block)
 		}
 		break;
 	}
-	case BlockType::PORTAL_RED_EXIT:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-		for (int _y = 0; _y < MAP_H; _y++)
-		{
-			for (int _x = 0; _x < MAP_W; _x++)
-			{
-				if (state.map[_y][_x] == BlockType::PORTAL_RED_ENTER)
-				{
-					Position cursorPos = { 0,0 };
-					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
-
-					state.player.SetPos(cursorPos, { _x, _y });
-				}
-			}
-		}
-		break;
-	}
-	case BlockType::BUTTON_RASERCORE:
+	case BlockType::BUTTOON_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 		for (int y = 0; y < MAP_H; ++y)
 		{
 			for (int x = 0; x < MAP_W; ++x)
 			{
-				if (state.map[y][x] == BlockType::LASERCORE)
+				if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
+					|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
 				{
-					LaserCore& laserCore = *((LaserCore*)(state.blocks[y][x]));
-					laserCore.ChangeDirection(state, Dir::UP);
-					laserCore.Cast(state, x, y);
+					SwitchableBrick* switchableBrick = (SwitchableBrick*)(state.blocks[y][x]);
+					switchableBrick->Toggle(state);
 				}
-				else if (state.map[y][x] == BlockType::BRICK_SWITCHABLE)
+			}
+		}
+
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				if (state.map[y][x] == BlockType::LASERCORE_RED)
 				{
-					SwitchableBrick& switchableBrick = *((SwitchableBrick*)(state.blocks[y][x]));
-					switchableBrick.m_isActive = !switchableBrick.m_isActive;
+					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+					laserCore->ChangeDirection(state, Dir::UP);
+					laserCore->TryDrawCast(state, x, y);
 				}
 			}
 		}
@@ -286,34 +243,28 @@ void HandlePlayerBlockInteraction(GameState& state, BlockType block)
 	}
 }
 
-void HandleCloneBlockInteraction(GameState& state, BlockType block)
+void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType)
 {
-	cout << "HandleCloneBlockInteraction";
-	switch (block)
+	switch (blockType)
 	{
-	case BlockType::BRICK:
-	{
-		break;
-	}
 	case BlockType::LASERBEAM_HORIZONTAL:
 	case BlockType::LASERBEAM_VERTICAL:
 	{
 		HandleCloneDead(state);
 		break;
 	}
-	case BlockType::PORTAL_RED_ENTER:
+	case BlockType::PORTAL_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
-		cout << "PORTAL_RED_ENTERPORTAL_RED_ENTER";
 		for (int _y = 0; _y < MAP_H; _y++)
 		{
 			for (int _x = 0; _x < MAP_W; _x++)
 			{
-				if (state.map[_y][_x] == BlockType::PORTAL_RED_EXIT)
+				if (state.map[_y][_x] == BlockType::PORTAL_RED)
 				{
 					Position cursorPos = { 0,0 };
 					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
+					cursorPos.y += _y;
 
 					state.clone.SetPos(cursorPos, { _x, _y });
 				}
@@ -321,51 +272,42 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 		}
 		break;
 	}
-	case BlockType::PORTAL_RED_EXIT:
-	{
-		cout << "PORTAL_RED_EXITPORTAL_RED_EXIT";
-
-		ShakeConsoleWindow(15, 40, 25);
-		for (int _y = 0; _y < MAP_H; _y++)
-		{
-			for (int _x = 0; _x < MAP_W; _x++)
-			{
-				if (state.map[_y][_x] == BlockType::PORTAL_RED_ENTER)
-				{
-					Position cursorPos = { 0,0 };
-					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
-
-					state.clone.SetPos(cursorPos, { _x, _y });
-				}
-			}
-		}
-		break;
-	}
-	case BlockType::BUTTON_RASERCORE:
+	case BlockType::BUTTOON_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 		for (int y = 0; y < MAP_H; ++y)
 		{
 			for (int x = 0; x < MAP_W; ++x)
 			{
-				if (state.map[y][x] == BlockType::LASERCORE)
+				if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON)
 				{
-					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state, Dir::UP);
-					((LaserCore*)(state.blocks[y][x]))->Cast(state, x, y);
+					SwitchableBrick* switchableBrick = (SwitchableBrick*)(state.blocks[y][x]);
+					switchableBrick->Toggle(state);
+				}
+			}
+		}
+
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				if (state.map[y][x] == BlockType::LASERCORE_RED)
+				{
+					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+					laserCore->ChangeDirection(state, Dir::UP);
+					laserCore->TryDrawCast(state, x, y);
 				}
 			}
 		}
 		break;
 	}
-
 	}
 }
 
 void HandlePlayerDead(GameState& state)
 {
 	Position startPos = state.player.GetStartPos();
-	Position cursorPos = { startPos.x * 2, startPos.y * 2 };
+	Position cursorPos = { startPos.x * 2, startPos.y };
 	state.player.Dead();
 	ShakeConsoleWindow(20, 30, 30);
 	Sleep(500);

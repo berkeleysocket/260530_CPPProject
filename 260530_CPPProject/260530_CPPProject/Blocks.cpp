@@ -19,7 +19,12 @@ Block* GenerateBlock(BlockType type)
 		block = new Brick();
 		break;
 	}
-	case BlockType::LASERCORE:
+	case BlockType::START:
+	{
+		block = new Empty();
+		break;
+	}
+	case BlockType::LASERCORE_RED:
 	{
 		block = new LaserCore(Dir::DOWN);
 		break;
@@ -34,26 +39,27 @@ Block* GenerateBlock(BlockType type)
 		block = new HorizontalLaser();
 		break;
 	}
-	case BlockType::PORTAL_RED_ENTER:
+	case BlockType::PORTAL_RED:
 	{
-		block = new PortalEnter();
+		block = new Portal();
 		break;
 	}
-	case BlockType::PORTAL_RED_EXIT:
+	case BlockType::PORTAL_BLUE:
 	{
-		block = new PortalExit();
+		block = new Portal();
 		break;
 	}
+	case BlockType::BUTTOON_RED:
 	{
-		block = new PortalEnter();
+		block = new RedButton();
 		break;
 	}
-	case BlockType::BUTTON_RASERCORE:
+	case BlockType::BUTTON_BLUE:
 	{
-		block = new PortalButton();
+		block = new RedButton();
 		break;
 	}
-	case BlockType::BRICK_SWITCHABLE:
+	case BlockType::SWITCHABLEBRICK_RED_ON:
 	{
 		block = new SwitchableBrick();
 		break;
@@ -66,10 +72,33 @@ Block* GenerateBlock(BlockType type)
 	return block;
 }
 
+bool IsPassable(Block* block, BlockType blockType)
+{
+	switch (blockType)
+	{
+	case BlockType::EMPTY:
+	{
+		return true;
+		break;
+	}
+	case BlockType::SWITCHABLEBRICK_RED_ON:
+	{
+		return !(((SwitchableBrick*)(block))->GetIsActive());
+		break;
+	}
+	default:
+	{
+		return false;
+		break;
+	}
+	}
+}
+
 const string Block::GetImage() const
 {
 	return m_image;
 }
+
 const Color Block::GetColor() const
 {
 	return m_color;
@@ -108,23 +137,31 @@ LaserCore::LaserCore(Dir castingDir)
 	m_color = Color::LIGHT_GRAY;
 }
 
-void LaserCore::Cast(GameState& state, int x, int y)
+void LaserCore::TryDrawCast(GameState& state, int x, int y)
 {
-	Position dir = DirToCursorPosition(m_dir);
+	Position dir = DirToMapPosition(m_dir);
 	Position createLaserPos = { x + dir.x, y + dir.y };
-	BlockType castingLaserT = dir.x != 0 ? BlockType::LASERBEAM_HORIZONTAL : BlockType::LASERBEAM_VERTICAL;
+	BlockType renderLaserType = dir.x != 0 ? BlockType::LASERBEAM_HORIZONTAL : BlockType::LASERBEAM_VERTICAL;
+	BlockType& nextBlockType = state.map[createLaserPos.y][createLaserPos.x];
 
-	while (!IsEdge(createLaserPos.x, createLaserPos.y)
-		&& state.map[createLaserPos.y][createLaserPos.x] == BlockType::EMPTY)
-		//|| state.map[createLaserPos.y][createLaserPos.x] == BlockType::BRICK_SWITCHABLE)
+	while (!IsEdge(createLaserPos.x, createLaserPos.y))
 	{
-		//if (state.map[createLaserPos.y][createLaserPos.x] == BlockType::BRICK_SWITCHABLE)
-		//{
-		//	if(state.map[createLaserPos.y][createLaserPos.x] == BlockType::BRICK_SWITCHABLE)
-		//}
-		state.map[createLaserPos.y][createLaserPos.x] = castingLaserT;
-		state.blocks[createLaserPos.y][createLaserPos.x] = GenerateBlock(castingLaserT);
+		BlockType nextBlockType = state.map[createLaserPos.y][createLaserPos.x];
+
+		if (nextBlockType == BlockType::SWITCHABLEBRICK_RED_ON)
+			return;
+		else if (nextBlockType == BlockType::SWITCHABLEBRICK_RED_OFF)
+		{
+			createLaserPos += dir;
+			continue;
+		}
+
+		if (nextBlockType != BlockType::EMPTY) return;
+
+		state.map[createLaserPos.y][createLaserPos.x] = renderLaserType;
+		state.blocks[createLaserPos.y][createLaserPos.x] = GenerateBlock(renderLaserType);
 		m_beamPosQueue.push({ createLaserPos.x, createLaserPos.y });
+		
 		createLaserPos += dir;
 	}
 }
@@ -142,9 +179,8 @@ void LaserCore::ChangeDirection(GameState& state, Dir dir)
 		m_dir = Dir::UP;
 
 	Position pos { 0,0 };
-	int x(0);
-	int y(0);
 	BlockType empty = BlockType::EMPTY;
+	BlockType switchableBlock = BlockType::SWITCHABLEBRICK_RED_ON;
 
 	while (!m_beamPosQueue.empty())
 	{
@@ -152,11 +188,11 @@ void LaserCore::ChangeDirection(GameState& state, Dir dir)
 
 		m_beamPosQueue.pop();
 
-		x = pos.x;
-		y = pos.y;
+		if (state.map[pos.y][pos.x] == switchableBlock)
+			continue;
 
-		state.map[y][x] = empty;
-		state.blocks[y][x] = GenerateBlock(empty);
+		state.map[pos.y][pos.x] = empty;
+		state.blocks[pos.y][pos.x] = GenerateBlock(empty);
 	}
 }
 
@@ -181,21 +217,15 @@ VerticalLaser::VerticalLaser()
 #pragma endregion
 
 #pragma region Button
-PortalButton::PortalButton() 
+RedButton::RedButton() 
 {
-	m_image = "б▄";
+	m_image = "в┴";
 	m_color = Color::RED;
 }
 #pragma endregion
 
 #pragma region Portal
-PortalEnter::PortalEnter() 
-{
-	m_image = "г└";
-	m_color = Color::LIGHT_VIOLET;
-}
-
-PortalExit::PortalExit()
+Portal::Portal() 
 {
 	m_image = "г└";
 	m_color = Color::LIGHT_VIOLET;
@@ -207,6 +237,31 @@ SwitchableBrick::SwitchableBrick()
 {
 	m_image = "бс";
 	m_color = Color::LIGHT_RED;
+	m_isActive = true;
+}
+
+bool SwitchableBrick::GetIsActive()
+{
+	return m_isActive;
+}
+
+void SwitchableBrick::Toggle(GameState& state)
+{
+	m_isActive = !m_isActive;
+
+	if (m_isActive)
+	{
+		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_ON;
+
+		m_image = "бс";
+		m_color = Color::LIGHT_RED;
+	}
+	else
+	{
+		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_OFF;
+		m_image = "бр";
+		m_color = Color::LIGHT_GRAY;
+	}
 }
 #pragma endregion
 
