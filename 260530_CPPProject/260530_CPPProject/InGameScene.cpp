@@ -33,7 +33,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 			state.blocks[y][x] = GenerateBlock(blockType);
 			if (state.map[y][x] == BlockType::START)
 			{
-				state.player.startPos = { x,y };
+				state.player.SetSpawnPos({ x,y*2 },{x,y});
 				state.map[y][x] = BlockType::EMPTY;
 			}
 		}
@@ -373,7 +373,7 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 
 void HandlePlayerDead(GameState& state)
 {
-	Position startPos = state.player.startPos;
+	Position startPos = state.player.GetStartPos();
 	Position cursorPos = { startPos.x * 2, startPos.y * 2 };
 	state.clone.Spawn(state.moveDataRecord.GetRecord());
 

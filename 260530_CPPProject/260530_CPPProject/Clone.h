@@ -2,7 +2,8 @@
 #include<queue>
 #include"Color.h"
 #include"Actor.h"
-#include "GameState.h"
+
+class GameState;
 
 class Clone:public Actor
 {
