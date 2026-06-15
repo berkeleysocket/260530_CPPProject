@@ -4,6 +4,8 @@
 #include"Actor.h"
 #include "GameState.h"
 
+struct GameState;
+
 class Clone:public Actor
 {
 public:
