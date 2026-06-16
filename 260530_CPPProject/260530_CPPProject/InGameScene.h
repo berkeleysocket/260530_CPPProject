@@ -13,24 +13,22 @@ using std::string;
 using std::cout;
 using std::endl;
 
-//Game
+//game
 void InitInGame(GameState& state);
 void ClearStage(GameState& state);
+void LoadMap(GameState& state, const vector<string>& gameMap);
+void LoadMap(GameState& state, const string gameMap[MAP_H]);
 
-//player & clone
-void HandlePlayerDead(GameState& state);
-void HandleCloneDead(GameState& state);
+//render
+void DrawMap(GameState& state);
+void DrawBlock(GameState& state, int x, int y);
 bool TryDrawPlayer(GameState& state, int x, int y);
 bool TryDrawClone(GameState& state, int x, int y);
+
+//player & clone actions
 bool TryPlayerMove(GameState& state, Dir dir);
-bool TryCloneMove(GameState& state, Dir dir);
 bool TryCloneMove(GameState& state, Dir dir);
 void HandlePlayerBlockInteraction(GameState& state, Block* block, BlockType blockType);
 void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType);
-
-//map
-void LoadMap(GameState& state, const vector<string>& gameMap);
-void LoadMap(GameState& state, const string gameMap[MAP_H]);
-void DrawMap(GameState& state);
-void DrawBlock(GameState& state, int x, int y);
-bool IsEdge(int x, int y);
+void HandlePlayerDead(GameState& state);
+void HandleCloneDead(GameState& state);

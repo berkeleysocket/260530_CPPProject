@@ -1,5 +1,17 @@
 ﻿#include "InGameScene.h"
 
+void InitInGame(GameState& state)
+{
+	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
+	LoadMap(state, state.mapBox.m_gameMap);
+}
+void ClearStage(GameState& state)
+{
+	//Stage 클리어 처리
+	SetColor(Color::LIGHT_YELLOW);
+	cout << endl;
+	cout << "Stage Clear!!";
+}
 void LoadMap(GameState& state, const vector<string>& gameMap)
 {
 	int w = gameMap[0].size(); // 이렇게 할려면 무조권 맵이 사각형이여야함 (공백으로 체워도 상과 x)
@@ -29,7 +41,6 @@ void LoadMap(GameState& state, const vector<string>& gameMap)
 		}
 	}
 }
-
 void LoadMap(GameState& state, const string gameMap[MAP_H])
 {
 	for (int y = 0; y < MAP_H; ++y)
@@ -57,12 +68,6 @@ void LoadMap(GameState& state, const string gameMap[MAP_H])
 	}
 }
 
-void InitInGame(GameState& state)
-{
-	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, state.mapBox.m_gameMap);
-}
-
 void DrawMap(GameState& state)
 {
 	for (int y = 0; y < MAP_H; ++y)
@@ -82,7 +87,6 @@ void DrawMap(GameState& state)
 	}
 	SetColor();
 }
-
 void DrawBlock(GameState& state, int x, int y)
 {
 	BlockType blockType = state.map[y][x];
@@ -109,7 +113,6 @@ void DrawBlock(GameState& state, int x, int y)
 	SetColor(block->GetColor());
 	cout << (block->GetImage());
 }
-
 bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
@@ -123,7 +126,6 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 
 	return false;
 }
-
 bool TryDrawClone(GameState& state, int x, int y)
 {
 	if (state.clone.GetMapPos() == Position{ x, y }
@@ -146,7 +148,7 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	Position nextPos = playerPos + dirToPos;
 	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
 
-	cout << nextPos.x << "," << nextPos.y << " : " << (char)nextBlockType;
+	cout << nextPos.x << "," << nextPos.y << " : " << (char)nextBlockType << "   ";
 
 	if (IsEdge(nextPos.x, nextPos.y))
 	{
@@ -162,7 +164,6 @@ bool TryPlayerMove(GameState& state, Dir dir)
 
 	return true;
 }
-
 bool TryCloneMove(GameState& state, Dir dir)
 {
 	Position dirToPos = DirToMapPosition(dir);
@@ -183,7 +184,6 @@ bool TryCloneMove(GameState& state, Dir dir)
 
 	return true;
 }
-
 void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blockType)
 {
 	Position blockPos = block-> m_position;
@@ -265,7 +265,6 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 	}
 	}
 }
-
 void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType)
 {
 	Position blockPos = block->m_position;
@@ -274,69 +273,70 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 	{
 	case BlockType::LASERBEAM_HORIZONTAL:
 	case BlockType::LASERBEAM_VERTICAL:
-	{
-		HandlePlayerDead(state);
-		break;
-	}
+		{
+			HandlePlayerDead(state);
+			break;
+		}
 	case BlockType::PORTAL_RED:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		for (int _y = 0; _y < MAP_H; _y++)
 		{
-			for (int _x = 0; _x < MAP_W; _x++)
-			{
-				if (state.map[_y][_x] == BlockType::PORTAL_RED
-					&& Position{ _x, _y } != blockPos)
-				{
-					Position cursorPos = { 0,0 };
-					cursorPos.x += _x * 2;
-					cursorPos.y += _y;
+			ShakeConsoleWindow(15, 40, 25);
 
-					state.clone.SetPos(cursorPos, { _x, _y });
+			for (int _y = 0; _y < MAP_H; _y++)
+			{
+				for (int _x = 0; _x < MAP_W; _x++)
+				{
+					if (state.map[_y][_x] == BlockType::PORTAL_RED
+						&& Position{ _x, _y } != blockPos)
+					{
+						Position cursorPos = { 0,0 };
+						cursorPos.x += _x * 2;
+						cursorPos.y += _y * 2;
+
+						state.clone.SetPos(cursorPos, { _x, _y });
+					}
 				}
+				cout << endl;
 			}
+			break;
 		}
-		break;
-	}
 	case BlockType::PORTAL_BLUE:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		for (int _y = 0; _y < MAP_H; _y++)
 		{
-			for (int _x = 0; _x < MAP_W; _x++)
+			ShakeConsoleWindow(15, 40, 25);
+
+			for (int _y = 0; _y < MAP_H; _y++)
 			{
-				if (state.map[_y][_x] == BlockType::PORTAL_BLUE
-					&& Position{ _x, _y } != blockPos)
+				for (int _x = 0; _x < MAP_W; _x++)
 				{
-					Position cursorPos = { 0,0 };
-					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
+					if (state.map[_y][_x] == BlockType::PORTAL_BLUE
+						&& Position{ _x, _y } != blockPos)
+					{
+						Position cursorPos = { 0,0 };
+						cursorPos.x += _x * 2;
+						cursorPos.y += _y * 2;
 
-					state.player.SetPos(cursorPos, { _x, _y });
+						state.player.SetPos(cursorPos, { _x, _y });
+					}
 				}
+				cout << endl;
 			}
-			cout << endl;
+			break;
 		}
-		break;
-	}
 	case BlockType::BUTTOON_RED:
-	{
-		ShakeConsoleWindow(15, 40, 25);
+		{
+			ShakeConsoleWindow(15, 40, 25);
 
-		RedButton* redButton = (RedButton*)block;
-		redButton->Press(state);
-		break;
-	}
+			RedButton* redButton = (RedButton*)block;
+			redButton->Press(state);
+			break;
+		}
 	case BlockType::BUTTON_BLUE:
-	{
-		ShakeConsoleWindow(15, 40, 25);
+		{
+			ShakeConsoleWindow(15, 40, 25);
 
-		BlueButton* blueButton = (BlueButton*)block;
-		blueButton->Press(state);
-		break;
-	}
+			BlueButton* blueButton = (BlueButton*)block;
+			blueButton->Press(state);
+			break;
+		}
 	case BlockType::END:
 	{
 		ShakeConsoleWindow(15, 40, 25);
@@ -346,7 +346,6 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 	}
 	}
 }
-
 void HandlePlayerDead(GameState& state)
 {
 	Position startPos = state.player.GetStartPos();
@@ -361,15 +360,9 @@ void HandlePlayerDead(GameState& state)
 	state.player.Spawn();
 	state.moveDataRecord.ReSet();
 }
-
 void HandleCloneDead(GameState& state)
 {
 	state.clone.Dead();
 	ShakeConsoleWindow(20, 30, 30);
 	Sleep(500);
-}
-
-void ClearStage(GameState& state)
-{
-	//Stage 클리어 처리
 }

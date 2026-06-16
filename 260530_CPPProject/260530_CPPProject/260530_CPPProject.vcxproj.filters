@@ -42,9 +42,6 @@
     <ClCompile Include="Console.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Prop.cpp">
-      <Filter>SY\소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>HJ\Actor\Player</Filter>
     </ClCompile>
@@ -75,12 +72,6 @@
     <ClCompile Include="Dir.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameState.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -90,13 +81,16 @@
     <ClCompile Include="StageScene.cpp">
       <Filter>HJ\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>SY\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>SY\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Prop.h">
-      <Filter>SY\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Position.h">
       <Filter>헤더 파일</Filter>
@@ -112,9 +106,6 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>HJ\Actor\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="GameState.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Blocks.h">
       <Filter>SY\헤더 파일</Filter>
@@ -140,9 +131,6 @@
     <ClInclude Include="Enums.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -154,6 +142,12 @@
     </ClInclude>
     <ClInclude Include="StageScene.h">
       <Filter>HJ\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>SY\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>SY\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

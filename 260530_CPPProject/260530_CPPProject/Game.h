@@ -6,4 +6,3 @@
 void Init(GameState& state);
 void Update(GameState& state);
 void Render(GameState& state);
-

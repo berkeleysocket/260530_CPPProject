@@ -1,6 +1,9 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <queue>
+
+#include "GameState.h"
 #include "Position.h"
 #include "Dir.h"
 #include "Color.h"
@@ -64,7 +67,6 @@ public:
 	Brick();
 };
 
-#pragma region Laser
 class LaserCore : public Block
 {
 private:
@@ -92,7 +94,6 @@ class VerticalLaser : public Block
 public:
 	VerticalLaser();
 };
-#pragma endregion
 
 #pragma region Button
 class RedButton : public Block
@@ -149,16 +150,11 @@ public:
 };
 #pragma endregion
 
-#pragma region End
 class EndBlock : public Block
 {
 public:
 	EndBlock();
 };
-#pragma endregion
-
-
-
 
 Block* GenerateBlock(BlockType type);
 bool IsPassable(Block* block, BlockType blockType);
