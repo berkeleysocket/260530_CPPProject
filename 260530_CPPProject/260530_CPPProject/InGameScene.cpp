@@ -181,6 +181,7 @@ bool TryCloneMove(GameState& state, Dir dir)
 void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blockType)
 {
 	Position blockPos = block-> m_position;
+
 	switch (blockType)
 	{
 	case BlockType::LASERBEAM_HORIZONTAL:
@@ -211,37 +212,44 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		}
 		break;
 	}
-	case BlockType::BUTTOON_RED:
+	case BlockType::PORTAL_BLUE:
 	{
 		ShakeConsoleWindow(15, 40, 25);
-		for (int y = 0; y < MAP_H; ++y)
-		{
-			for (int x = 0; x < MAP_W; ++x)
-			{
-				if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
-					|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
-				{
-					RedSwitchableBrick* switchableBrick = (RedSwitchableBrick*)(state.blocks[y][x]);
-					switchableBrick->Toggle(state);
-				}
-			}
-		}
 
-		for (int y = 0; y < MAP_H; ++y)
+		for (int _y = 0; _y < MAP_H; _y++)
 		{
-			for (int x = 0; x < MAP_W; ++x)
+			for (int _x = 0; _x < MAP_W; _x++)
 			{
-				if (state.map[y][x] == BlockType::LASERCORE_RED)
+				if (state.map[_y][_x] == BlockType::PORTAL_BLUE
+					&& Position{ _x, _y } != blockPos)
 				{
-					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-					laserCore->ChangeDirection(state, Dir::UP);
-					laserCore->TryDrawCast(state, x, y);
+					Position cursorPos = { 0,0 };
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y * 2;
+
+					state.player.SetPos(cursorPos, { _x, _y });
 				}
 			}
+			cout << endl;
 		}
 		break;
 	}
+	case BlockType::BUTTOON_RED:
+	{
+		ShakeConsoleWindow(15, 40, 25);
 
+		RedButton* redButton = (RedButton*)block;
+		redButton->Press(state);
+		break;
+	}
+	case BlockType::BUTTON_BLUE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		BlueButton* blueButton = (BlueButton*)block;
+		blueButton->Press(state);
+		break;
+	}
 	}
 }
 
@@ -277,40 +285,44 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 		}
 		break;
 	}
+	case BlockType::PORTAL_BLUE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		for (int _y = 0; _y < MAP_H; _y++)
+		{
+			for (int _x = 0; _x < MAP_W; _x++)
+			{
+				if (state.map[_y][_x] == BlockType::PORTAL_BLUE
+					&& Position{ _x, _y } != blockPos)
+				{
+					Position cursorPos = { 0,0 };
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y * 2;
+
+					state.player.SetPos(cursorPos, { _x, _y });
+				}
+			}
+			cout << endl;
+		}
+		break;
+	}
 	case BlockType::BUTTOON_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
 		RedButton* redButton = (RedButton*)block;
 		redButton->Press(state);
-		//for (int y = 0; y < MAP_H; ++y)
-		//{
-		//	for (int x = 0; x < MAP_W; ++x)
-		//	{
-		//		if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
-		//			|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
-		//		{
-		//			RedSwitchableBrick* switchableBrick = (RedSwitchableBrick*)(state.blocks[y][x]);
-		//			switchableBrick->Toggle(state);
-		//		}
-		//	}
-		//}
-
-		//for (int y = 0; y < MAP_H; ++y)
-		//{
-		//	for (int x = 0; x < MAP_W; ++x)
-		//	{
-		//		if (state.map[y][x] == BlockType::LASERCORE_RED)
-		//		{
-		//			LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-		//			laserCore->ChangeDirection(state, Dir::UP);
-		//			laserCore->TryDrawCast(state, x, y);
-		//		}
-		//	}
-		//}
 		break;
 	}
+	case BlockType::BUTTON_BLUE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
 
+		BlueButton* blueButton = (BlueButton*)block;
+		blueButton->Press(state);
+		break;
+	}
 	}
 }
 

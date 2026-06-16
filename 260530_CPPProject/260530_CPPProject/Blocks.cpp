@@ -250,6 +250,13 @@ void RedButton::Press(GameState& state)
 				RedSwitchableBrick* switchableBrick = (RedSwitchableBrick*)(state.blocks[y][x]);
 				switchableBrick->Toggle(state);
 			}
+			else if (state.map[y][x] == BlockType::LASERCORE_RED)
+			{
+				LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+				laserCore->ChangeDirection(state, Dir::UP);
+				laserCore->TryDrawCast(state, x, y);
+			}
+
 		}
 	}
 }
@@ -272,19 +279,12 @@ void BlueButton::Press(GameState& state)
 				BlueSwitchableBrick* switchableBrick = (BlueSwitchableBrick*)(state.blocks[y][x]);
 				switchableBrick->Toggle(state);
 			}
-		}
-	}
-
-	for (int y = 0; y < MAP_H; ++y)
-	{
-		for (int x = 0; x < MAP_W; ++x)
-		{
-			if (state.map[y][x] == BlockType::LASERCORE_RED)
-			{
-				LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-				laserCore->ChangeDirection(state, Dir::UP);
-				laserCore->TryDrawCast(state, x, y);
-			}
+			//else if (state.map[y][x] == BlockType::LASERCORE_)
+			//{
+			//	LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+			//	laserCore->ChangeDirection(state, Dir::UP);
+			//	laserCore->TryDrawCast(state, x, y);
+			//}
 		}
 	}
 }
@@ -307,7 +307,7 @@ BluePortal::BluePortal()
 #pragma region SwitchableBrick
 RedSwitchableBrick::RedSwitchableBrick(bool isActive)
 {
-	m_image = "бс";
+	m_image = isActive ? "бс" : "бр";
 	m_color = Color::LIGHT_RED;
 	m_isActive = isActive;
 }
@@ -326,19 +326,17 @@ void RedSwitchableBrick::Toggle(GameState& state)
 		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_ON;
 
 		m_image = "бс";
-		m_color = Color::LIGHT_RED;
 	}
 	else
 	{
 		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_OFF;
 		m_image = "бр";
-		m_color = Color::LIGHT_GRAY;
 	}
 }
 
 BlueSwitchableBrick::BlueSwitchableBrick(bool isActive)
 {
-	m_image = "бс";
+	m_image = isActive ? "бс" : "бр";
 	m_color = Color::LIGHT_BLUE;
 	m_isActive = isActive;
 }
@@ -355,15 +353,12 @@ void BlueSwitchableBrick::Toggle(GameState& state)
 	if (m_isActive)
 	{
 		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_ON;
-
 		m_image = "бс";
-		m_color = Color::LIGHT_BLUE;
 	}
 	else
 	{
 		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_OFF;
 		m_image = "бр";
-		m_color = Color::LIGHT_GRAY;
 	}
 }
 #pragma endregion
