@@ -221,7 +221,7 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 				if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
 					|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
 				{
-					SwitchableBrick* switchableBrick = (SwitchableBrick*)(state.blocks[y][x]);
+					RedSwitchableBrick* switchableBrick = (RedSwitchableBrick*)(state.blocks[y][x]);
 					switchableBrick->Toggle(state);
 				}
 			}
@@ -280,31 +280,34 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 	case BlockType::BUTTOON_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
-		for (int y = 0; y < MAP_H; ++y)
-		{
-			for (int x = 0; x < MAP_W; ++x)
-			{
-				if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
-					|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
-				{
-					SwitchableBrick* switchableBrick = (SwitchableBrick*)(state.blocks[y][x]);
-					switchableBrick->Toggle(state);
-				}
-			}
-		}
 
-		for (int y = 0; y < MAP_H; ++y)
-		{
-			for (int x = 0; x < MAP_W; ++x)
-			{
-				if (state.map[y][x] == BlockType::LASERCORE_RED)
-				{
-					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-					laserCore->ChangeDirection(state, Dir::UP);
-					laserCore->TryDrawCast(state, x, y);
-				}
-			}
-		}
+		RedButton* redButton = (RedButton*)block;
+		redButton->Press(state);
+		//for (int y = 0; y < MAP_H; ++y)
+		//{
+		//	for (int x = 0; x < MAP_W; ++x)
+		//	{
+		//		if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
+		//			|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
+		//		{
+		//			RedSwitchableBrick* switchableBrick = (RedSwitchableBrick*)(state.blocks[y][x]);
+		//			switchableBrick->Toggle(state);
+		//		}
+		//	}
+		//}
+
+		//for (int y = 0; y < MAP_H; ++y)
+		//{
+		//	for (int x = 0; x < MAP_W; ++x)
+		//	{
+		//		if (state.map[y][x] == BlockType::LASERCORE_RED)
+		//		{
+		//			LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+		//			laserCore->ChangeDirection(state, Dir::UP);
+		//			laserCore->TryDrawCast(state, x, y);
+		//		}
+		//	}
+		//}
 		break;
 	}
 

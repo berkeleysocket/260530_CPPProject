@@ -41,12 +41,12 @@ Block* GenerateBlock(BlockType type)
 	}
 	case BlockType::PORTAL_RED:
 	{
-		block = new Portal();
+		block = new RedPortal();
 		break;
 	}
 	case BlockType::PORTAL_BLUE:
 	{
-		block = new Portal();
+		block = new BluePortal();
 		break;
 	}
 	case BlockType::BUTTOON_RED:
@@ -56,12 +56,27 @@ Block* GenerateBlock(BlockType type)
 	}
 	case BlockType::BUTTON_BLUE:
 	{
-		block = new RedButton();
+		block = new BlueButton();
 		break;
 	}
 	case BlockType::SWITCHABLEBRICK_RED_ON:
 	{
-		block = new SwitchableBrick();
+		block = new RedSwitchableBrick(true);
+		break;
+	}
+	case BlockType::SWITCHABLEBRICK_RED_OFF:
+	{
+		block = new RedSwitchableBrick(false);
+		break;
+	}
+	case BlockType::SWITCHABLEBRICK_BLUE_ON:
+	{
+		block = new BlueSwitchableBrick(true);
+		break;
+	}
+	case BlockType::SWITCHABLEBRICK_BLUE_OFF:
+	{
+		block = new BlueSwitchableBrick(false);
 		break;
 	}
 	default:
@@ -83,7 +98,7 @@ bool IsPassable(Block* block, BlockType blockType)
 	}
 	case BlockType::SWITCHABLEBRICK_RED_ON:
 	{
-		return !(((SwitchableBrick*)(block))->GetIsActive());
+		return !(((RedSwitchableBrick*)(block))->GetIsActive());
 		break;
 	}
 	default:
@@ -222,30 +237,87 @@ RedButton::RedButton()
 	m_image = "в┴";
 	m_color = Color::RED;
 }
+
+void RedButton::Press(GameState& state)
+{
+	for (int y = 0; y < MAP_H; ++y)
+	{
+		for (int x = 0; x < MAP_W; ++x)
+		{
+			if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
+				|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
+			{
+				RedSwitchableBrick* switchableBrick = (RedSwitchableBrick*)(state.blocks[y][x]);
+				switchableBrick->Toggle(state);
+			}
+		}
+	}
+}
+
+BlueButton::BlueButton()
+{
+	m_image = "в┴";
+	m_color = Color::BLUE;
+}
+
+void BlueButton::Press(GameState& state)
+{
+	for (int y = 0; y < MAP_H; ++y)
+	{
+		for (int x = 0; x < MAP_W; ++x)
+		{
+			if (state.map[y][x] == BlockType::SWITCHABLEBRICK_BLUE_ON
+				|| state.map[y][x] == BlockType::SWITCHABLEBRICK_BLUE_OFF)
+			{
+				BlueSwitchableBrick* switchableBrick = (BlueSwitchableBrick*)(state.blocks[y][x]);
+				switchableBrick->Toggle(state);
+			}
+		}
+	}
+
+	for (int y = 0; y < MAP_H; ++y)
+	{
+		for (int x = 0; x < MAP_W; ++x)
+		{
+			if (state.map[y][x] == BlockType::LASERCORE_RED)
+			{
+				LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+				laserCore->ChangeDirection(state, Dir::UP);
+				laserCore->TryDrawCast(state, x, y);
+			}
+		}
+	}
+}
 #pragma endregion
 
 #pragma region Portal
-Portal::Portal() 
+RedPortal::RedPortal() 
 {
 	m_image = "г└";
-	m_color = Color::LIGHT_VIOLET;
+	m_color = Color::LIGHT_RED;
+}
+
+BluePortal::BluePortal()
+{
+	m_image = "г└";
+	m_color = Color::LIGHT_BLUE;
 }
 #pragma endregion
 
 #pragma region SwitchableBrick
-SwitchableBrick::SwitchableBrick()
+RedSwitchableBrick::RedSwitchableBrick(bool isActive)
 {
 	m_image = "бс";
 	m_color = Color::LIGHT_RED;
-	m_isActive = true;
+	m_isActive = isActive;
 }
 
-bool SwitchableBrick::GetIsActive()
+bool RedSwitchableBrick::GetIsActive()
 {
 	return m_isActive;
 }
 
-void SwitchableBrick::Toggle(GameState& state)
+void RedSwitchableBrick::Toggle(GameState& state)
 {
 	m_isActive = !m_isActive;
 
@@ -259,6 +331,37 @@ void SwitchableBrick::Toggle(GameState& state)
 	else
 	{
 		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_OFF;
+		m_image = "бр";
+		m_color = Color::LIGHT_GRAY;
+	}
+}
+
+BlueSwitchableBrick::BlueSwitchableBrick(bool isActive)
+{
+	m_image = "бс";
+	m_color = Color::LIGHT_BLUE;
+	m_isActive = isActive;
+}
+
+bool BlueSwitchableBrick::GetIsActive()
+{
+	return m_isActive;
+}
+
+void BlueSwitchableBrick::Toggle(GameState& state)
+{
+	m_isActive = !m_isActive;
+
+	if (m_isActive)
+	{
+		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_ON;
+
+		m_image = "бс";
+		m_color = Color::LIGHT_BLUE;
+	}
+	else
+	{
+		state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_OFF;
 		m_image = "бр";
 		m_color = Color::LIGHT_GRAY;
 	}

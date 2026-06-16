@@ -27,7 +27,9 @@ enum class BlockType
 	BUTTON_BLUE = 'b',
 
 	SWITCHABLEBRICK_RED_ON = 'W',
-	SWITCHABLEBRICK_RED_OFF = 'w'
+	SWITCHABLEBRICK_RED_OFF = 'w',
+	SWITCHABLEBRICK_BLUE_ON = 'E',
+	SWITCHABLEBRICK_BLUE_OFF = 'e',
 };
 
 class Block
@@ -53,6 +55,7 @@ public:
 	Brick();
 };
 
+#pragma region Laser
 class LaserCore : public Block
 {
 private:
@@ -78,29 +81,64 @@ class VerticalLaser : public Block
 public:
 	VerticalLaser();
 };
+#pragma endregion
 
+#pragma region Button
 class RedButton : public Block
 {
 public:
 	RedButton();
+public:
+	void Press(GameState& state);
 };
 
-class Portal : public Block
+class BlueButton : public Block
 {
 public:
-	Portal();
+	BlueButton();
+public:
+	void Press(GameState& state);
 };
+#pragma endregion
 
-class SwitchableBrick : public Block
+#pragma region Portal
+class RedPortal : public Block
 {
 public:
-	SwitchableBrick();
+	RedPortal();
+};
+class BluePortal : public Block
+{
+public:
+	BluePortal();
+};
+#pragma endregion
+
+#pragma region SwitchableBrick
+class RedSwitchableBrick : public Block
+{
+public:
+	RedSwitchableBrick(bool isActive);
 private:
 	bool m_isActive;
 public:
 	bool GetIsActive();
 	void Toggle(GameState& state);
 };
+
+class BlueSwitchableBrick : public Block
+{
+public:
+	BlueSwitchableBrick(bool isActive);
+private:
+	bool m_isActive;
+public:
+	bool GetIsActive();
+	void Toggle(GameState& state);
+};
+#pragma endregion
+
+
 
 Block* GenerateBlock(BlockType type);
 bool IsPassable(Block* block, BlockType blockType);
