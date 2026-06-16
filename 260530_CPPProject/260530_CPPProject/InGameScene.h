@@ -13,8 +13,9 @@ using std::string;
 using std::cout;
 using std::endl;
 
-//Init
+//Game
 void InitInGame(GameState& state);
+void ClearStage(GameState& state);
 
 //player & clone
 void HandlePlayerDead(GameState& state);

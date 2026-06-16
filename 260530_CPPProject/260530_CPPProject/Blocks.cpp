@@ -11,7 +11,7 @@ Block* GenerateBlock(BlockType type)
 	{
 	case BlockType::EMPTY:
 	{
-		block = new Empty();
+		block = new EmptyBlock();
 		break;
 	}
 	case BlockType::BRICK:
@@ -21,12 +21,52 @@ Block* GenerateBlock(BlockType type)
 	}
 	case BlockType::START:
 	{
-		block = new Empty();
+		block = new EmptyBlock();
 		break;
 	}
-	case BlockType::LASERCORE_RED:
+	case BlockType::END:
 	{
-		block = new LaserCore(Dir::DOWN);
+		block = new EndBlock();
+		break;
+	}
+	case BlockType::LASERCORE_RED_UP_AUTO:
+	{
+		block = new LaserCore(true, Dir::UP);
+		break;
+	}
+	case BlockType::LASERCORE_RED_UP_STATIC:
+	{
+		block = new LaserCore(false, Dir::UP);
+		break;
+	}
+	case BlockType::LASERCORE_RED_DOWN_AUTO:
+	{
+		block = new LaserCore(true, Dir::DOWN);
+		break;
+	}
+	case BlockType::LASERCORE_RED_DOWN_STATIC:
+	{
+		block = new LaserCore(false, Dir::DOWN);
+		break;
+	}
+	case BlockType::LASERCORE_RED_LEFT_AUTO:
+	{
+		block = new LaserCore(true, Dir::LEFT);
+		break;
+	}
+	case BlockType::LASERCORE_RED_LEFT_STATIC:
+	{
+		block = new LaserCore(false, Dir::LEFT);
+		break;
+	}
+	case BlockType::LASERCORE_RED_RIGHT_AUTO:
+	{
+		block = new LaserCore(true, Dir::RIGHT);
+		break;
+	}
+	case BlockType::LASERCORE_RED_RIGHT_STATIC:
+	{
+		block = new LaserCore(false, Dir::RIGHT);
 		break;
 	}
 	case BlockType::LASERBEAM_VERTICAL:
@@ -80,7 +120,7 @@ Block* GenerateBlock(BlockType type)
 		break;
 	}
 	default:
-		block = new Empty();
+		block = new EmptyBlock();
 		break;
 	}
 
@@ -120,7 +160,7 @@ const Color Block::GetColor() const
 }
 
 #pragma region Empty
-Empty::Empty()
+EmptyBlock::EmptyBlock()
 {
 	m_image = "  ";
 	m_color = Color::WHITE;
@@ -136,26 +176,22 @@ Brick::Brick()
 #pragma endregion
 
 #pragma region LaserCore
-LaserCore::LaserCore()
+LaserCore::LaserCore(bool autoRotation, Dir castingDir)
 {
-	m_dir = Dir::UP;
 	m_image = "¡Ø";
-	m_color = Color::LIGHT_GRAY;
-	m_beamPosQueue = queue<Position>();
-}
-
-LaserCore::LaserCore(Dir castingDir)
-{
+	m_color = Color::RED;
+	m_isActive = true;	
+	m_autoRotation = autoRotation;
 	m_dir = castingDir;
 	m_beamPosQueue = queue<Position>();
-	m_image = "¡Ø";
-	m_color = Color::LIGHT_GRAY;
 }
 
-void LaserCore::TryDrawCast(GameState& state, int x, int y)
+void LaserCore::TryDrawCast(GameState& state)
 {
+	if (!m_isActive) return;
+
 	Position dir = DirToMapPosition(m_dir);
-	Position createLaserPos = { x + dir.x, y + dir.y };
+	Position createLaserPos = { m_position.x + dir.x, m_position.y + dir.y };
 	BlockType renderLaserType = dir.x != 0 ? BlockType::LASERBEAM_HORIZONTAL : BlockType::LASERBEAM_VERTICAL;
 	BlockType& nextBlockType = state.map[createLaserPos.y][createLaserPos.x];
 
@@ -183,17 +219,42 @@ void LaserCore::TryDrawCast(GameState& state, int x, int y)
 
 void LaserCore::ChangeDirection(GameState& state, Dir dir)
 {
-	//m_dir = dir;
-	if (m_dir == Dir::UP)
-		m_dir = Dir::RIGHT;
-	else if (m_dir == Dir::RIGHT)
-		m_dir = Dir::DOWN;
-	else if (m_dir == Dir::DOWN)
-		m_dir = Dir::LEFT;
-	else if (m_dir == Dir::LEFT)
-		m_dir = Dir::UP;
+	if (!m_isActive) return;
 
-	Position pos { 0,0 };
+	if (m_autoRotation)
+	{
+		switch (m_dir)
+		{
+		case Dir::UP:
+		{
+			m_dir = Dir::RIGHT;
+			break;
+		}
+		case Dir::DOWN:
+		{
+			m_dir = Dir::LEFT;
+			break;
+		}
+		case Dir::LEFT:
+		{
+			m_dir = Dir::UP;
+			break;
+		}
+		case Dir::RIGHT:
+		{
+			m_dir = Dir::DOWN;
+			break;
+		}
+		}
+	}
+
+	Clear(state);
+	TryDrawCast(state);
+}
+
+void LaserCore::Clear(GameState& state)
+{
+	Position pos{ 0,0 };
 	BlockType empty = BlockType::EMPTY;
 	BlockType switchableBlock = BlockType::SWITCHABLEBRICK_RED_ON;
 
@@ -209,6 +270,17 @@ void LaserCore::ChangeDirection(GameState& state, Dir dir)
 		state.map[pos.y][pos.x] = empty;
 		state.blocks[pos.y][pos.x] = GenerateBlock(empty);
 	}
+}
+
+void LaserCore::Toggle(GameState& state)
+{
+	m_isActive = !m_isActive;
+	m_color = m_isActive ? Color::RED : Color::LIGHT_GRAY;
+
+	if (!m_isActive)
+		Clear(state);
+	else
+		TryDrawCast(state);
 }
 
 const Dir LaserCore::GetBeamDirection() const
@@ -240,21 +312,30 @@ RedButton::RedButton()
 
 void RedButton::Press(GameState& state)
 {
+	BlockType blockType;
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
-			if (state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_ON
-				|| state.map[y][x] == BlockType::SWITCHABLEBRICK_RED_OFF)
+			blockType = state.map[y][x];
+			if (blockType == BlockType::SWITCHABLEBRICK_RED_ON
+				|| blockType == BlockType::SWITCHABLEBRICK_RED_OFF)
 			{
-				RedSwitchableBrick* switchableBrick = (RedSwitchableBrick*)(state.blocks[y][x]);
-				switchableBrick->Toggle(state);
+				((RedSwitchableBrick*)(state.blocks[y][x]))->Toggle(state);
 			}
-			else if (state.map[y][x] == BlockType::LASERCORE_RED)
+			else if (blockType == BlockType::LASERCORE_RED_UP_AUTO
+				|| blockType == BlockType::LASERCORE_RED_DOWN_AUTO
+				|| blockType == BlockType::LASERCORE_RED_LEFT_AUTO
+				|| blockType == BlockType::LASERCORE_RED_RIGHT_AUTO)
 			{
-				LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-				laserCore->ChangeDirection(state, Dir::UP);
-				laserCore->TryDrawCast(state, x, y);
+				((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state, Dir::UP);
+			}
+			else if (blockType == BlockType::LASERCORE_RED_UP_STATIC
+				|| blockType == BlockType::LASERCORE_RED_DOWN_STATIC
+				|| blockType == BlockType::LASERCORE_RED_LEFT_STATIC
+				|| blockType == BlockType::LASERCORE_RED_RIGHT_STATIC)
+			{
+				((LaserCore*)(state.blocks[y][x]))->Toggle(state);
 			}
 
 		}
@@ -269,22 +350,17 @@ BlueButton::BlueButton()
 
 void BlueButton::Press(GameState& state)
 {
+	BlockType blockType;
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
-			if (state.map[y][x] == BlockType::SWITCHABLEBRICK_BLUE_ON
-				|| state.map[y][x] == BlockType::SWITCHABLEBRICK_BLUE_OFF)
+			blockType = state.map[y][x];
+			if (blockType == BlockType::SWITCHABLEBRICK_BLUE_ON
+				|| blockType == BlockType::SWITCHABLEBRICK_BLUE_OFF)
 			{
-				BlueSwitchableBrick* switchableBrick = (BlueSwitchableBrick*)(state.blocks[y][x]);
-				switchableBrick->Toggle(state);
+				((BlueSwitchableBrick*)(state.blocks[y][x]))->Toggle(state);
 			}
-			//else if (state.map[y][x] == BlockType::LASERCORE_)
-			//{
-			//	LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-			//	laserCore->ChangeDirection(state, Dir::UP);
-			//	laserCore->TryDrawCast(state, x, y);
-			//}
 		}
 	}
 }
@@ -362,5 +438,14 @@ void BlueSwitchableBrick::Toggle(GameState& state)
 	}
 }
 #pragma endregion
+
+#pragma region EndBlock
+EndBlock::EndBlock()
+{
+	m_image = "¢Â";
+	m_color = Color::YELLOW;
+}
+#pragma endregion
+
 
 

@@ -92,10 +92,16 @@ void DrawBlock(GameState& state, int x, int y)
 	  
 	switch (blockType)
 	{
-	case BlockType::LASERCORE_RED:
+	case BlockType::LASERCORE_RED_UP_AUTO:
+	case BlockType::LASERCORE_RED_UP_STATIC:
+	case BlockType::LASERCORE_RED_DOWN_AUTO:
+	case BlockType::LASERCORE_RED_DOWN_STATIC:
+	case BlockType::LASERCORE_RED_LEFT_AUTO:
+	case BlockType::LASERCORE_RED_LEFT_STATIC:
+	case BlockType::LASERCORE_RED_RIGHT_AUTO:
+	case BlockType::LASERCORE_RED_RIGHT_STATIC:
 	{
-		LaserCore* laserCore = (LaserCore*)block;
-		laserCore->TryDrawCast(state, x, y);
+		((LaserCore*)block)-> TryDrawCast(state);
 		break;
 	}
 	}
@@ -250,12 +256,20 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		blueButton->Press(state);
 		break;
 	}
+	case BlockType::END:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		ClearStage(state);
+		break;
+	}
 	}
 }
 
 void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType)
 {
 	Position blockPos = block->m_position;
+
 	switch (blockType)
 	{
 	case BlockType::LASERBEAM_HORIZONTAL:
@@ -323,6 +337,13 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 		blueButton->Press(state);
 		break;
 	}
+	case BlockType::END:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		ClearStage(state);
+		break;
+	}
 	}
 }
 
@@ -346,4 +367,9 @@ void HandleCloneDead(GameState& state)
 	state.clone.Dead();
 	ShakeConsoleWindow(20, 30, 30);
 	Sleep(500);
+}
+
+void ClearStage(GameState& state)
+{
+	//Stage 클리어 처리
 }

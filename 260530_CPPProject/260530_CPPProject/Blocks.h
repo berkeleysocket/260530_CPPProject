@@ -15,10 +15,19 @@ enum class BlockType
 	EMPTY = '.',
 	START = 'S',
 	BRICK = '0',
+	END = 'E',
 
-	LASERCORE_RED = 'L',
-	LASERBEAM_VERTICAL = 'V',
-	LASERBEAM_HORIZONTAL = 'H',
+	LASERCORE_RED_UP_AUTO = 'U',		//Up Auto Rotation
+	LASERCORE_RED_UP_STATIC = 'u',		//Up Static Direction
+	LASERCORE_RED_DOWN_AUTO = 'D',		//Down Auto Rotation
+	LASERCORE_RED_DOWN_STATIC = 'd',	//Down Static Direction
+	LASERCORE_RED_LEFT_AUTO = 'L',		//Left Auto Rotation
+	LASERCORE_RED_LEFT_STATIC = 'l',	//Left Static Direction 
+	LASERCORE_RED_RIGHT_AUTO = 'R',		//Right Auto Rotation
+	LASERCORE_RED_RIGHT_STATIC = 'r',	//Right Static Direction
+
+	LASERBEAM_VERTICAL = 'V',			//Vertical Laser
+	LASERBEAM_HORIZONTAL = 'H',			//Horizontal Laser
 
 	PORTAL_RED = 'P',
 	PORTAL_BLUE = 'p',
@@ -28,8 +37,8 @@ enum class BlockType
 
 	SWITCHABLEBRICK_RED_ON = 'W',
 	SWITCHABLEBRICK_RED_OFF = 'w',
-	SWITCHABLEBRICK_BLUE_ON = 'E',
-	SWITCHABLEBRICK_BLUE_OFF = 'e',
+	SWITCHABLEBRICK_BLUE_ON = 'Q',
+	SWITCHABLEBRICK_BLUE_OFF = 'q',
 };
 
 class Block
@@ -43,10 +52,10 @@ public:
 	const Color GetColor() const;
 };
 
-class Empty : public Block
+class EmptyBlock : public Block
 {
 public:
-	Empty();
+	EmptyBlock();
 };
 
 class Brick : public Block
@@ -59,14 +68,16 @@ public:
 class LaserCore : public Block
 {
 private:
+	bool m_isActive;
+	bool m_autoRotation;
 	Dir m_dir;
 	queue<Position> m_beamPosQueue;
-
 public:
-	LaserCore();
-	LaserCore(Dir castingDir);
-	void TryDrawCast(GameState& state, int x, int y);
+	LaserCore(bool autoRotation, Dir castingDir);
+	void TryDrawCast(GameState& state);
 	void ChangeDirection(GameState& state, Dir dir);
+	void Toggle(GameState& state);
+	void Clear(GameState& state);
 	const Dir GetBeamDirection() const;
 };
 
@@ -137,6 +148,15 @@ public:
 	void Toggle(GameState& state);
 };
 #pragma endregion
+
+#pragma region End
+class EndBlock : public Block
+{
+public:
+	EndBlock();
+};
+#pragma endregion
+
 
 
 
