@@ -12,21 +12,24 @@ struct GameState;
 
 enum class BlockType
 {
-	EMPTY = 0,
-	START = 1,
-	BRICK = 2,
+	EMPTY = '.',
+	START = 'S',
+	BRICK = '0',
 
-	LASERCORE = 3,
-	LASERBEAM_VERTICAL = 4,
-	LASERBEAM_HORIZONTAL = 5,
+	LASERCORE_RED = 'L',
+	LASERBEAM_VERTICAL = 'V',
+	LASERBEAM_HORIZONTAL = 'H',
 
-	PORTAL_RED_ENTER = 6,
-	PORTAL_RED_EXIT = 7,
+	PORTAL_RED = 'P',
+	PORTAL_BLUE = 'p',
 	
-	BUTTON_RASERCORE = 8,
-	//BUTTON_PORTAL = 9,
+	BUTTOON_RED = 'B',
+	BUTTON_BLUE = 'b',
 
-	BRICK_SWITCHABLE = 9,
+	SWITCHABLEBRICK_RED_ON = 'W',
+	SWITCHABLEBRICK_RED_OFF = 'w',
+	SWITCHABLEBRICK_BLUE_ON = 'E',
+	SWITCHABLEBRICK_BLUE_OFF = 'e',
 };
 
 class Block
@@ -35,6 +38,7 @@ protected:
 	string m_image;
 	Color m_color;
 public:
+	Position m_position;
 	const string GetImage() const;
 	const Color GetColor() const;
 };
@@ -51,6 +55,7 @@ public:
 	Brick();
 };
 
+#pragma region Laser
 class LaserCore : public Block
 {
 private:
@@ -60,7 +65,7 @@ private:
 public:
 	LaserCore();
 	LaserCore(Dir castingDir);
-	void Cast(GameState& state, int x, int y);
+	void TryDrawCast(GameState& state, int x, int y);
 	void ChangeDirection(GameState& state, Dir dir);
 	const Dir GetBeamDirection() const;
 };
@@ -76,30 +81,65 @@ class VerticalLaser : public Block
 public:
 	VerticalLaser();
 };
+#pragma endregion
 
-class PortalButton : public Block
+#pragma region Button
+class RedButton : public Block
 {
 public:
-	PortalButton();
+	RedButton();
+public:
+	void Press(GameState& state);
 };
 
-class PortalEnter : public Block
+class BlueButton : public Block
 {
 public:
-	PortalEnter();
+	BlueButton();
+public:
+	void Press(GameState& state);
+};
+#pragma endregion
+
+#pragma region Portal
+class RedPortal : public Block
+{
+public:
+	RedPortal();
+};
+class BluePortal : public Block
+{
+public:
+	BluePortal();
+};
+#pragma endregion
+
+#pragma region SwitchableBrick
+class RedSwitchableBrick : public Block
+{
+public:
+	RedSwitchableBrick(bool isActive);
+private:
+	bool m_isActive;
+public:
+	bool GetIsActive();
+	void Toggle(GameState& state);
 };
 
-class PortalExit : public Block
+class BlueSwitchableBrick : public Block
 {
 public:
-	PortalExit();
+	BlueSwitchableBrick(bool isActive);
+private:
+	bool m_isActive;
+public:
+	bool GetIsActive();
+	void Toggle(GameState& state);
 };
+#pragma endregion
 
-class SwitchableBrick : public Block
-{
-public:
-	SwitchableBrick();
-};
+
 
 Block* GenerateBlock(BlockType type);
+bool IsPassable(Block* block, BlockType blockType);
 

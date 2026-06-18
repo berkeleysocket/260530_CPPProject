@@ -9,5 +9,4 @@ enum class Dir
 	RIGHT
 };
 
-Position DirToCursorPosition(Dir dir);
 Position DirToMapPosition(Dir dir);

@@ -9,7 +9,6 @@ int main()
 
 	Init(state);
 	InitInGame(state);
-	LoadMap(state, map.m_gameMap);
 	ULONGLONG prevTick = 0;
 
 	while (true)

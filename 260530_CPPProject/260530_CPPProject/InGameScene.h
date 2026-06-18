@@ -7,16 +7,16 @@
 #include "GameState.h"
 #include "Position.h"
 #include "Dir.h";
+#include "StageManager.h"
 
 using std::string;
 using std::cout;
 using std::endl;
 
-
 //Init
 void InitInGame(GameState& state);
 
-//player
+//player & clone
 void HandlePlayerDead(GameState& state);
 void HandleCloneDead(GameState& state);
 bool TryDrawPlayer(GameState& state, int x, int y);
@@ -24,8 +24,8 @@ bool TryDrawClone(GameState& state, int x, int y);
 bool TryPlayerMove(GameState& state, Dir dir);
 bool TryCloneMove(GameState& state, Dir dir);
 bool TryCloneMove(GameState& state, Dir dir);
-void HandlePlayerBlockInteraction(GameState& state, BlockType block);
-void HandleCloneBlockInteraction(GameState& state, BlockType block);
+void HandlePlayerBlockInteraction(GameState& state, Block* block, BlockType blockType);
+void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType);
 
 //map
 void LoadMap(GameState& state, const vector<string>& gameMap);
