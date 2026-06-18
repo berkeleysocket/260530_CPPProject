@@ -3,18 +3,25 @@
 
 void LoadMap(GameState& state, const vector<string>& gameMap)
 {
+	state.vBlocks.clear();
+	state.vMap.clear();
+
 	int w = gameMap[0].size(); // 이렇게 할려면 무조권 맵이 사각형이여야함 (공백으로 체워도 상과 x)
 	int h = gameMap.size();
+
+ 	state.vBlocks.resize(h);
+	state.vMap.resize(h);
+
 	for (int y = 0; y < h; ++y)
 	{
 		for (int x = 0; x < w; ++x)
 		{
 			int data = gameMap[y][x] - '0';
-			state.map[y][x] = (BlockType)data;
-			state.blocks[y][x] = GenerateBlock((BlockType)data);
+ 			state.vMap[y].push_back((BlockType)data);
+			state.vBlocks[y].push_back(GenerateBlock((BlockType)data));
 			if (state.map[y][x] == BlockType::START)
 			{
-				//state.player.pos = { x,y };
+				state.player.SetSpawnPos({ x,y }, { x,y });
 				state.map[y][x] = BlockType::EMPTY;
 			}
 		}
@@ -47,10 +54,11 @@ void InitInGame(GameState& state)
 
 void DrawMap(GameState& state)
 {
-	StageManager::GetInst()->GetCurMapData().m_map;
-	for (int y = 0; y < MAP_H; ++y)
+	int w = state.vMap[0].size(); 
+	int h = state.vMap.size();
+	for (int y = 0; y < h; ++y)
 	{
-		for (int x = 0; x < MAP_W; ++x)
+		for (int x = 0; x < w; ++x)
 		{
 			if (TryDrawClone(state, x, y))
 				continue;
@@ -68,11 +76,11 @@ void DrawBlock(GameState& state, int x, int y)
 {
 	SetDefaultMode();
 	SetColor();
-	Block* block = state.blocks[y][x];
+	Block* block = state.vBlocks[y][x];
 
 	if (block == nullptr) return;
 	  
-	switch (state.map[y][x])
+	switch (state.vMap[y][x])
 	{
 	case BlockType::EMPTY:
 	case BlockType::BRICK:
@@ -154,7 +162,7 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	if (IsEdge(next.x, next.y))
 		return false;
 
-	BlockType nextBlock = state.map[next.y][next.x];
+	BlockType nextBlock = state.vMap[next.y][next.x];
 	if (nextBlock != BlockType::EMPTY)
 	{
 		HandlePlayerBlockInteraction(state, nextBlock);
@@ -196,7 +204,7 @@ bool TryCloneMove(GameState& state, Dir dir)
 	if (IsEdge(next.x, next.y))
 		return false;
 
-	BlockType nextBlock = state.map[next.y][next.x];
+	BlockType nextBlock = state.vMap[next.y][next.x];
 	cout << next.x << "," << next.y << "is not Empty?" << endl;
 	if (nextBlock != BlockType::EMPTY)
 	{
@@ -283,6 +291,8 @@ void HandlePlayerBlockInteraction(GameState& state, BlockType block)
 void HandleCloneBlockInteraction(GameState& state, BlockType block)
 {
 	cout << "HandleCloneBlockInteraction";
+	int w = state.vMap[0].size();
+	int h = state.vMap.size();
 	switch (block)
 	{
 	case BlockType::BRICK:
@@ -299,9 +309,10 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 	{
 		ShakeConsoleWindow(15, 40, 25);
 		cout << "PORTAL_RED_ENTERPORTAL_RED_ENTER";
-		for (int _y = 0; _y < MAP_H; _y++)
+	
+		for (int _y = 0; _y < h; _y++)
 		{
-			for (int _x = 0; _x < MAP_W; _x++)
+			for (int _x = 0; _x < w; _x++)
 			{
 				if (state.map[_y][_x] == BlockType::PORTAL_RED_EXIT)
 				{
@@ -320,9 +331,9 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 		cout << "PORTAL_RED_EXITPORTAL_RED_EXIT";
 
 		ShakeConsoleWindow(15, 40, 25);
-		for (int _y = 0; _y < MAP_H; _y++)
+		for (int _y = 0; _y < h; _y++)
 		{
-			for (int _x = 0; _x < MAP_W; _x++)
+			for (int _x = 0; _x < w; _x++)
 			{
 				if (state.map[_y][_x] == BlockType::PORTAL_RED_ENTER)
 				{
@@ -339,9 +350,9 @@ void HandleCloneBlockInteraction(GameState& state, BlockType block)
 	case BlockType::BUTTON_RASERCORE:
 	{
 		ShakeConsoleWindow(15, 40, 25);
-		for (int y = 0; y < MAP_H; ++y)
+		for (int y = 0; y < h; ++y)
 		{
-			for (int x = 0; x < MAP_W; ++x)
+			for (int x = 0; x < w; ++x)
 			{
 				if (state.map[y][x] == BlockType::LASERCORE)
 				{
