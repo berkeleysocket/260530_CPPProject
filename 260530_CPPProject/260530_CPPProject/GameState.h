@@ -8,16 +8,12 @@
 #include "MoveDataRecord.h"
 #include "Enums.h"
 #include "Blocks.h"
+#include "StageData.h"
 
 using std::vector;
 using std::wstring;
 
 struct Block;
-
-constexpr int MAP_W = 15;
-constexpr int MAP_H = 15;
-constexpr int WIDTH = 160;
-constexpr int HEIGHT = 45;
 
 struct MapBox
 {
