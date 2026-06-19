@@ -12,35 +12,6 @@ void ClearStage(GameState& state)
 	//Stage 클리어 처리
 }
 
-void LoadMap(GameState& state, const vector<string>& gameMap)
-{
-	int w = gameMap[0].size(); // 이렇게 할려면 무조권 맵이 사각형이여야함 (공백으로 체워도 상과 x)
-	int h = gameMap.size();
-
-	for (int y = 0; y < h; y++)
-	{
-		for (int x = 0; x < w; x++)
-		{
-			int data = gameMap[y][x];
-			BlockType blockType = (BlockType)data;
-			Block* block = GenerateBlock((BlockType)data);
-
-			block->m_position = { x, y };
-
-			state.blocks[y][x] = block;
-			state.map[y][x] = blockType;
-
-			if (blockType == BlockType::START)
-			{
-				Position cursorPos = { x * 2, y };
-				Position mapPos = { x, y };
-				state.player.SetSpawnPos(cursorPos, mapPos);
-				state.player.SetPos(cursorPos, mapPos);
-				state.map[y][x] = BlockType::EMPTY;
-			}
-		}
-	}
-}
 void LoadMap(GameState& state, const string gameMap[MAP_H])
 {
 	for (int y = 0; y < MAP_H; ++y)
@@ -83,6 +54,7 @@ void DrawMap(GameState& state)
 
 			DrawBlock(state, x, y);
 		}
+		SetDefaultMode();
 		cout << endl;
 	}
 	SetColor();
