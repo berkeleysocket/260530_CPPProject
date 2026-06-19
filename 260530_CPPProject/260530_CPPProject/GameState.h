@@ -10,6 +10,8 @@
 
 using std::vector;
 
+struct Block;
+
 constexpr int MAP_W = 15;
 constexpr int MAP_H = 15;
 constexpr int WIDTH = 160;
@@ -19,21 +21,21 @@ struct MapBox
 {
     Position m_startPosition = {0,0};
     string m_gameMap[MAP_W] = {
-    "...0...........",//1
-    ".S.0.....E.....",//2
-    "...0...........",//3
-    "...0QQQQQQQQQQQ",//4
-    "...0...........",//5
-    "...0.....b.....",//6
-    "...0...........",//7
-    "...0..........l",//8
+    "........0Q.....",//0
+    ".S.B....0Q.....",//1
+    "........0Q.....",//2
+    "........PQ.....",//3
+    "........0Q.....",//4
+    "........0Q.....",//5
+    "........0QQQQQQ",//6
+    "qqqqqqqU.......",//7
+    "...............",//8
     "...............",//9
-    "...............",//10
-    "...............",//11
-    "...000000000000",//12
-    "...0...........",//13
-    ".P.0.P.......B.",//14
-    "...0..........." //15
+    "...........P...",//10
+    "...b...........",//11
+    "...............",//12
+    "...............",//13
+    "..............." //14
     };
 };
 
@@ -44,15 +46,17 @@ struct GameState
 	Menu      curMenu = Menu::START;
 	Stage     curStage = Stage::STAGE1;
 	Stage     prevStage = Stage::STAGE1;
-	bool	  isRunning = true;
-    float     delta = 0;    
 	BlockType map[MAP_H][MAP_W] = {};
 	Block* blocks[MAP_H][MAP_W] = {};
+	bool	  isRunning = true;
+    float     delta = 0;    
 	Player	  player;
     Clone     clone;
     MoveDataRecord moveDataRecord;
 	ULONGLONG curTime;
     MapBox mapBox;
+    string uiMessage1;
+    Color uiColor1;
 };
     
 bool IsEdge(int x, int y);

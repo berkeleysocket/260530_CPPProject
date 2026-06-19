@@ -22,6 +22,7 @@ void LoadMap(GameState& state, const string gameMap[MAP_H]);
 //render
 void DrawMap(GameState& state);
 void DrawBlock(GameState& state, int x, int y);
+void DrawUI(GameState& state);
 bool TryDrawPlayer(GameState& state, int x, int y);
 bool TryDrawClone(GameState& state, int x, int y);
 

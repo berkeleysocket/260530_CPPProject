@@ -3,7 +3,7 @@
 #include <string>
 #include <queue>
 
-#include "GameState.h"
+//#include "GameState.h"
 #include "Position.h"
 #include "Dir.h"
 #include "Color.h"
@@ -29,13 +29,15 @@ enum class BlockType
 	LASERCORE_RED_RIGHT_AUTO = 'R',		//Right Auto Rotation
 	LASERCORE_RED_RIGHT_STATIC = 'r',	//Right Static Direction
 
-	LASERBEAM_VERTICAL = 'V',			//Vertical Laser
-	LASERBEAM_HORIZONTAL = 'H',			//Horizontal Laser
+	LASERBEAM_UP = 'K',
+	LASERBEAM_DOWN = 'k',
+	LASERBEAM_RIGHT = 'V',			
+	LASERBEAM_LEFT = 'v',
 
 	PORTAL_RED = 'P',
 	PORTAL_BLUE = 'p',
 	
-	BUTTOON_RED = 'B',
+	BUTTON_RED = 'B',
 	BUTTON_BLUE = 'b',
 
 	SWITCHABLEBRICK_RED_ON = 'W',
@@ -77,22 +79,34 @@ private:
 public:
 	LaserCore(bool autoRotation, Dir castingDir);
 	void TryDrawCast(GameState& state);
-	void ChangeDirection(GameState& state, Dir dir);
+	void ChangeDirection(GameState& state);
 	void Toggle(GameState& state);
 	void Clear(GameState& state);
 	const Dir GetBeamDirection() const;
 };
 
-class HorizontalLaser : public Block
+class LaserBeamUp : public Block
 {
 public:
-	HorizontalLaser();
+	LaserBeamUp();
 };
 
-class VerticalLaser : public Block
+class LaserBeamDown : public Block
 {
 public:
-	VerticalLaser();
+	LaserBeamDown();
+};
+
+class LaserBeamRight : public Block
+{
+public:
+	LaserBeamRight();
+};
+
+class LaserBeamLeft : public Block
+{
+public:
+	LaserBeamLeft();
 };
 
 #pragma region Button

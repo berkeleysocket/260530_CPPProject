@@ -5,13 +5,12 @@ void InitInGame(GameState& state)
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
 	LoadMap(state, state.mapBox.m_gameMap);
 }
+
 void ClearStage(GameState& state)
 {
 	//Stage 클리어 처리
-	SetColor(Color::LIGHT_YELLOW);
-	cout << endl;
-	cout << "Stage Clear!!";
 }
+
 void LoadMap(GameState& state, const vector<string>& gameMap)
 {
 	int w = gameMap[0].size(); // 이렇게 할려면 무조권 맵이 사각형이여야함 (공백으로 체워도 상과 x)
@@ -87,6 +86,7 @@ void DrawMap(GameState& state)
 	}
 	SetColor();
 }
+
 void DrawBlock(GameState& state, int x, int y)
 {
 	BlockType blockType = state.map[y][x];
@@ -113,6 +113,14 @@ void DrawBlock(GameState& state, int x, int y)
 	SetColor(block->GetColor());
 	cout << (block->GetImage());
 }
+
+void DrawUI(GameState& state)
+{
+	SetColor(state.uiColor1);
+	cout << state.uiMessage1;
+	SetColor();
+}
+
 bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
@@ -126,6 +134,7 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 
 	return false;
 }
+
 bool TryDrawClone(GameState& state, int x, int y)
 {
 	if (state.clone.GetMapPos() == Position{ x, y }
@@ -148,7 +157,7 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	Position nextPos = playerPos + dirToPos;
 	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
 
-	cout << nextPos.x << "," << nextPos.y << " : " << (char)nextBlockType << "   ";
+	//cout << nextPos.x << "," << nextPos.y << " : " << (char)nextBlockType << "   ";
 
 	if (IsEdge(nextPos.x, nextPos.y))
 	{
@@ -164,6 +173,7 @@ bool TryPlayerMove(GameState& state, Dir dir)
 
 	return true;
 }
+
 bool TryCloneMove(GameState& state, Dir dir)
 {
 	Position dirToPos = DirToMapPosition(dir);
@@ -184,15 +194,20 @@ bool TryCloneMove(GameState& state, Dir dir)
 
 	return true;
 }
+
 void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blockType)
 {
 	Position blockPos = block-> m_position;
 
 	switch (blockType)
 	{
-	case BlockType::LASERBEAM_HORIZONTAL:
-	case BlockType::LASERBEAM_VERTICAL:
+	case BlockType::LASERBEAM_UP:
+	case BlockType::LASERBEAM_DOWN:
+	case BlockType::LASERBEAM_RIGHT:
+	case BlockType::LASERBEAM_LEFT:
 	{
+		state.uiColor1 = Color::RED;
+		state.uiMessage1 = "플레이어가 죽었습니다.";
 		HandlePlayerDead(state);
 		break;
 	}
@@ -212,6 +227,9 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 					cursorPos.y += _y * 2;
 					
 					state.player.SetPos(cursorPos, {_x, _y});
+
+					state.uiColor1 = Color::YELLOW;
+					state.uiMessage1 = "플레이어가 워프했습니다.";
 				}
 			}
 			cout << endl;
@@ -234,18 +252,24 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 					cursorPos.y += _y * 2;
 
 					state.player.SetPos(cursorPos, { _x, _y });
+
+					state.uiColor1 = Color::YELLOW;
+					state.uiMessage1 = "플레이어가 워프했습니다. ";
 				}
 			}
 			cout << endl;
 		}
 		break;
 	}
-	case BlockType::BUTTOON_RED:
+	case BlockType::BUTTON_RED:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
 		RedButton* redButton = (RedButton*)block;
 		redButton->Press(state);
+
+		state.uiColor1 = Color::YELLOW;
+		state.uiMessage1 = "플레이어가 빨간 버튼을 눌렀습니다.";
 		break;
 	}
 	case BlockType::BUTTON_BLUE:
@@ -254,6 +278,9 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 
 		BlueButton* blueButton = (BlueButton*)block;
 		blueButton->Press(state);
+
+		state.uiColor1 = Color::YELLOW;
+		state.uiMessage1 = "플레이어가 파란 버튼을 눌렀습니다.";
 		break;
 	}
 	case BlockType::END:
@@ -261,20 +288,26 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		ShakeConsoleWindow(15, 40, 25);
 
 		ClearStage(state);
+
+		state.uiColor1 = Color::YELLOW;
+		state.uiMessage1 = "스테이지 클리어!";
 		break;
 	}
 	}
 }
+
 void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType)
 {
 	Position blockPos = block->m_position;
 
 	switch (blockType)
 	{
-	case BlockType::LASERBEAM_HORIZONTAL:
-	case BlockType::LASERBEAM_VERTICAL:
+	case BlockType::LASERBEAM_UP:
+	case BlockType::LASERBEAM_DOWN:
+	case BlockType::LASERBEAM_LEFT:
+	case BlockType::LASERBEAM_RIGHT:
 		{
-			HandlePlayerDead(state);
+			HandleCloneDead(state);
 			break;
 		}
 	case BlockType::PORTAL_RED:
@@ -314,14 +347,14 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 						cursorPos.x += _x * 2;
 						cursorPos.y += _y * 2;
 
-						state.player.SetPos(cursorPos, { _x, _y });
+						state.clone.SetPos(cursorPos, { _x, _y });
 					}
 				}
 				cout << endl;
 			}
 			break;
 		}
-	case BlockType::BUTTOON_RED:
+	case BlockType::BUTTON_RED:
 		{
 			ShakeConsoleWindow(15, 40, 25);
 
@@ -346,6 +379,7 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 	}
 	}
 }
+
 void HandlePlayerDead(GameState& state)
 {
 	Position startPos = state.player.GetStartPos();
@@ -360,6 +394,7 @@ void HandlePlayerDead(GameState& state)
 	state.player.Spawn();
 	state.moveDataRecord.ReSet();
 }
+
 void HandleCloneDead(GameState& state)
 {
 	state.clone.Dead();
