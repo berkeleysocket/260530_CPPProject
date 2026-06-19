@@ -6,16 +6,11 @@
 #include "Enums.h"
 #include "MoveDataRecord.h"
 #include "Clone.h"
-#include<vector>
+#include "StageData.h"
 
 using std::vector;
 
-
 //Map
-constexpr int MAP_W = 21; //맵 다합치면 지우기
-constexpr int MAP_H = 20; //맵 다 합치면 지우기
-constexpr int WIDTH = 160; 
-constexpr int HEIGHT = 45; 
 
 struct MapBox
 {
@@ -45,7 +40,7 @@ struct MapBox
 };
 
 struct GameState
-{ 
+{   
 	Scene	  prevScene = Scene::NONE;
 	Scene	  curScene = Scene::TITLE;
 	Menu      curMenu = Menu::START;
@@ -53,10 +48,10 @@ struct GameState
 	Stage     prevStage = Stage::STAGE1;
 	bool	  isRunning = true;
     float     delta = 0;    
-	BlockType map[MAP_H][MAP_W] = {};//나중에 지워야함
-	Block* blocks[MAP_H][MAP_W] = {}; //얘두 맵 다 합치면 지워야함
-    std::vector<vector<BlockType>> vMap;
-    std::vector<vector<Block*>> vBlocks;
+	BlockType map[MAP_H][MAP_W] = {};
+	Block* blocks[MAP_H][MAP_W] = {}; 
+    //std::vector<vector<BlockType>> vMap;
+    //std::vector<vector<Block*>> vBlocks;
 	Player	  player;
     Clone     clone;
     MoveDataRecord moveDataRecord;
