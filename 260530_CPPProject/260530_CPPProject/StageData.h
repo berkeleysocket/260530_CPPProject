@@ -3,6 +3,11 @@
 #include<vector>
 #include "Position.h"
 
+constexpr int MAP_W = 21; //맵 다합치면 지우기
+constexpr int MAP_H = 20; //맵 다 합치면 지우기
+constexpr int WIDTH = 160;
+constexpr int HEIGHT = 45;
+
 using std::string;
 using std::vector;
 
@@ -18,5 +23,5 @@ struct StageSaveData
 struct MapData
 {
 	string m_name = "";
-	vector<string> m_map;
-};;
+	string m_map[MAP_W];
+};

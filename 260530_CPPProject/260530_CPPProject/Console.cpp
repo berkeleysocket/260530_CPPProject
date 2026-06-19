@@ -311,7 +311,7 @@ void UpdateInput()
 		prevDown[i] = curDown[i];
 		// 지금 딱! 이 프레임에 눌렸어요?
 		curDown[i] = GetAsyncKeyState(i) & 0x8000;
-	}
+ 	}
 }
 
 void FrameSync(int fps)
