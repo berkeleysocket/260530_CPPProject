@@ -20,14 +20,14 @@ enum class BlockType
 	BRICK = '0',
 	END = 'E',
 
-	LASERCORE_RED_UP_AUTO = 'U',		//Up Auto Rotation
-	LASERCORE_RED_UP_STATIC = 'u',		//Up Static Direction
-	LASERCORE_RED_DOWN_AUTO = 'D',		//Down Auto Rotation
-	LASERCORE_RED_DOWN_STATIC = 'd',	//Down Static Direction
-	LASERCORE_RED_LEFT_AUTO = 'L',		//Left Auto Rotation
-	LASERCORE_RED_LEFT_STATIC = 'l',	//Left Static Direction 
-	LASERCORE_RED_RIGHT_AUTO = 'R',		//Right Auto Rotation
-	LASERCORE_RED_RIGHT_STATIC = 'r',	//Right Static Direction
+	LASERCORE_UP_AUTO = 'U',		//Up Auto Rotation
+	LASERCORE_UP_STATIC = 'u',		//Up Static Direction
+	LASERCORE_DOWN_AUTO = 'D',		//Down Auto Rotation
+	LASERCORE_DOWN_STATIC = 'd',	//Down Static Direction
+	LASERCORE_LEFT_AUTO = 'L',		//Left Auto Rotation
+	LASERCORE_LEFT_STATIC = 'l',	//Left Static Direction 
+	LASERCORE_RIGHT_AUTO = 'R',		//Right Auto Rotation
+	LASERCORE_RIGHT_STATIC = 'r',	//Right Static Direction
 
 	LASERBEAM_UP = 'K',
 	LASERBEAM_DOWN = 'k',

@@ -45,15 +45,15 @@
 
 		Position dir = DirToMapPosition(m_dir);
 		Position createLaserPos = { m_position.x + dir.x, m_position.y + dir.y };
-		BlockType renderLaserType;
+		BlockType laserBeamType = BlockType::EMPTY;
 		if (m_dir == Dir::UP)
-			renderLaserType = BlockType::LASERBEAM_UP;
+			laserBeamType = BlockType::LASERBEAM_UP;
 		else if (m_dir == Dir::DOWN)
-			renderLaserType = BlockType::LASERBEAM_DOWN;
+			laserBeamType = BlockType::LASERBEAM_DOWN;
 		else if (m_dir == Dir::RIGHT)
-			renderLaserType = BlockType::LASERBEAM_RIGHT;
+			laserBeamType = BlockType::LASERBEAM_RIGHT;
 		else if (m_dir == Dir::LEFT)
-			renderLaserType = BlockType::LASERBEAM_LEFT;
+			laserBeamType = BlockType::LASERBEAM_LEFT;
 
 		while (!IsEdge(createLaserPos.x, createLaserPos.y))
 		{
@@ -76,8 +76,8 @@
 				&& nextBlockType != BlockType::LASERBEAM_LEFT)
 				return;
 
-			state.map[createLaserPos.y][createLaserPos.x] = renderLaserType;
-			state.blocks[createLaserPos.y][createLaserPos.x] = GenerateBlock(renderLaserType);
+			state.map[createLaserPos.y][createLaserPos.x] = laserBeamType;
+			state.blocks[createLaserPos.y][createLaserPos.x] = GenerateBlock(laserBeamType);
 			m_beamPosQueue.push({ createLaserPos.x, createLaserPos.y });
 		
 			createLaserPos += dir;
@@ -202,17 +202,17 @@
 				{
 					((RedSwitchableBrick*)(state.blocks[y][x]))->Toggle(state);
 				}
-				else if (blockType == BlockType::LASERCORE_RED_UP_AUTO
-					|| blockType == BlockType::LASERCORE_RED_DOWN_AUTO
-					|| blockType == BlockType::LASERCORE_RED_LEFT_AUTO
-					|| blockType == BlockType::LASERCORE_RED_RIGHT_AUTO)
+				else if (blockType == BlockType::LASERCORE_UP_AUTO
+					|| blockType == BlockType::LASERCORE_DOWN_AUTO
+					|| blockType == BlockType::LASERCORE_LEFT_AUTO
+					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
 				{
 					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state);
 				}
-				else if (blockType == BlockType::LASERCORE_RED_UP_STATIC
-					|| blockType == BlockType::LASERCORE_RED_DOWN_STATIC
-					|| blockType == BlockType::LASERCORE_RED_LEFT_STATIC
-					|| blockType == BlockType::LASERCORE_RED_RIGHT_STATIC)
+				else if (blockType == BlockType::LASERCORE_UP_STATIC
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
 				{
 					((LaserCore*)(state.blocks[y][x]))->Toggle(state);
 				}
@@ -239,20 +239,24 @@
 				{
 					((BlueSwitchableBrick*)(state.blocks[y][x]))->Toggle(state);
 				}
-				else if (blockType == BlockType::LASERCORE_RED_UP_AUTO
-					|| blockType == BlockType::LASERCORE_RED_DOWN_AUTO
-					|| blockType == BlockType::LASERCORE_RED_LEFT_AUTO
-					|| blockType == BlockType::LASERCORE_RED_RIGHT_AUTO)
+				else if (blockType == BlockType::LASERCORE_UP_AUTO
+					|| blockType == BlockType::LASERCORE_DOWN_AUTO
+					|| blockType == BlockType::LASERCORE_LEFT_AUTO
+					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
 				{
-					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state);
+					//((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state);
+					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+					laserCore->Clear(state);
+					laserCore->TryDrawCast(state);
 				}
-				else if (blockType == BlockType::LASERCORE_RED_UP_STATIC
-					|| blockType == BlockType::LASERCORE_RED_DOWN_STATIC
-					|| blockType == BlockType::LASERCORE_RED_LEFT_STATIC
-					|| blockType == BlockType::LASERCORE_RED_RIGHT_STATIC)
+				else if (blockType == BlockType::LASERCORE_UP_STATIC
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
 				{
-					((LaserCore*)(state.blocks[y][x]))->Clear(state);
-					((LaserCore*)(state.blocks[y][x]))->TryDrawCast(state);
+					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+					laserCore->Clear(state);
+					laserCore->TryDrawCast(state);
 				}
 			}
 			std::cout << std::endl;
@@ -367,42 +371,42 @@
 			block = new EndBlock();
 			break;
 		}
-		case BlockType::LASERCORE_RED_UP_AUTO:
+		case BlockType::LASERCORE_UP_AUTO:
 		{
 			block = new LaserCore(true, Dir::UP);
 			break;
 		}
-		case BlockType::LASERCORE_RED_UP_STATIC:
+		case BlockType::LASERCORE_UP_STATIC:
 		{
 			block = new LaserCore(false, Dir::UP);
 			break;
 		}
-		case BlockType::LASERCORE_RED_DOWN_AUTO:
+		case BlockType::LASERCORE_DOWN_AUTO:
 		{
 			block = new LaserCore(true, Dir::DOWN);
 			break;
 		}
-		case BlockType::LASERCORE_RED_DOWN_STATIC:
+		case BlockType::LASERCORE_DOWN_STATIC:
 		{
 			block = new LaserCore(false, Dir::DOWN);
 			break;
 		}
-		case BlockType::LASERCORE_RED_LEFT_AUTO:
+		case BlockType::LASERCORE_LEFT_AUTO:
 		{
 			block = new LaserCore(true, Dir::LEFT);
 			break;
 		}
-		case BlockType::LASERCORE_RED_LEFT_STATIC:
+		case BlockType::LASERCORE_LEFT_STATIC:
 		{
 			block = new LaserCore(false, Dir::LEFT);
 			break;
 		}
-		case BlockType::LASERCORE_RED_RIGHT_AUTO:
+		case BlockType::LASERCORE_RIGHT_AUTO:
 		{
 			block = new LaserCore(true, Dir::RIGHT);
 			break;
 		}
-		case BlockType::LASERCORE_RED_RIGHT_STATIC:
+		case BlockType::LASERCORE_RIGHT_STATIC:
 		{
 			block = new LaserCore(false, Dir::RIGHT);
 			break;

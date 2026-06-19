@@ -3,7 +3,8 @@
 void InitInGame(GameState& state)
 {
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, state.mapBox.m_gameMap);
+	//LoadMap(state, state.mapBox.m_gameMap1);
+	LoadMap(state, state.mapBox.m_gameMap2);
 }
 
 void ClearStage(GameState& state)
@@ -96,14 +97,14 @@ void DrawBlock(GameState& state, int x, int y)
 	  
 	switch (blockType)
 	{
-	case BlockType::LASERCORE_RED_UP_AUTO:
-	case BlockType::LASERCORE_RED_UP_STATIC:
-	case BlockType::LASERCORE_RED_DOWN_AUTO:
-	case BlockType::LASERCORE_RED_DOWN_STATIC:
-	case BlockType::LASERCORE_RED_LEFT_AUTO:
-	case BlockType::LASERCORE_RED_LEFT_STATIC:
-	case BlockType::LASERCORE_RED_RIGHT_AUTO:
-	case BlockType::LASERCORE_RED_RIGHT_STATIC:
+	case BlockType::LASERCORE_UP_AUTO:
+	case BlockType::LASERCORE_UP_STATIC:
+	case BlockType::LASERCORE_DOWN_AUTO:
+	case BlockType::LASERCORE_DOWN_STATIC:
+	case BlockType::LASERCORE_LEFT_AUTO:
+	case BlockType::LASERCORE_LEFT_STATIC:
+	case BlockType::LASERCORE_RIGHT_AUTO:
+	case BlockType::LASERCORE_RIGHT_STATIC:
 	{
 		((LaserCore*)block)-> TryDrawCast(state);
 		break;
