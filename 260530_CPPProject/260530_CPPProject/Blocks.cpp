@@ -44,7 +44,7 @@
 		if (!m_isActive) return;
 
 		Position dir = DirToMapPosition(m_dir);
-		Position createLaserPos = { m_position.x + dir.x, m_position.y + dir.y };
+		Position createLaserPos = m_position + dir;
 		BlockType laserBeamType = BlockType::EMPTY;
 		if (m_dir == Dir::UP)
 			laserBeamType = BlockType::LASERBEAM_UP;
@@ -79,7 +79,7 @@
 			state.map[createLaserPos.y][createLaserPos.x] = laserBeamType;
 			state.blocks[createLaserPos.y][createLaserPos.x] = GenerateBlock(laserBeamType);
 			m_beamPosQueue.push({ createLaserPos.x, createLaserPos.y });
-		
+
 			createLaserPos += dir;
 		}
 	}
@@ -123,16 +123,11 @@
 	{
 		Position pos{ 0,0 };
 		BlockType empty = BlockType::EMPTY;
-		BlockType switchableBlock = BlockType::SWITCHABLEBRICK_RED_ON;
 
 		while (!m_beamPosQueue.empty())
 		{
 			pos = m_beamPosQueue.front();
-
 			m_beamPosQueue.pop();
-
-			if (state.map[pos.y][pos.x] == switchableBlock)
-				continue;
 
 			state.map[pos.y][pos.x] = empty;
 			state.blocks[pos.y][pos.x] = GenerateBlock(empty);
@@ -239,27 +234,7 @@
 				{
 					((BlueSwitchableBrick*)(state.blocks[y][x]))->Toggle(state);
 				}
-				else if (blockType == BlockType::LASERCORE_UP_AUTO
-					|| blockType == BlockType::LASERCORE_DOWN_AUTO
-					|| blockType == BlockType::LASERCORE_LEFT_AUTO
-					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
-				{
-					//((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state);
-					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-					laserCore->Clear(state);
-					laserCore->TryDrawCast(state);
-				}
-				else if (blockType == BlockType::LASERCORE_UP_STATIC
-					|| blockType == BlockType::LASERCORE_DOWN_STATIC
-					|| blockType == BlockType::LASERCORE_LEFT_STATIC
-					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
-				{
-					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-					laserCore->Clear(state);
-					laserCore->TryDrawCast(state);
-				}
 			}
-			std::cout << std::endl;
 		}
 	}
 	#pragma endregion
@@ -306,6 +281,33 @@
 			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_OFF;
 			m_image = "бр";
 		}
+
+		BlockType blockType;
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				blockType = state.map[y][x];
+				if (blockType == BlockType::LASERCORE_UP_AUTO
+					|| blockType == BlockType::LASERCORE_DOWN_AUTO
+					|| blockType == BlockType::LASERCORE_LEFT_AUTO
+					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
+				{
+					LaserCore* laserCore = ((LaserCore*)(state.blocks[y][x]));
+					((LaserCore*)(state.blocks[y][x]))->Clear(state);
+					((LaserCore*)(state.blocks[y][x]))->TryDrawCast(state);
+				}
+				else if (blockType == BlockType::LASERCORE_UP_STATIC
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
+				{
+					LaserCore* laserCore = ((LaserCore*)(state.blocks[y][x]));
+					((LaserCore*)(state.blocks[y][x]))->Clear(state);
+					((LaserCore*)(state.blocks[y][x]))->TryDrawCast(state);
+				}
+			}
+		}
 	}
 
 	BlueSwitchableBrick::BlueSwitchableBrick(bool isActive)
@@ -333,6 +335,33 @@
 		{
 			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_OFF;
 			m_image = "бр";
+		}
+
+		BlockType blockType;
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				blockType = state.map[y][x];
+				if (blockType == BlockType::LASERCORE_UP_AUTO
+					|| blockType == BlockType::LASERCORE_DOWN_AUTO
+					|| blockType == BlockType::LASERCORE_LEFT_AUTO
+					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
+				{
+					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+					laserCore->Clear(state);
+					laserCore->TryDrawCast(state);
+				}
+				else if (blockType == BlockType::LASERCORE_UP_STATIC
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
+				{
+					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+					laserCore->Clear(state);
+					laserCore->TryDrawCast(state);
+				}
+			}
 		}
 	}
 	#pragma endregion
