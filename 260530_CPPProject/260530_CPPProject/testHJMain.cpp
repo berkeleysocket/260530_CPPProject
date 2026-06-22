@@ -15,7 +15,7 @@ int main()
 {
 	GameState state;
 	Initt();
-	state.curScene = Scene::STAGE;
+	state.curScene = Scene::TITLE;
 	while (state.isRunning)
 	{
 		Updatee(state);
@@ -29,27 +29,28 @@ int main()
 void Initt()
 {
 	InitTitle();
+
 	StageManager::GetInst()->LoadStage();
 	MapData mapData
 	{
 		"Test Map1"
 		,
 	{ //map
-		"........0Q.....",//0
-	".S.B....0Q.....",//1
-	"........0Q.....",//2
-	"........PQ.....",//3
-	"........0Q.....",//4
-	"........0Q.....",//5
-	"........0QQQQQQ",//6
-	"..qqq..U.......",//7
-	"...............",//8
-	"...............",//9
-	"...........P...",//10
-	"...b...........",//11
-	"...............",//12
-	"...............",//13
-	"..............." //14
+	"000000000000000",//0
+	"0..S.......0.p0",//1
+	"0..........0..0",//2
+	"0...B......0..0",//3
+	"0..........0u.0",//4
+	"0000000....0..0",//5
+	"0..P..0....0.u0",//6
+	"0WWWWWWU...0QQ0",//7
+	"0......w...0..0",//8
+	"0......w...0..0",//9
+	"0......w...0..0",//10
+	"0......w...0..0",//11
+	"0000000w.b.0..0",//12
+	"0p.q.P0w...0RE0",//13
+	"000000000000000" //14
 	}
 	};
 	StageManager::GetInst()->RegisterStage(Stage::STAGE1, std::make_unique<MapData>(mapData));
@@ -59,24 +60,25 @@ void Initt()
 		"Test Map2"
 		,
 	{
-		"........0Q.....",//0
-	".S.B....0Q.....",//1
-	"........0Q.....",//2
-	"........PQ.....",//3
-	"........0Q.....",//4
-	"........0Q.....",//5
-	"........0QQQQQQ",//6
-	"..qqq..U.......",//7
-	"...............",//8
-	"...............",//9
-	"...........P...",//10
-	"...b...........",//11
-	"...............",//12
-	"...............",//13
-	"..............." //14
+	"000000000000000",//0
+	"0..S.......0.p0",//1
+	"0..........0..0",//2
+	"0...B......0..0",//3
+	"0..........0u.0",//4
+	"0000000....0..0",//5
+	"0..P..0....0.u0",//6
+	"0WWWWWWU...0QQ0",//7
+	"0......w...0..0",//8
+	"0......w...0..0",//9
+	"0......w...0..0",//10
+	"0......w...0..0",//11
+	"0000000w.b.0..0",//12
+	"0p.q.P0w...0RE0",//13
+	"000000000000000" //14
 	}
 	};
 	StageManager::GetInst()->RegisterStage(Stage::STAGE2, std::make_unique<MapData>(mapData2));
+
 	StageManager::GetInst()->SaveStage();
 	StageManager::GetInst()->ChangeStage(Stage::STAGE1);
 }
@@ -96,7 +98,7 @@ void Updatee(GameState& state)
 			SetConsoleWindowStyle(true);
 			SetConsoleMouseInputDisabled();
 			SetCursorVisible(false);
-			InitInGame(state);
+			//InitInGame(state);
 			LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 		}
 		Update(state);
@@ -225,3 +227,4 @@ void Renderr( GameState& state)
 //	if (state.clone)
 //		state.clone->Render();
 //}
+

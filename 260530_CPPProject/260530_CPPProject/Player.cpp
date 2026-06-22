@@ -4,13 +4,6 @@
 
 void Player::Render() const
 {
-	if (m_prevPos != m_cursorPos)
-	{
-		SetDefaultMode();
-		SetColor();
-		GotoXY(m_prevPos.x, m_prevPos.y);
-		cout << "  ";
-	}
 		SetColor(m_bodyClr);
 		GotoXY(m_cursorPos.x, m_cursorPos.y);
 		cout << m_bodyImg;

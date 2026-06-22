@@ -3,8 +3,8 @@
 #include<vector>
 #include "Position.h"
 
-constexpr int MAP_W = 15; //맵 다합치면 지우기
-constexpr int MAP_H = 15; //맵 다 합치면 지우기
+constexpr int MAP_W = 15; 
+constexpr int MAP_H = 15; 
 constexpr int WIDTH = 160;
 constexpr int HEIGHT = 45;
 
