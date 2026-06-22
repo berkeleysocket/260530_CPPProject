@@ -118,10 +118,12 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)Fmod\inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)Fmod\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -139,6 +141,7 @@
     </ClCompile>
     <ClCompile Include="MoveData.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageScene.cpp" />
     <ClCompile Include="testHJMain.cpp">
@@ -168,6 +171,7 @@
     <ClInclude Include="MoveDataRecord.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="StageScene.h" />

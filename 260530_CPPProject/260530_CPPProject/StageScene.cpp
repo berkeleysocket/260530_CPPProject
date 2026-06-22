@@ -37,18 +37,7 @@ void RenderStage(GameState& state)
 
 	StageSaveData& stageData = StageManager::GetInst()->GetCurStageSaveData();
 	if (state.curStage == state.prevStage)
-	{
-		if (stageData.m_prevClear == stageData.m_isCleared
-			|| stageData.m_prevLock == stageData.m_isLock)
-		{
 			return;
-		}
-		else
-		{
-			stageData.m_prevClear = stageData.m_isCleared;
-			stageData.m_prevLock = stageData.m_isLock;
-		}
-	}
 
 	state.prevStage = state.curStage;
 	MapData mapData = StageManager::GetInst()->GetCurMapData();
@@ -157,4 +146,8 @@ L"╚═════════════════════════
 		wcout << L" ";
 	}
 
+}
+
+void SelecteStageAni(const StageSaveData& stageData, const MapData& mapData)
+{
 }
