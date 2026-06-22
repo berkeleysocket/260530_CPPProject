@@ -32,7 +32,7 @@
 	LaserCore::LaserCore(bool autoRotation, Dir castingDir)
 	{
 		m_image = "¡Ø";
-		m_color = Color::VIOLET;
+		m_color = Color::RED;
 		m_isActive = true;	
 		m_autoRotation = autoRotation;
 		m_dir = castingDir;
@@ -155,25 +155,25 @@
 	LaserBeamUp::LaserBeamUp()
 	{
 		m_image = "¡è";
-		m_color = Color::LIGHT_VIOLET;
+		m_color = Color::RED;
 	}
 
 	LaserBeamDown::LaserBeamDown()
 	{
 		m_image = "¡é";
-		m_color = Color::LIGHT_VIOLET;
+		m_color = Color::RED;
 	}
 
 	LaserBeamRight::LaserBeamRight()
 	{
 		m_image = "¡æ";
-		m_color = Color::LIGHT_VIOLET;
+		m_color = Color::RED;
 	}
 
 	LaserBeamLeft::LaserBeamLeft()
 	{
 		m_image = "¡ç";
-		m_color = Color::LIGHT_VIOLET;
+		m_color = Color::RED;
 	}
 	#pragma endregion
 

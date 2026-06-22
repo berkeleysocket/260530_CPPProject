@@ -14,11 +14,14 @@ struct GameState;
 
 enum class BlockType
 {
-	EMPTY = '.',
-	START = 'S',
-	BRICK = '0',
-	END = 'E',
+	EMPTY = '.', //빈 공간.
+	START = 'S', //스타트 지점.
+	BRICK = '0', //일반 벽.
+	END = 'E',	//종착점.
 
+	//static : 안 돌아가는 레이저.
+	//auto : 돌아가는 레이저.
+	//up, down, left, right : 시작 방향.
 	LASERCORE_UP_AUTO = 'U',		//Up Auto Rotation
 	LASERCORE_UP_STATIC = 'u',		//Up Static Direction
 	LASERCORE_DOWN_AUTO = 'D',		//Down Auto Rotation
@@ -28,21 +31,22 @@ enum class BlockType
 	LASERCORE_RIGHT_AUTO = 'R',		//Right Auto Rotation
 	LASERCORE_RIGHT_STATIC = 'r',	//Right Static Direction
 
+	//LaserBeam은 렌더링 용이므로 사용할 필요 없음.
 	LASERBEAM_UP = 'K',
 	LASERBEAM_DOWN = 'k',
 	LASERBEAM_RIGHT = 'V',			
 	LASERBEAM_LEFT = 'v',
 
-	PORTAL_RED = 'P',
-	PORTAL_BLUE = 'p',
+	PORTAL_RED = 'P',	//빨간색 포탈 - 빨간색 포탈이랑 연결됨. 맵에 딱 두 개만 존재가능.
+	PORTAL_BLUE = 'p',	//파란색 포탈 - 파란색 포탈이랑 연결됨. 맵에 딱 두 개만 존재가능.
 	
-	BUTTON_RED = 'B',
-	BUTTON_BLUE = 'b',
+	BUTTON_RED = 'B',	//빨간색 버튼 - 레이저, 빨간색 벽이랑 상호작용함.
+	BUTTON_BLUE = 'b',	//파란색 버튼 - 파란색 벽이랑 상호작용함.
 
-	SWITCHABLEBRICK_RED_ON = 'W',
-	SWITCHABLEBRICK_RED_OFF = 'w',
-	SWITCHABLEBRICK_BLUE_ON = 'Q',
-	SWITCHABLEBRICK_BLUE_OFF = 'q',
+	SWITCHABLEBRICK_RED_ON = 'W',	//빨간색 벽이 켜져있는 버전.
+	SWITCHABLEBRICK_RED_OFF = 'w',	//빨간색 벽이 꺼져있는 버전.
+	SWITCHABLEBRICK_BLUE_ON = 'Q',	//파란색 벽이 켜져있는 버전.
+	SWITCHABLEBRICK_BLUE_OFF = 'q',	//파란색 벽이 꺼져있는 버전.
 };
 
 class Block
