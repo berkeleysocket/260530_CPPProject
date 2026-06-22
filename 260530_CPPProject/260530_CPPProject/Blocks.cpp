@@ -119,6 +119,8 @@
 
 		Clear(state);
 		TryDrawCast(state);
+
+		SoundManager::GetInst()->Play("Laser");
 	}
 
 	void LaserCore::Clear(GameState& state)

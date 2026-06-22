@@ -3,7 +3,7 @@
 void InitInGame(GameState& state)
 {
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, state.mapBox.m_gameMap1);
+	LoadMap(state, state.mapBox.m_gameMap2);
 }
 
 void ClearStage(GameState& state)

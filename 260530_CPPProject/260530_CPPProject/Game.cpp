@@ -7,6 +7,8 @@ void Init(GameState& state)
 	SetConsoleMouseInputDisabled();
 	SetCursorVisible(false);
 
+	SoundManager::GetInst()->Load("Laser", "Resources/Sounds/Laser.mp3");
+
 	state = GameState{};
 }
 
