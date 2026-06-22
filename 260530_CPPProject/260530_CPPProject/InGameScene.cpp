@@ -109,9 +109,59 @@ void DrawBlock(GameState& state, int x, int y)
 
 void DrawUI(GameState& state)
 {
+	GotoXY(0, 15);
 	SetColor(state.uiColor1);
-	cout << state.uiMessage1 << "            ";
-	SetColor();
+	cout << state.uiMessage1 << "    ";
+
+	GotoXY(0, 16);
+	SetColor(Color::RED);
+	cout << "@";
+	SetColor(Color::WHITE);
+	cout << " : 빨간 포탈";
+	SetColor(Color::BLUE);
+	cout << " @";
+	SetColor(Color::WHITE);
+	cout << " : 파란 포탈";
+
+	GotoXY(0, 17);
+	SetColor(Color::RED);
+	cout << "⊙";
+	SetColor(Color::WHITE);
+	cout << " : 빨간 버튼";
+	SetColor(Color::BLUE);
+	cout << " ⊙";
+	SetColor(Color::WHITE);
+	cout << " : 파란 버튼";
+
+	GotoXY(0, 18);
+	SetColor(Color::RED);
+	cout << "※";
+	SetColor(Color::WHITE);
+	cout << " : 레이저 코어";
+	SetColor(Color::RED);
+	cout << " ↑";
+	SetColor(Color::WHITE);
+	cout << " : 레이저";
+
+	GotoXY(0, 19);
+	SetColor(Color::LIGHT_GREEN);
+	cout << "⊙";
+	SetColor(Color::WHITE);
+	cout << " : 클론 버튼";
+	SetColor(Color::LIGHT_GREEN);
+	cout << " ■";
+	SetColor(Color::WHITE);
+	cout << " : 클론 스위치 벽";
+
+	GotoXY(0, 20);
+	SetColor(Color::LIGHT_RED);
+	cout << "■";
+	SetColor(Color::WHITE);
+	cout << " : 빨간 스위치 벽";
+	SetColor(Color::BLUE);
+	cout << " ■";
+	SetColor(Color::WHITE);
+	cout << " : 파란 스위치 벽";
 }
 
 bool TryDrawPlayer(GameState& state, int x, int y)

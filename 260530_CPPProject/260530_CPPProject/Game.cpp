@@ -54,6 +54,5 @@ void Render(GameState& state)
 {
 	GotoXY(0, 0);
     DrawMap(state);
-	GotoXY(0, 18);
 	DrawUI(state);
 }
