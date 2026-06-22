@@ -8,13 +8,16 @@ void Init(GameState& state)
 	SetCursorVisible(false);
 
 	SoundManager::GetInst()->Init();
-	SoundManager::GetInst()->Load("Laser", "~/Resources/Sounds/Laser.mp3");
-	SoundManager::GetInst()->Load("PlayerMovement", "~/Resources/Sounds/PlayerMovement.mp3");
-	SoundManager::GetInst()->Load("ButtonClick", "~/Resources/Sounds/ButtonClick.mp3");
-	SoundManager::GetInst()->Load("SwitchableBrick_OFF", "~/Resources/Sounds/SwitchableBrick_OFF.mp3");
-	SoundManager::GetInst()->Load("SwitchableBrick_ON", "~/Resources/Sounds/SwitchableBrick_ON.mp3");
-	SoundManager::GetInst()->Load("Teleport", "~/Resources/Sounds/Teleport.mp3");
-
+	SoundManager::GetInst()->Load("Laser", "Resources/Sounds/Laser.mp3");
+	SoundManager::GetInst()->Load("PlayerMovement", "Resources/Sounds/PlayerMovement.mp3");
+	SoundManager::GetInst()->Load("ButtonClick", "Resources/Sounds/ButtonClick.mp3");
+	SoundManager::GetInst()->Load("SwitchableBrick_OFF", "Resources/Sounds/SwitchableBrick_OFF.mp3");
+	SoundManager::GetInst()->Load("SwitchableBrick_ON", "Resources/Sounds/SwitchableBrick_ON.mp3");
+	SoundManager::GetInst()->Load("Teleport", "Resources/Sounds/Teleport.mp3");
+	SoundManager::GetInst()->Load("CloneMovement", "Resources/Sounds/CloneMovement.mp3");
+	SoundManager::GetInst()->Load("PlayerDeath", "Resources/Sounds/PlayerDeath.mp3");
+	SoundManager::GetInst()->Load("CloneDeath", "Resources/Sounds/CloneDeath.mp3");
+	SoundManager::GetInst()->Load("StageClear", "Resources/Sounds/StageClear.mp3");
 	state = GameState{};
 }
 
@@ -48,7 +51,6 @@ void Update(GameState& state)
 	}
 
 	state.clone.Tick(state, state.delta);
-	SoundManager::GetInst()->Update();
 }
 
 void Render(GameState& state)

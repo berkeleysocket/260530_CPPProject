@@ -13,12 +13,14 @@ int main()
 
 	while (true)
 	{
+		SoundManager::GetInst()->Update();
 		ULONGLONG curTick = GetTickCount64();
 		state.delta = (curTick - prevTick);
 		Update(state);
 		Render(state);
 		prevTick = curTick;
 	}
+	SoundManager::GetInst()->Release();
 
 	return 0;
 }

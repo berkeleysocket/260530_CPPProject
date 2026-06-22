@@ -9,6 +9,7 @@ void InitInGame(GameState& state)
 void ClearStage(GameState& state)
 {
 	//Stage 클리어 처리
+	SoundManager::GetInst()->Play("StageClear");
 }
 
 void LoadMap(GameState& state, const string gameMap[MAP_H])

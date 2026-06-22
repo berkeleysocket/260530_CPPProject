@@ -27,6 +27,7 @@ void Player::Dead()
 	m_isActive = false;
 	m_bodyClr = Color::RED;
 	m_bodyImg = "☆";
+	SoundManager::GetInst()->Play("PlayerDeath");
 	Render();
 }
 
