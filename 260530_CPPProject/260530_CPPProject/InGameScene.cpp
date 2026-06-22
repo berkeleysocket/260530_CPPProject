@@ -3,7 +3,7 @@
 void InitInGame(GameState& state)
 {
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, state.mapBox.m_gameMap3);
+	LoadMap(state, state.mapBox.m_gameMap1);
 }
 
 void ClearStage(GameState& state)
@@ -111,7 +111,7 @@ void DrawUI(GameState& state)
 {
 	GotoXY(0, 15);
 	SetColor(state.uiColor1);
-	cout << state.uiMessage1 << "    ";
+	cout << state.uiMessage1 << "              ";
 
 	GotoXY(0, 16);
 	SetColor(Color::RED);
