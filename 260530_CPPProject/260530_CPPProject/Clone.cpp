@@ -60,7 +60,7 @@ void Clone::Dead()
 	nextMoveTime = moveCooltime;
 
 	m_bodyClr = Color::RED;
-	m_bodyImg = "※";
+	m_bodyImg = "＃";
 	Render();
 	m_isActive = false;
 
