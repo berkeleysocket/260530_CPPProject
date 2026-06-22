@@ -60,10 +60,12 @@
 			BlockType nextBlockType = state.map[createLaserPos.y][createLaserPos.x];
 
 			if (nextBlockType == BlockType::SWITCHABLEBRICK_RED_ON
-				|| nextBlockType == BlockType::SWITCHABLEBRICK_BLUE_ON)
+				|| nextBlockType == BlockType::SWITCHABLEBRICK_BLUE_ON
+				|| nextBlockType == BlockType::SWITCHABLEBRICK_CLONE_ON)
 				return;
 			else if (nextBlockType == BlockType::SWITCHABLEBRICK_RED_OFF
-				|| nextBlockType == BlockType::SWITCHABLEBRICK_BLUE_OFF)
+				|| nextBlockType == BlockType::SWITCHABLEBRICK_BLUE_OFF
+				|| nextBlockType == BlockType::SWITCHABLEBRICK_CLONE_OFF)
 			{
 				createLaserPos += dir;	
 				continue;
@@ -237,6 +239,29 @@
 			}
 		}
 	}
+
+	CloneButton::CloneButton()
+	{
+		m_image = "в┴";
+		m_color = Color::LIGHT_GREEN;
+	}
+
+	void CloneButton::Press(GameState& state)
+	{
+		BlockType blockType;
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				blockType = state.map[y][x];
+				if (blockType == BlockType::SWITCHABLEBRICK_CLONE_ON
+					|| blockType == BlockType::SWITCHABLEBRICK_CLONE_OFF)
+				{
+					((CloneSwitchableBrick*)(state.blocks[y][x]))->Toggle(state);
+				}
+			}
+		}
+	}
 	#pragma endregion
 
 	#pragma region Portal
@@ -364,6 +389,56 @@
 			}
 		}
 	}
+
+	CloneSwitchableBrick::CloneSwitchableBrick(bool isActive)
+	{
+		m_image = isActive ? "бс" : "бр";
+		m_color = Color::LIGHT_GREEN;
+		m_isActive = isActive;
+	}
+
+	bool CloneSwitchableBrick::GetIsActive()
+	{
+		return m_isActive;
+	}
+
+	void CloneSwitchableBrick::Toggle(GameState& state)
+	{
+		m_isActive = !m_isActive;
+
+		if (m_isActive)
+		{
+			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_CLONE_ON;
+			m_image = "бс";
+		}
+		else
+		{
+			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_CLONE_OFF;
+			m_image = "бр";
+		}
+
+		BlockType blockType;
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				blockType = state.map[y][x];
+				if (blockType == BlockType::LASERCORE_UP_AUTO
+					|| blockType == BlockType::LASERCORE_DOWN_AUTO
+					|| blockType == BlockType::LASERCORE_LEFT_AUTO
+					|| blockType == BlockType::LASERCORE_RIGHT_AUTO
+					|| blockType == BlockType::LASERCORE_UP_STATIC
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
+				{
+					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
+					laserCore->Clear(state);
+					laserCore->TryDrawCast(state);
+				}
+			}
+		}
+	}
 	#pragma endregion
 
 	#pragma region EndBlock
@@ -480,6 +555,11 @@
 			block = new BlueButton();
 			break;
 		}
+		case BlockType::BUTTON_CLONE:
+		{
+			block = new CloneButton();
+			break;
+		}
 		case BlockType::SWITCHABLEBRICK_RED_ON:
 		{
 			block = new RedSwitchableBrick(true);
@@ -500,6 +580,16 @@
 			block = new BlueSwitchableBrick(false);
 			break;
 		}
+		case BlockType::SWITCHABLEBRICK_CLONE_ON:
+		{
+			block = new CloneSwitchableBrick(true);
+			break;
+		}
+		case BlockType::SWITCHABLEBRICK_CLONE_OFF:
+		{
+			block = new CloneSwitchableBrick(false);
+			break;
+		}
 		default:
 			block = new EmptyBlock();
 			break;
@@ -507,6 +597,7 @@
 
 		return block;
 	}
+
 	bool IsPassable(Block* block, BlockType blockType)
 	{
 		switch (blockType)
