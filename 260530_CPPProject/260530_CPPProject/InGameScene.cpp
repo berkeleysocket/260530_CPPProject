@@ -177,6 +177,8 @@ bool TryCloneMove(GameState& state, Dir dir)
 	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
 	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
 
+	if (nextBlockType == BlockType::SWITCHABLEBRICK_CLONE_ON)
+		return true;
 	if (!IsPassable(nextBlock, nextBlockType))
 	{
 		HandleCloneBlockInteraction(state, nextBlock, nextBlockType);
@@ -274,6 +276,17 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		state.uiMessage1 = "플레이어가 파란 버튼을 눌렀습니다.";
 		break;
 	}
+	case BlockType::BUTTON_CLONE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		CloneButton* cloneButton = (CloneButton*)block;
+		cloneButton->Press(state);
+
+		state.uiColor1 = Color::YELLOW;
+		state.uiMessage1 = "플레이어가 클론 버튼을 눌렀습니다.";
+		break;
+	}
 	case BlockType::END:
 	{
 		ShakeConsoleWindow(15, 40, 25);
@@ -361,6 +374,14 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 			blueButton->Press(state);
 			break;
 		}
+	case BlockType::BUTTON_CLONE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		CloneButton* cloneButton = (CloneButton*)block;
+		cloneButton->Press(state);
+		break;
+	}
 	case BlockType::END:
 	{
 		ShakeConsoleWindow(15, 40, 25);
