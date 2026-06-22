@@ -145,8 +145,11 @@
 
 		Clear(state);
 
-		if(m_isActive)
+		if (m_isActive)
+		{
+			SoundManager::GetInst()->Play("Laser");
 			TryDrawCast(state);
+		}
 	}
 
 	const Dir LaserCore::GetBeamDirection() const
@@ -191,6 +194,7 @@
 	void RedButton::Press(GameState& state)
 	{
 		BlockType blockType;
+		SoundManager::GetInst()->Play("ButtonClick");
 		for (int y = 0; y < MAP_H; ++y)
 		{
 			for (int x = 0; x < MAP_W; ++x)
@@ -228,6 +232,7 @@
 	void BlueButton::Press(GameState& state)
 	{
 		BlockType blockType;
+		SoundManager::GetInst()->Play("ButtonClick");
 		for (int y = 0; y < MAP_H; ++y)
 		{
 			for (int x = 0; x < MAP_W; ++x)
@@ -251,6 +256,7 @@
 	void CloneButton::Press(GameState& state)
 	{
 		BlockType blockType;
+		SoundManager::GetInst()->Play("ButtonClick");
 		for (int y = 0; y < MAP_H; ++y)
 		{
 			for (int x = 0; x < MAP_W; ++x)
@@ -300,13 +306,14 @@
 		if (m_isActive)
 		{
 			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_ON;
-
 			m_image = "бс";
+			SoundManager::GetInst()->Play("SwitchableBrick_ON");
 		}
 		else
 		{
 			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_OFF;
 			m_image = "бр";
+			SoundManager::GetInst()->Play("SwitchableBrick_OFF");
 		}
 
 		BlockType blockType;
@@ -357,11 +364,13 @@
 		{
 			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_ON;
 			m_image = "бс";
+			SoundManager::GetInst()->Play("SwitchableBrick_ON");
 		}
 		else
 		{
 			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_OFF;
 			m_image = "бр";
+			SoundManager::GetInst()->Play("SwitchableBrick_OFF");
 		}
 
 		BlockType blockType;
@@ -412,11 +421,13 @@
 		{
 			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_CLONE_ON;
 			m_image = "бс";
+			SoundManager::GetInst()->Play("SwitchableBrick_ON");
 		}
 		else
 		{
 			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_CLONE_OFF;
 			m_image = "бр";
+			SoundManager::GetInst()->Play("SwitchableBrick_OFF");
 		}
 
 		BlockType blockType;

@@ -7,7 +7,13 @@ void Init(GameState& state)
 	SetConsoleMouseInputDisabled();
 	SetCursorVisible(false);
 
-	SoundManager::GetInst()->Load("Laser", "Resources/Sounds/Laser.mp3");
+	SoundManager::GetInst()->Init();
+	SoundManager::GetInst()->Load("Laser", "~/Resources/Sounds/Laser.mp3");
+	SoundManager::GetInst()->Load("PlayerMovement", "~/Resources/Sounds/PlayerMovement.mp3");
+	SoundManager::GetInst()->Load("ButtonClick", "~/Resources/Sounds/ButtonClick.mp3");
+	SoundManager::GetInst()->Load("SwitchableBrick_OFF", "~/Resources/Sounds/SwitchableBrick_OFF.mp3");
+	SoundManager::GetInst()->Load("SwitchableBrick_ON", "~/Resources/Sounds/SwitchableBrick_ON.mp3");
+	SoundManager::GetInst()->Load("Teleport", "~/Resources/Sounds/Teleport.mp3");
 
 	state = GameState{};
 }
@@ -20,36 +26,29 @@ void Update(GameState& state)
 	{
 		dir = Dir::UP;
 		if (TryPlayerMove(state, dir))
-		{
 			state.player.Move(dir);
-		}
 	}
 	if (GetKeyDown('S'))
 	{
 		dir = Dir::DOWN;
 		if (TryPlayerMove(state, dir))
-		{
 			state.player.Move(dir);
-		}
 	}
 	if (GetKeyDown('A'))
 	{
 		dir = Dir::LEFT;
 		if (TryPlayerMove(state, dir))
-		{
 			state.player.Move(dir);
-		}
 	}
 	if (GetKeyDown('D'))
 	{
 		dir = Dir::RIGHT;
 		if (TryPlayerMove(state, dir))
-		{
 			state.player.Move(dir);
-		}
 	}
 
 	state.clone.Tick(state, state.delta);
+	SoundManager::GetInst()->Update();
 }
 
 void Render(GameState& state)

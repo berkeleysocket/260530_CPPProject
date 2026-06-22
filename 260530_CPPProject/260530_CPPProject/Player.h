@@ -1,6 +1,7 @@
 #pragma once
 #include"Actor.h"
 #include"Color.h"
+#include"SoundManager.h"
 #include<string>
 
 class Player:public Actor
