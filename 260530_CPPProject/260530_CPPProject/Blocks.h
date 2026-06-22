@@ -3,7 +3,6 @@
 #include <string>
 #include <queue>
 
-//#include "GameState.h"
 #include "Position.h"
 #include "Dir.h"
 #include "Color.h"
