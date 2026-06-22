@@ -12,6 +12,7 @@ void StageManager::SaveStage()
 	{
 		for (const auto& [stage, stageData] : m_mapStageSaveData)
 		{
+			bool de = stageData->m_isLock;
 			stageFile <<(int)stage<<","<< stageData->m_isLock << ","
 				<< stageData->m_isCleared << "," << stageData->m_bestTime << "\n";
 		}

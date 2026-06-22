@@ -3,7 +3,7 @@
 #include<vector>
 #include "Position.h"
 
-constexpr int MAP_W = 15; 
+constexpr int MAP_W = 16; 
 constexpr int MAP_H = 15; 
 constexpr int WIDTH = 160;
 constexpr int HEIGHT = 45;
@@ -23,5 +23,5 @@ struct StageSaveData
 struct MapData
 {
 	string m_name = "";
-	string m_map[MAP_W];
+	string m_map[MAP_H];
 };
