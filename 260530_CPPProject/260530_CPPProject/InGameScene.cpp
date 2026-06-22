@@ -3,8 +3,7 @@
 void InitInGame(GameState& state)
 {
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	//LoadMap(state, state.mapBox.m_gameMap1);
-	LoadMap(state, state.mapBox.m_gameMap2);
+	LoadMap(state, state.mapBox.m_gameMap3);
 }
 
 void ClearStage(GameState& state)
@@ -90,7 +89,7 @@ void DrawBlock(GameState& state, int x, int y)
 void DrawUI(GameState& state)
 {
 	SetColor(state.uiColor1);
-	cout << state.uiMessage1;
+	cout << state.uiMessage1 << "            ";
 	SetColor();
 }
 
@@ -99,9 +98,24 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 	if (state.player.GetMapPos() == Position{ x, y } )
 		//플레이어를 그릴 때도 죽었다면 그리지 말아야 한다.
 	{
-		SetColor();
-		cout << "★";
-		//state.player.Render();
+		switch (state.map[y][x])
+		{
+		case BlockType::LASERBEAM_UP:
+		case BlockType::LASERBEAM_DOWN:
+		case BlockType::LASERBEAM_RIGHT:
+		case BlockType::LASERBEAM_LEFT:
+		{
+			HandlePlayerDead(state);
+			break;
+		}
+		default:
+		{
+			SetColor();
+			cout << "★";
+			//state.player.Render();
+			break;
+		}
+		}
 		return true;
 	}
 
