@@ -109,9 +109,59 @@ void DrawBlock(GameState& state, int x, int y)
 
 void DrawUI(GameState& state)
 {
+	GotoXY(0, 15);
 	SetColor(state.uiColor1);
-	cout << state.uiMessage1 << "            ";
-	SetColor();
+	cout << state.uiMessage1 << "    ";
+
+	GotoXY(0, 16);
+	SetColor(Color::RED);
+	cout << "@";
+	SetColor(Color::WHITE);
+	cout << " : 빨간 포탈";
+	SetColor(Color::BLUE);
+	cout << " @";
+	SetColor(Color::WHITE);
+	cout << " : 파란 포탈";
+
+	GotoXY(0, 17);
+	SetColor(Color::RED);
+	cout << "⊙";
+	SetColor(Color::WHITE);
+	cout << " : 빨간 버튼";
+	SetColor(Color::BLUE);
+	cout << " ⊙";
+	SetColor(Color::WHITE);
+	cout << " : 파란 버튼";
+
+	GotoXY(0, 18);
+	SetColor(Color::RED);
+	cout << "※";
+	SetColor(Color::WHITE);
+	cout << " : 레이저 코어";
+	SetColor(Color::RED);
+	cout << " ↑";
+	SetColor(Color::WHITE);
+	cout << " : 레이저";
+
+	GotoXY(0, 19);
+	SetColor(Color::LIGHT_GREEN);
+	cout << "⊙";
+	SetColor(Color::WHITE);
+	cout << " : 클론 버튼";
+	SetColor(Color::LIGHT_GREEN);
+	cout << " ■";
+	SetColor(Color::WHITE);
+	cout << " : 클론 스위치 벽";
+
+	GotoXY(0, 20);
+	SetColor(Color::LIGHT_RED);
+	cout << "■";
+	SetColor(Color::WHITE);
+	cout << " : 빨간 스위치 벽";
+	SetColor(Color::BLUE);
+	cout << " ■";
+	SetColor(Color::WHITE);
+	cout << " : 파란 스위치 벽";
 }
 
 bool TryDrawPlayer(GameState& state, int x, int y)
@@ -177,6 +227,8 @@ bool TryCloneMove(GameState& state, Dir dir)
 	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
 	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
 
+	if (nextBlockType == BlockType::SWITCHABLEBRICK_CLONE_ON)
+		return true;
 	if (!IsPassable(nextBlock, nextBlockType))
 	{
 		HandleCloneBlockInteraction(state, nextBlock, nextBlockType);
@@ -274,6 +326,17 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		state.uiMessage1 = "플레이어가 파란 버튼을 눌렀습니다.";
 		break;
 	}
+	case BlockType::BUTTON_CLONE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		CloneButton* cloneButton = (CloneButton*)block;
+		cloneButton->Press(state);
+
+		state.uiColor1 = Color::YELLOW;
+		state.uiMessage1 = "플레이어가 클론 버튼을 눌렀습니다.";
+		break;
+	}
 	case BlockType::END:
 	{
 		ShakeConsoleWindow(15, 40, 25);
@@ -361,6 +424,14 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 			blueButton->Press(state);
 			break;
 		}
+	case BlockType::BUTTON_CLONE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		CloneButton* cloneButton = (CloneButton*)block;
+		cloneButton->Press(state);
+		break;
+	}
 	case BlockType::END:
 	{
 		ShakeConsoleWindow(15, 40, 25);

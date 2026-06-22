@@ -42,11 +42,15 @@ enum class BlockType
 	
 	BUTTON_RED = 'B',	//빨간색 버튼 - 레이저, 빨간색 벽이랑 상호작용함.
 	BUTTON_BLUE = 'b',	//파란색 버튼 - 파란색 벽이랑 상호작용함.
+	BUTTON_CLONE = 'N',
 
 	SWITCHABLEBRICK_RED_ON = 'W',	//빨간색 벽이 켜져있는 버전.
 	SWITCHABLEBRICK_RED_OFF = 'w',	//빨간색 벽이 꺼져있는 버전.
 	SWITCHABLEBRICK_BLUE_ON = 'Q',	//파란색 벽이 켜져있는 버전.
 	SWITCHABLEBRICK_BLUE_OFF = 'q',	//파란색 벽이 꺼져있는 버전.
+	SWITCHABLEBRICK_CLONE_ON = 'C', //클론 벽이 꺼져있는 버전.
+	SWITCHABLEBRICK_CLONE_OFF = 'c' //클론 벽이 꺼져있는 버전.
+
 };
 
 class Block
@@ -128,6 +132,14 @@ public:
 public:
 	void Press(GameState& state);
 };
+
+class CloneButton : public Block
+{
+public:
+	CloneButton();
+public:
+	void Press(GameState& state);
+};
 #pragma endregion
 
 #pragma region Portal
@@ -159,6 +171,17 @@ class BlueSwitchableBrick : public Block
 {
 public:
 	BlueSwitchableBrick(bool isActive);
+private:
+	bool m_isActive;
+public:
+	bool GetIsActive();
+	void Toggle(GameState& state);
+};
+
+class CloneSwitchableBrick : public Block
+{
+public: 
+	CloneSwitchableBrick(bool isActive);
 private:
 	bool m_isActive;
 public:
