@@ -56,7 +56,28 @@ void DrawMap(GameState& state)
 		SetDefaultMode();
 		cout << endl;
 	}
-	SetColor();
+
+	for (int y = 0; y < MAP_H; ++y)
+	{
+		for (int x = 0; x < MAP_W; ++x)
+		{
+			if (Position{ x,y } == state.player.GetMapPos())
+			{
+				GotoXY(x * 2, y);
+				switch (state.map[y][x])
+				{
+				case BlockType::LASERBEAM_UP:
+				case BlockType::LASERBEAM_DOWN:
+				case BlockType::LASERBEAM_RIGHT:
+				case BlockType::LASERBEAM_LEFT:
+				{
+					HandlePlayerDead(state);
+					break;
+				}
+				}
+			}
+		}
+	}
 }
 
 void DrawBlock(GameState& state, int x, int y)
@@ -96,26 +117,9 @@ void DrawUI(GameState& state)
 bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
-		//플레이어를 그릴 때도 죽었다면 그리지 말아야 한다.
 	{
-		switch (state.map[y][x])
-		{
-		case BlockType::LASERBEAM_UP:
-		case BlockType::LASERBEAM_DOWN:
-		case BlockType::LASERBEAM_RIGHT:
-		case BlockType::LASERBEAM_LEFT:
-		{
-			HandlePlayerDead(state);
-			break;
-		}
-		default:
-		{
-			SetColor();
-			cout << "★";
-			//state.player.Render();
-			break;
-		}
-		}
+		SetColor();
+		cout << "★";
 		return true;
 	}
 
