@@ -383,6 +383,11 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		state.uiMessage1 = "스테이지 클리어!";
 		break;
 	}
+	case BlockType::BRICK_KILL:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		HandlePlayerDead(state);
+	}
 	}
 }
 
@@ -446,6 +451,11 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 
 		ClearStage(state);
 		break;
+	}
+	case BlockType::BRICK_KILL:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		HandleCloneDead(state);
 	}
 	}
 }

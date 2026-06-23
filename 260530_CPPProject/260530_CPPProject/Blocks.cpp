@@ -26,6 +26,12 @@
 		m_image = "бс";
 		m_color = Color::GRAY;
 	}
+
+	KillBrick::KillBrick()
+	{
+		m_image = "в├";
+		m_color = Color::LIGHT_VIOLET;
+	}
 	#pragma endregion
 
 	#pragma region LaserCore
@@ -640,6 +646,11 @@
 		case BlockType::SWITCHABLEBRICK_CLONE_OFF:
 		{
 			block = new CloneSwitchableBrick(false);
+			break;
+		}
+		case BlockType::BRICK_KILL:
+		{
+			block = new KillBrick();
 			break;
 		}
 		default:
