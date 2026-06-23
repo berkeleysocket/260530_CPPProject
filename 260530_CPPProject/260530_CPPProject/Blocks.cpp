@@ -26,14 +26,20 @@
 		m_image = "¡á";
 		m_color = Color::GRAY;
 	}
+
+	KillBrick::KillBrick()
+	{
+		m_image = "¢Ã";
+		m_color = Color::LIGHT_VIOLET;
+	}
 	#pragma endregion
 
 	#pragma region LaserCore
-	LaserCore::LaserCore(bool autoRotation, Dir castingDir)
+	LaserCore::LaserCore(bool autoRotation, bool isActive, Dir castingDir)
 	{
 		m_image = "¡Ø";
-		m_color = Color::RED;
-		m_isActive = true;	
+		m_color = isActive ? Color::RED : Color::LIGHT_GRAY;
+		m_isActive = isActive;
 		m_autoRotation = autoRotation;
 		m_dir = castingDir;
 		m_beamPosQueue = queue<Position>();
@@ -202,23 +208,21 @@
 				blockType = state.map[y][x];
 				if (blockType == BlockType::SWITCHABLEBRICK_RED_ON
 					|| blockType == BlockType::SWITCHABLEBRICK_RED_OFF)
-				{
 					((RedSwitchableBrick*)(state.blocks[y][x]))->Toggle(state);
-				}
 				else if (blockType == BlockType::LASERCORE_UP_AUTO
 					|| blockType == BlockType::LASERCORE_DOWN_AUTO
 					|| blockType == BlockType::LASERCORE_LEFT_AUTO
 					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
-				{
 					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state);
-				}
-				else if (blockType == BlockType::LASERCORE_UP_STATIC
-					|| blockType == BlockType::LASERCORE_DOWN_STATIC
-					|| blockType == BlockType::LASERCORE_LEFT_STATIC
-					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
-				{
+				else if (blockType == BlockType::LASERCORE_UP_STATIC_ON
+					|| blockType == BlockType::LASERCORE_UP_STATIC_OFF
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC_ON
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC_OFF
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC_ON
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC_OFF
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_ON
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_OFF)
 					((LaserCore*)(state.blocks[y][x]))->Toggle(state);
-				}
 			}
 		}
 	}
@@ -352,10 +356,10 @@
 					((LaserCore*)(state.blocks[y][x]))->Clear(state);
 					((LaserCore*)(state.blocks[y][x]))->TryDrawCast(state);
 				}
-				else if (blockType == BlockType::LASERCORE_UP_STATIC
-					|| blockType == BlockType::LASERCORE_DOWN_STATIC
-					|| blockType == BlockType::LASERCORE_LEFT_STATIC
-					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
+				else if (blockType == BlockType::LASERCORE_UP_STATIC_ON
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC_ON
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC_ON
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_ON)
 				{
 					LaserCore* laserCore = ((LaserCore*)(state.blocks[y][x]));
 					((LaserCore*)(state.blocks[y][x]))->Clear(state);
@@ -409,10 +413,10 @@
 					laserCore->Clear(state);
 					laserCore->TryDrawCast(state);
 				}
-				else if (blockType == BlockType::LASERCORE_UP_STATIC
-					|| blockType == BlockType::LASERCORE_DOWN_STATIC
-					|| blockType == BlockType::LASERCORE_LEFT_STATIC
-					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
+				else if (blockType == BlockType::LASERCORE_UP_STATIC_ON
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC_ON
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC_ON
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_ON)
 				{
 					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
 					laserCore->Clear(state);
@@ -461,10 +465,10 @@
 					|| blockType == BlockType::LASERCORE_DOWN_AUTO
 					|| blockType == BlockType::LASERCORE_LEFT_AUTO
 					|| blockType == BlockType::LASERCORE_RIGHT_AUTO
-					|| blockType == BlockType::LASERCORE_UP_STATIC
-					|| blockType == BlockType::LASERCORE_DOWN_STATIC
-					|| blockType == BlockType::LASERCORE_LEFT_STATIC
-					|| blockType == BlockType::LASERCORE_RIGHT_STATIC)
+					|| blockType == BlockType::LASERCORE_UP_STATIC_ON
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC_ON
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC_ON
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_ON)
 				{
 					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
 					laserCore->Clear(state);
@@ -511,42 +515,62 @@
 		}
 		case BlockType::LASERCORE_UP_AUTO:
 		{
-			block = new LaserCore(true, Dir::UP);
+			block = new LaserCore(true, true, Dir::UP);
 			break;
 		}
-		case BlockType::LASERCORE_UP_STATIC:
+		case BlockType::LASERCORE_UP_STATIC_ON:
 		{
-			block = new LaserCore(false, Dir::UP);
+			block = new LaserCore(false, true, Dir::UP);
+			break;
+		}
+		case BlockType::LASERCORE_UP_STATIC_OFF:
+		{
+			block = new LaserCore(false, false, Dir::UP);
 			break;
 		}
 		case BlockType::LASERCORE_DOWN_AUTO:
 		{
-			block = new LaserCore(true, Dir::DOWN);
+			block = new LaserCore(true, true, Dir::DOWN);
 			break;
 		}
-		case BlockType::LASERCORE_DOWN_STATIC:
+		case BlockType::LASERCORE_DOWN_STATIC_ON:
 		{
-			block = new LaserCore(false, Dir::DOWN);
+			block = new LaserCore(false, true, Dir::DOWN);
+			break;
+		}
+		case BlockType::LASERCORE_DOWN_STATIC_OFF:
+		{
+			block = new LaserCore(false, false, Dir::DOWN);
 			break;
 		}
 		case BlockType::LASERCORE_LEFT_AUTO:
 		{
-			block = new LaserCore(true, Dir::LEFT);
+			block = new LaserCore(true, true, Dir::LEFT);
 			break;
 		}
-		case BlockType::LASERCORE_LEFT_STATIC:
+		case BlockType::LASERCORE_LEFT_STATIC_ON:
 		{
-			block = new LaserCore(false, Dir::LEFT);
+			block = new LaserCore(false, true, Dir::LEFT);
+			break;
+		}
+		case BlockType::LASERCORE_LEFT_STATIC_OFF:
+		{
+			block = new LaserCore(false, false, Dir::LEFT);
 			break;
 		}
 		case BlockType::LASERCORE_RIGHT_AUTO:
 		{
-			block = new LaserCore(true, Dir::RIGHT);
+			block = new LaserCore(true, true, Dir::RIGHT);
 			break;
 		}
-		case BlockType::LASERCORE_RIGHT_STATIC:
+		case BlockType::LASERCORE_RIGHT_STATIC_ON:
 		{
-			block = new LaserCore(false, Dir::RIGHT);
+			block = new LaserCore(false, true, Dir::RIGHT);
+			break;
+		}
+		case BlockType::LASERCORE_RIGHT_STATIC_OFF:
+		{
+			block = new LaserCore(false, false, Dir::RIGHT);
 			break;
 		}
 		case BlockType::LASERBEAM_UP:
@@ -622,6 +646,11 @@
 		case BlockType::SWITCHABLEBRICK_CLONE_OFF:
 		{
 			block = new CloneSwitchableBrick(false);
+			break;
+		}
+		case BlockType::BRICK_KILL:
+		{
+			block = new KillBrick();
 			break;
 		}
 		default:
