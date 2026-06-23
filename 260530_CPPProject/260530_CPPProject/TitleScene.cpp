@@ -3,9 +3,11 @@
 
 void InitTitle()
 {
-	SetConsoleSize(100, 30);
+	SetConsoleSize(WIDTH, HEIGHT);
+	SetConsoleWindowStyle(true);
+	SetConsoleMouseInputDisabled();
 	SetCursorVisible(false);
-	//SetConsoleWindowStyle(false);
+	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
 }
 
 void UpdateTitle(GameState& state)
