@@ -22,7 +22,7 @@ void Init()
 	LoadMaps();
 }
 
-void LoadMaps()
+void LoadMaps()		
 {
 	StageManager::GetInst()->LoadStage();
 
