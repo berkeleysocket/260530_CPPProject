@@ -6,6 +6,7 @@ void InitInStage(GameState& state)
 	SoundManager::GetInst()->PlayBGM("Resources/Sounds/InGameBGM.wav");
 	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 	state.clone.Init();
+	state.moveDataRecord.ReSet();
 }
 
 void UpdateInGame(GameState& state)
