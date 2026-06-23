@@ -4,6 +4,7 @@
 void InitTitle()
 {
 	SetConsoleSize(100, 30);
+	SoundManager::GetInst()->PlayBGM("Resources/Sounds/TitleBGM.wav");
 }
 
 void UpdateTitle(GameState& state)

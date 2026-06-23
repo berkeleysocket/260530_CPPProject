@@ -25,6 +25,7 @@ void Init()
 	SoundManager::GetInst()->Load("RealSelecte", "Resources/Sounds/RealSelecte.wav");
 	SoundManager::GetInst()->Load("Exit", "Resources/Sounds/Exit.wav");
 	SoundManager::GetInst()->Load("Restart", "Resources/Sounds/Restart.wav");
+
 	LoadMaps();
 }
 
