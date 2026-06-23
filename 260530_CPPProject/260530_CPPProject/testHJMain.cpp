@@ -37,6 +37,7 @@ int main()
 void Initt()
 {
 	SoundManager::GetInst()->Init();
+	SoundInit();
 	LoadMaps();
 }
 
