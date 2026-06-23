@@ -2,6 +2,7 @@
 
 void InitInStage(GameState& state)
 {
+	SetConsoleSize(MAP_W * 4, MAP_H * 1.5);
 	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 	state.clone.Init();
 }

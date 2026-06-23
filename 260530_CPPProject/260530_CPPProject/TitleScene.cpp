@@ -4,8 +4,6 @@
 void InitTitle()
 {
 	SetConsoleSize(100, 30);
-	SetCursorVisible(false);
-	//SetConsoleWindowStyle(false);
 }
 
 void UpdateTitle(GameState& state)

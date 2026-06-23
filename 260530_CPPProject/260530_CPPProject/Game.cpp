@@ -7,6 +7,7 @@ void Init()
 	SetConsoleMouseInputDisabled();
 	SetCursorVisible(false);
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
+
 	SoundManager::GetInst()->Init();
 	SoundManager::GetInst()->Init();
 	SoundManager::GetInst()->Load("Laser", "Resources/Sounds/Laser.mp3");
