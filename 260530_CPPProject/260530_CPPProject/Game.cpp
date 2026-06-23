@@ -47,6 +47,18 @@ void Update(GameState& state)
 		}
 	}
 
+	if (GetKeyDown(VK_ESCAPE))
+	{
+		state.curScene = Scene::STAGE;
+		state.prevStage = Stage::NONE;
+	}
+
+	if (GetKeyDown('R'))
+	{
+		state.curScene = Scene::RESTART;
+	}
+
+
 	state.clone.Tick(state, state.delta);
 }
 

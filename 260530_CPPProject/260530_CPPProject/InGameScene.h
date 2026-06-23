@@ -16,7 +16,6 @@ using std::endl;
 //game
 void InitInGame(GameState& state);
 void ClearStage(GameState& state);
-void LoadMap(GameState& state, const vector<string>& gameMap);
 void LoadMap(GameState& state, const string gameMap[MAP_H]);
 
 //render

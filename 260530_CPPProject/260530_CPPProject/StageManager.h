@@ -34,6 +34,8 @@ public:
 	{
 		return *m_curStageData;
 	}
+
+	void Clear(Stage curStage);
 private:
 	static StageManager* m_inst;
 	std::map<Stage, std::unique_ptr<StageSaveData>> m_mapStageSaveData;

@@ -3,12 +3,19 @@
 void InitInGame(GameState& state)
 {
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, state.mapBox.m_gameMap1);
+	LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
+	state.clone.Dead();
 }
 
 void ClearStage(GameState& state)
 {
+	//사운드
+
 	//Stage 클리어 처리
+
+	Sleep(1000);
+	StageManager::GetInst()->Clear(state.curStage);
+	state.curScene = Scene::STAGE;
 }
 
 void LoadMap(GameState& state, const string gameMap[MAP_H])
@@ -162,6 +169,11 @@ void DrawUI(GameState& state)
 	cout << " ■";
 	SetColor(Color::WHITE);
 	cout << " : 파란 스위치 벽";
+
+	GotoXY(32, 0);
+	cout << "[ESC] Main Menu";
+	GotoXY(32, 1);
+	cout << "[R] Restart";
 }
 
 bool TryDrawPlayer(GameState& state, int x, int y)

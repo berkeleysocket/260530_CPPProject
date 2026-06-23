@@ -30,10 +30,18 @@ void UpdateStage(GameState& state)
 		state.curScene = Scene::INGAME;
 		StageManager::GetInst()->ChangeStage(state.curStage);
 	}
+
+	if (GetKeyDown(VK_ESCAPE))
+	{
+		state.curScene = Scene::TITLE;
+		state.prevStage = Stage::NONE;
+	}
 }
 
 void RenderStage(GameState& state)
 {
+	SetDefaultMode();
+	cout << "[ESC] Main Menu";
 
 	StageSaveData& stageData = StageManager::GetInst()->GetCurStageSaveData();
 	if (state.curStage == state.prevStage)

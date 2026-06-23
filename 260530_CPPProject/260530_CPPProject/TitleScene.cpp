@@ -41,12 +41,14 @@ void RenderTitle(const GameState& state)
 	int y = res.Y / 3 *2;
 	SetColor();
 
+	SetDefaultMode();
 	const string labels[] = { "게임 시작", "게임 종료" };
 	for (int i = 0; i < 2; i++)
 	{
 		GotoXY(x - 2, y + i);
 		cout << (i == (int)state.curMenu ? "> " : "  ") << labels[i];
 	}
+
 	const wstring title[] =
 	{
 		L"████████▄     ▄████████    ▄████████ ████████▄     ▄███████▄ ███    █▄   ▄███████▄   ▄███████▄     ▄████████  ▄█",

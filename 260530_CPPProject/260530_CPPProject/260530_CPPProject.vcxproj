@@ -143,6 +143,7 @@
     </ClCompile>
     <ClCompile Include="MoveData.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ReStartScene.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageScene.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="MoveDataRecord.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
+    <ClInclude Include="ReStartScene.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageManager.h" />
