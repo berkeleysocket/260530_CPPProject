@@ -166,7 +166,10 @@ void DrawBlock(GameState& state, int x, int y)
 void DrawUI(GameState& state)
 {
 	GotoXY(0, 15);
-	SetColor(state.uiColor1);
+	if (state.uiMessage1.empty())
+		SetColor();
+	else
+		SetColor(state.uiColor1);
 	cout << state.uiMessage1 << "              ";
 
 	GotoXY(0, 16);
@@ -220,7 +223,7 @@ void DrawUI(GameState& state)
 	cout << " : 파란 스위치 벽";
 
 	GotoXY(32, 0);
-	cout << "[ESC] Main Menu";
+	cout << "[ESC] Selecte Stage";
 	GotoXY(32, 1);
 	cout << "[R] Restart";
 
