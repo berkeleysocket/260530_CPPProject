@@ -2,6 +2,7 @@
 
 void InitInStage(GameState& state)
 {
+	SetConsoleSize(MAP_W * 4, MAP_H * 1.5);
 	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 	state.clone.Init();
 }
@@ -37,12 +38,14 @@ void UpdateInGame(GameState& state)
 
 	if (GetKeyDown(VK_ESCAPE))
 	{
+		SoundManager::GetInst()->Play("Exit");
 		state.curScene = Scene::STAGE;
 		state.prevStage = Stage::NONE;
 	}
 
 	if (GetKeyDown('R'))
 	{
+		SoundManager::GetInst()->Play("Restart");
 		state.curScene = Scene::RESTART;
 	}
 

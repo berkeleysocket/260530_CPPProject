@@ -55,66 +55,6 @@ void SoundInit()
 	SoundManager::GetInst()->Load("StageClear", "Resources/Sounds/StageClear.mp3");
 }
 
-void LoadMaps()
-{
-	StageManager::GetInst()->LoadStage();
-	MapData mapData
-	{
-		"Test Map1"
-		,
-	{ //map
- "000000000000000",//0
-	"0..S.w.......N.",//1
-	"0....w.........",//2
-	"0QQQQ0www000000",//3
-	"0....0...C..c..",//4
-	"0....0.b.C..c.B",//5
-	"0....0...C..c..",//6
-	"0qqqq00000WW000",//7
-	"0....0...0..0.0",//8
-	"0....0.P.0NN0.0",//9
-	"0....0...0000 0",//10
-	"0QQQQ0...0..P.0",//11
-	"0....W...0....0",//12
-	"0....W...0..E.0",//13
-	"000000000000000" //14
-	}
-	};
-	StageManager::GetInst()->RegisterStage(Stage::STAGE1, std::make_unique<MapData>(mapData));
-
-	MapData mapData2
-	{
-		"Test Map2"
-		,
-	{
-	"000000000000000",//0
-	"0..S.......0.p0",//1
-	"0..........0..0",//2
-	"0...B......0..0",//3
-	"0..........0u.0",//4
-	"0000000....0..0",//5
-	"0..P..0....0.u0",//6
-	"0WWWWWWU...0QQ0",//7
-	"0......w...0..0",//8
-	"0......w...0..0",//9
-	"0......w...0..0",//10
-	"0......w...0..0",//11
-	"0000000w.b.0..0",//12
-	"0p.q.P0w...0RE0",//13
-	"000000000000000" //14
-	}
-	};
-	StageManager::GetInst()->RegisterStage(Stage::STAGE2, std::make_unique<MapData>(mapData2));
-
-	StageManager::GetInst()->ChangeStage(Stage::STAGE1);
-	StageSaveData& sd = StageManager::GetInst()->GetCurStageSaveData();
-	sd.m_isLock = false;
-
-	StageManager::GetInst()->SaveStage();
-
-
-}
-
 
 void Updatee(GameState& state)
 {
