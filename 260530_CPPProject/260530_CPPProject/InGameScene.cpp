@@ -146,13 +146,13 @@ void DrawBlock(GameState& state, int x, int y)
 	switch (blockType)
 	{
 	case BlockType::LASERCORE_UP_AUTO:
-	case BlockType::LASERCORE_UP_STATIC:
+	case BlockType::LASERCORE_UP_STATIC_ON:
 	case BlockType::LASERCORE_DOWN_AUTO:
-	case BlockType::LASERCORE_DOWN_STATIC:
+	case BlockType::LASERCORE_DOWN_STATIC_ON:
 	case BlockType::LASERCORE_LEFT_AUTO:
-	case BlockType::LASERCORE_LEFT_STATIC:
+	case BlockType::LASERCORE_LEFT_STATIC_ON:
 	case BlockType::LASERCORE_RIGHT_AUTO:
-	case BlockType::LASERCORE_RIGHT_STATIC:
+	case BlockType::LASERCORE_RIGHT_STATIC_ON:
 	{
 		((LaserCore*)block)-> TryDrawCast(state);
 		break;
@@ -325,7 +325,9 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		ShakeConsoleWindow(15, 40, 25);
 
 		RedPortal* redPortal = (RedPortal*)block;
-		redPortal->Warp(state, state.player, blockPos, BlockType::PORTAL_RED);
+		redPortal-> Warp(state, state.player, blockPos, BlockType::PORTAL_RED);
+		state.uiColor1 = Color::YELLOW;
+		state.uiMessage1 = "플레이어가 빨간 포탈에 들어갔습니다.";
 		break;
 	}
 	case BlockType::PORTAL_BLUE:
@@ -333,7 +335,9 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 		ShakeConsoleWindow(15, 40, 25);
 
 		BluePortal* bluePortal = (BluePortal*)block;
-		bluePortal->Warp(state, state.player, blockPos, BlockType::PORTAL_BLUE);
+		bluePortal-> Warp(state, state.player, blockPos, BlockType::PORTAL_BLUE);
+		state.uiColor1 = Color::YELLOW;
+		state.uiMessage1 = "플레이어가 파란 포탈에 들어갔습니다.";
 		break;
 	}
 	case BlockType::BUTTON_RED:
