@@ -163,6 +163,12 @@ void DrawUI(GameState& state)
 	cout << " ■";
 	SetColor(Color::WHITE);
 	cout << " : 파란 스위치 벽";
+
+	GotoXY(32, 0);
+	cout << "[ESC] Main Menu";
+	GotoXY(32, 1);
+	cout << "[R] Restart";
+
 }
 
 bool TryDrawPlayer(GameState& state, int x, int y)
