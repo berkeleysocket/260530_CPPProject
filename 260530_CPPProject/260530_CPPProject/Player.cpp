@@ -55,7 +55,6 @@ void Player::Move(Dir dir)
 		m_cursorPos.x += 2;
 		break;
 	}
-
 }
 
 void Player::Tick(float deltaTime)
