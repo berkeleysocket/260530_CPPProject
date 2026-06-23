@@ -2,7 +2,7 @@
 
 void InitInStage(GameState& state)
 {
-	LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
+	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 	state.clone.Dead();
 }
 
@@ -67,7 +67,7 @@ void ClearStage(GameState& state)
 	state.prevStage = Stage::NONE;
 }
 
-void LoadMap(GameState& state, const string gameMap[MAP_H])
+void GenerateMap(GameState& state, const string gameMap[MAP_H])
 {
 	for (int y = 0; y < MAP_H; ++y)
 	{ 
@@ -230,8 +230,10 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
 	{
-		SetColor();
-		cout << "★";
+		state.player.Render();
+		//SetColor(state.player.GetColor());
+		//cout << state.player.GetImage();
+		//SetColor();
 		return true;
 	}
 
@@ -246,6 +248,7 @@ bool TryDrawClone(GameState& state, int x, int y)
 		state.clone.Render();
 		return true;
 	}
+
 	return false;
 }
 
@@ -258,15 +261,13 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	Position dirToPos = DirToMapPosition(dir);
 	Position playerPos = state.player.GetMapPos();
 	Position nextPos = playerPos + dirToPos;
-	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
-
-	//cout << nextPos.x << "," << nextPos.y << " : " << (char)nextBlockType << "   ";
 
 	if (IsEdge(nextPos.x, nextPos.y))
 	{
 		return false;
 	}
 
+	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
 	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
 	if (!IsPassable(nextBlock, nextBlockType))
 	{
