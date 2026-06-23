@@ -133,7 +133,7 @@ void Updatee(GameState& state)
 	{
 	case Scene::INGAME:
 		if (sceneChanged)
-			InitInGame(state);
+			//InitInGame(state);
 		Update(state);
 			break;
 	case Scene::STAGE:
