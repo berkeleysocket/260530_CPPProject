@@ -75,5 +75,6 @@ void StageManager::Clear(Stage curStage)
 	auto iter_map = m_mapStageSaveData.find(nextStage);
 	(*iter_map->second.get()).m_isLock = false;
 
+	SaveStage();
 }
 

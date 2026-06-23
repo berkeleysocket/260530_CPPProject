@@ -18,6 +18,7 @@ void Init(GameState& state)
 	SoundManager::GetInst()->Load("PlayerDeath", "Resources/Sounds/PlayerDeath.mp3");
 	SoundManager::GetInst()->Load("CloneDeath", "Resources/Sounds/CloneDeath.mp3");
 	SoundManager::GetInst()->Load("StageClear", "Resources/Sounds/StageClear.mp3");
+
 	state = GameState{};
 }
 
