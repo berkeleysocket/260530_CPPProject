@@ -3,7 +3,7 @@
 void InitInGame(GameState& state)
 {
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, state.mapBox.m_gameMap2);
+	LoadMap(state, state.mapBox.m_testMap);
 }
 
 void ClearStage(GameState& state)
@@ -373,51 +373,50 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 			break;
 		}
 	case BlockType::PORTAL_RED:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		for (int _y = 0; _y < MAP_H; _y++)
 		{
-			ShakeConsoleWindow(15, 40, 25);
-
-			for (int _y = 0; _y < MAP_H; _y++)
+			for (int _x = 0; _x < MAP_W; _x++)
 			{
-				for (int _x = 0; _x < MAP_W; _x++)
+				if (state.map[_y][_x] == BlockType::PORTAL_RED
+					&& Position{ _x, _y } != blockPos)
 				{
-					if (state.map[_y][_x] == BlockType::PORTAL_RED
-						&& Position{ _x, _y } != blockPos)
-					{
-						Position cursorPos = { 0,0 };
-						cursorPos.x += _x * 2;
-						cursorPos.y += _y * 2;
+					Position cursorPos = { 0,0 };
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y * 2;
 
-						state.clone.SetPos(cursorPos, { _x, _y });
-						SoundManager::GetInst()->Play("Teleport");
-					}
+					state.clone.SetPos(cursorPos, { _x, _y });
+					SoundManager::GetInst()->Play("Teleport");
 				}
-				cout << endl;
 			}
-			break;
+			cout << endl;
 		}
+		break;
+	}
 	case BlockType::PORTAL_BLUE:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		for (int _y = 0; _y < MAP_H; _y++)
 		{
-			ShakeConsoleWindow(15, 40, 25);
-
-			for (int _y = 0; _y < MAP_H; _y++)
+			for (int _x = 0; _x < MAP_W; _x++)
 			{
-				for (int _x = 0; _x < MAP_W; _x++)
+				if (state.map[_y][_x] == BlockType::PORTAL_BLUE
+					&& Position{ _x, _y } != blockPos)
 				{
-					if (state.map[_y][_x] == BlockType::PORTAL_BLUE
-						&& Position{ _x, _y } != blockPos)
-					{
-						Position cursorPos = { 0,0 };
-						cursorPos.x += _x * 2;
-						cursorPos.y += _y * 2;
+					Position cursorPos = { 0,0 };
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y * 2;
 
-						state.clone.SetPos(cursorPos, { _x, _y });
-						SoundManager::GetInst()->Play("Teleport");
-					}
+					state.clone.SetPos(cursorPos, { _x, _y });
+					SoundManager::GetInst()->Play("Teleport");
 				}
-				cout << endl;
 			}
-			break;
+			cout << endl;
 		}
+		break;
+	}
 	case BlockType::BUTTON_RED:
 		{
 			ShakeConsoleWindow(15, 40, 25);
