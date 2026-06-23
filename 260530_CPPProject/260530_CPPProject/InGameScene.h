@@ -14,7 +14,9 @@ using std::cout;
 using std::endl;
 
 //game
-void InitInGame(GameState& state);
+void InitInStage(GameState& state);
+void UpdateInGame(GameState& state);
+void RenderInGame(GameState& state);
 void ClearStage(GameState& state);
 void LoadMap(GameState& state, const string gameMap[MAP_H]);
 

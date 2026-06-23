@@ -1,10 +1,59 @@
 ﻿#include "InGameScene.h"
 
-void InitInGame(GameState& state)
+void InitInStage(GameState& state)
 {
-	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
 	LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 	state.clone.Dead();
+}
+
+void UpdateInGame(GameState& state)
+{
+	Dir dir;
+	UpdateInput();
+	if (GetKeyDown('W'))
+	{
+		dir = Dir::UP;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
+	}
+	if (GetKeyDown('S'))
+	{
+		dir = Dir::DOWN;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
+	}
+	if (GetKeyDown('A'))
+	{
+		dir = Dir::LEFT;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
+	}
+	if (GetKeyDown('D'))
+	{
+		dir = Dir::RIGHT;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
+	}
+
+	if (GetKeyDown(VK_ESCAPE))
+	{
+		state.curScene = Scene::STAGE;
+		state.prevStage = Stage::NONE;
+	}
+
+	if (GetKeyDown('R'))
+	{
+		state.curScene = Scene::RESTART;
+	}
+
+	state.clone.Tick(state, state.delta);
+}
+
+void RenderInGame(GameState& state)
+{
+	GotoXY(0, 0);
+	DrawMap(state);
+	DrawUI(state);
 }
 
 void ClearStage(GameState& state)
