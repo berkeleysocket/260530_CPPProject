@@ -1,10 +1,59 @@
 ﻿#include "InGameScene.h"
 
-void InitInGame(GameState& state)
+void InitInStage(GameState& state)
 {
-	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
-	state.clone.Init();
+	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
+	state.clone.Dead();
+}
+
+void UpdateInGame(GameState& state)
+{
+	Dir dir;
+	UpdateInput();
+	if (GetKeyDown('W'))
+	{
+		dir = Dir::UP;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
+	}
+	if (GetKeyDown('S'))
+	{
+		dir = Dir::DOWN;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
+	}
+	if (GetKeyDown('A'))
+	{
+		dir = Dir::LEFT;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
+	}
+	if (GetKeyDown('D'))
+	{
+		dir = Dir::RIGHT;
+		if (TryPlayerMove(state, dir))
+			state.player.Move(dir);
+	}
+
+	if (GetKeyDown(VK_ESCAPE))
+	{
+		state.curScene = Scene::STAGE;
+		state.prevStage = Stage::NONE;
+	}
+
+	if (GetKeyDown('R'))
+	{
+		state.curScene = Scene::RESTART;
+	}
+
+	state.clone.Tick(state, state.delta);
+}
+
+void RenderInGame(GameState& state)
+{
+	GotoXY(0, 0);
+	DrawMap(state);
+	DrawUI(state);
 }
 
 void ClearStage(GameState& state)
@@ -18,7 +67,7 @@ void ClearStage(GameState& state)
 	state.prevStage = Stage::NONE;
 }
 
-void LoadMap(GameState& state, const string gameMap[MAP_H])
+void GenerateMap(GameState& state, const string gameMap[MAP_H])
 {
 	for (int y = 0; y < MAP_H; ++y)
 	{ 
@@ -184,8 +233,10 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 {
 	if (state.player.GetMapPos() == Position{ x, y } )
 	{
-		SetColor();
-		cout << "★";
+		state.player.Render();
+		//SetColor(state.player.GetColor());
+		//cout << state.player.GetImage();
+		//SetColor();
 		return true;
 	}
 
@@ -200,6 +251,7 @@ bool TryDrawClone(GameState& state, int x, int y)
 		state.clone.Render();
 		return true;
 	}
+
 	return false;
 }
 
@@ -212,15 +264,13 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	Position dirToPos = DirToMapPosition(dir);
 	Position playerPos = state.player.GetMapPos();
 	Position nextPos = playerPos + dirToPos;
-	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
-
-	//cout << nextPos.x << "," << nextPos.y << " : " << (char)nextBlockType << "   ";
 
 	if (IsEdge(nextPos.x, nextPos.y))
 	{
 		return false;
 	}
 
+	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
 	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
 	if (!IsPassable(nextBlock, nextBlockType))
 	{
@@ -274,51 +324,16 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
-		for (int _y = 0; _y < MAP_H; _y++)
-		{
-			for (int _x = 0; _x < MAP_W; _x++)
-			{
-				if (state.map[_y][_x] == BlockType::PORTAL_RED
-					&& Position {_x, _y} != blockPos)
-				{
-					Position cursorPos = { 0,0 };
-					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
-					
-					state.player.SetPos(cursorPos, {_x, _y});
-
-					state.uiColor1 = Color::YELLOW;
-					state.uiMessage1 = "플레이어가 워프했습니다.";
-					SoundManager::GetInst()->Play("Teleport");
-				}
-			}
-			cout << endl;
-		}
+		RedPortal* redPortal = (RedPortal*)block;
+		redPortal->Warp(state, state.player, blockPos, BlockType::PORTAL_RED);
 		break;
 	}
 	case BlockType::PORTAL_BLUE:
 	{
 		ShakeConsoleWindow(15, 40, 25);
-		for (int _y = 0; _y < MAP_H; _y++)
-		{
-			for (int _x = 0; _x < MAP_W; _x++)
-			{
-				if (state.map[_y][_x] == BlockType::PORTAL_BLUE
-					&& Position{ _x, _y } != blockPos)
-				{
-					Position cursorPos = { 0,0 };
-					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
 
-					state.player.SetPos(cursorPos, { _x, _y });
-
-					state.uiColor1 = Color::YELLOW;
-					state.uiMessage1 = "플레이어가 워프했습니다. ";
-					SoundManager::GetInst()->Play("Teleport");
-				}
-			}
-			cout << endl;
-		}
+		BluePortal* bluePortal = (BluePortal*)block;
+		bluePortal->Warp(state, state.player, blockPos, BlockType::PORTAL_BLUE);
 		break;
 	}
 	case BlockType::BUTTON_RED:
@@ -385,46 +400,16 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 		{
 			ShakeConsoleWindow(15, 40, 25);
 
-			for (int _y = 0; _y < MAP_H; _y++)
-			{
-				for (int _x = 0; _x < MAP_W; _x++)
-				{
-					if (state.map[_y][_x] == BlockType::PORTAL_RED
-						&& Position{ _x, _y } != blockPos)
-					{
-						Position cursorPos = { 0,0 };
-						cursorPos.x += _x * 2;
-						cursorPos.y += _y * 2;
-
-						state.clone.SetPos(cursorPos, { _x, _y });
-						SoundManager::GetInst()->Play("Teleport");
-					}
-				}
-				cout << endl;
-			}
+			RedPortal* redPortal = (RedPortal*)block;
+			redPortal->Warp(state, state.clone, blockPos, BlockType::PORTAL_RED);
 			break;
 		}
 	case BlockType::PORTAL_BLUE:
 		{
 			ShakeConsoleWindow(15, 40, 25);
 
-			for (int _y = 0; _y < MAP_H; _y++)
-			{
-				for (int _x = 0; _x < MAP_W; _x++)
-				{
-					if (state.map[_y][_x] == BlockType::PORTAL_BLUE
-						&& Position{ _x, _y } != blockPos)
-					{
-						Position cursorPos = { 0,0 };
-						cursorPos.x += _x * 2;
-						cursorPos.y += _y * 2;
-
-						state.clone.SetPos(cursorPos, { _x, _y });
-						SoundManager::GetInst()->Play("Teleport");
-					}
-				}
-				cout << endl;
-			}
+			BluePortal* bluePortal = (BluePortal*)block;
+			bluePortal->Warp(state, state.clone, blockPos, BlockType::PORTAL_BLUE);
 			break;
 		}
 	case BlockType::BUTTON_RED:

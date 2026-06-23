@@ -15,6 +15,7 @@ private:
 	bool m_isActive = true;
 	Color m_bodyClr = Color::WHITE;
 	std::string m_bodyImg = "¡Ú";
+
 public:
 	void SetSpawnPos(Position spawnPos, Position spawnMapPos);
 	void Spawn();
@@ -26,6 +27,14 @@ public:
 	const Position GetStartPos() const
 	{
 		return m_spawnMapPos;
+	}
+	const std::string GetImage() const
+	{
+		return m_bodyImg;
+	}
+	const Color GetColor() const
+	{
+		return m_bodyClr;
 	}
 	void Render() const	 override;
 	void Move(Dir dir)  override;
