@@ -6,7 +6,7 @@ void InitStage()
 {
 	SetConsoleSize(80, 25);
 	SetCursorVisible(false);
-
+	SoundManager::GetInst()->PlayBGM("Resources/Sounds/StageSelecte.wav");
 }
 
 void UpdateStage(GameState& state)
