@@ -48,6 +48,14 @@ void Clone::Spawn(std::queue<MoveData> record)
 	m_bodyImg = "§";
 }
 
+void Clone::Init()
+{
+	nextMoveTime = moveCooltime;
+
+	Render();
+	m_isActive = false;
+}
+
 void Clone::Dead()
 {
 	nextMoveTime = moveCooltime;

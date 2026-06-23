@@ -23,6 +23,7 @@ public:
 	{
 		return m_isActive;
 	}
+	void Init();
 	void Spawn(std::queue<MoveData> record);
 	void Dead();
 	void Render() const override;
