@@ -1,7 +1,6 @@
 #include"GameState.h"
 #include"TitleScene.h"
 #include"StageScene.h"
-#include"ReStartScene.h"
 #include"StageManager.h"
 #include"SoundManager.h"
 #include"Game.h"
@@ -64,7 +63,7 @@ void LoadMaps()
 		"Test Map1"
 		,
 	{ //map
- "00000000000000D",//0
+ "000000000000000",//0
 	"0..S.w.......N.",//1
 	"0....w.........",//2
 	"0QQQQ0www000000",//3

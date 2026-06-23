@@ -27,6 +27,9 @@ void StageManager::LoadStage()
 	string str;
 	while (std::getline(stageFile, str))
 	{
+		if (str.empty())
+			continue;
+
 		Stage stage = (Stage)std::stoi(str.substr(0, str.find(",")));
 		bool isLock = str[2] == '1';
 		bool isClear = str[4] == '1';
