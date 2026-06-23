@@ -3,7 +3,7 @@
 void InitInStage(GameState& state)
 {
 	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
-	state.clone.Dead();
+	state.clone.Init();
 }
 
 void UpdateInGame(GameState& state)
