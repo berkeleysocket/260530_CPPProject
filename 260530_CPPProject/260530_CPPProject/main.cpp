@@ -1,7 +1,4 @@
-#include"Player.h"
-#include"Console.h"
 #include"GameState.h"
-#include "MoveDataRecord.h"
 #include"TitleScene.h"
 #include"StageScene.h"
 #include"StageManager.h"
@@ -9,6 +6,7 @@
 #include"Game.h"
 
 void Initt();
+void LoadMaps();
 void Updatee(GameState& state);
 void Renderr(GameState& state);
 
@@ -16,76 +14,152 @@ int main()
 {
 	GameState state;
 	Initt();
-	state.curScene = Scene::STAGE;
+	ULONGLONG prevTick = 0;
+	state.curScene = Scene::TITLE;
+
 	while (state.isRunning)
 	{
-		SoundManager::GetInst()->Update();
+		ULONGLONG curTick = GetTickCount64();
+		state.delta = (curTick - prevTick);
+
 		Updatee(state);
 		Renderr(state);
 		FrameSync(60);
+		prevTick = curTick;
 	}
+	SoundManager::GetInst()->Release();
 	StageManager::DestroyInst();
-	SoundManager::DestroyInst();
 }
 
 
 void Initt()
 {
-	InitTitle();
+	SoundManager::GetInst()->Init();
+	LoadMaps();
+
+}
+
+void LoadMaps()
+{
 	StageManager::GetInst()->LoadStage();
+
 	MapData mapData
 	{
-		"Test Map1"
+		"Default Map"
 		,
 	{ //map
-		"........0Q.....",//0
-	".S.B....0Q.....",//1
-	"........0Q.....",//2
-	"........PQ.....",//3
-	"........0Q.....",//4
-	"........0Q.....",//5
-	"........0QQQQQQ",//6
-	"..qqq..U.......",//7
-	"...............",//8
-	"...............",//9
-	"...........P...",//10
-	"...b...........",//11
-	"...............",//12
-	"...............",//13
-	"..............." //14
+	"000000000000000",//0
+	"0.S..........p0",//1
+	"0u............0",//2
+	"000000000.....0",//3
+	"0...p...0.....0",//4
+	"0.......0.....0",//5
+	"0.......0WWWWW0",//6
+	"0.......0.....0",//7
+	"0.......0QQQQQ0",//8
+	"0..b.B.u0.....0",//9
+	"000000000.... 0",//10
+	"0.............0",//11
+	"0E............0",//12
+	"0.............0",//13
+	"000000000000000" //14
 	}
 	};
 	StageManager::GetInst()->RegisterStage(Stage::STAGE1, std::make_unique<MapData>(mapData));
 
-	MapData mapData2
+	mapData = 
 	{
-		"Test Map2"
+		"Clone Test"
 		,
-	{
-		"........0Q.....",//0
-	".S.B....0Q.....",//1
-	"........0Q.....",//2
-	"........PQ.....",//3
-	"........0Q.....",//4
-	"........0Q.....",//5
-	"........0QQQQQQ",//6
-	"..qqq..U.......",//7
-	"...............",//8
-	"...............",//9
-	"...........P...",//10
-	"...b...........",//11
-	"...............",//12
-	"...............",//13
-	"..............." //14
+	{ //map
+	"00000000000000D",//0
+	"0.S..........p0",//1
+	"0u............0",//2
+	"000000000.....0",//3
+	"0...p...0CCCCC0",//4
+	"0.......0.....0",//5
+	"0.......0.....0",//6
+	"0QQQQQQQ0..b..0",//7
+	"0.......0000000",//8
+	"0...P..u0..P..0",//9
+	"000000000.... 0",//10
+	"0.............0",//11
+	"0E............0",//12
+	"0.............0",//13
+	"000000000000000" //14
 	}
 	};
-	StageManager::GetInst()->RegisterStage(Stage::STAGE2, std::make_unique<MapData>(mapData2));
-	StageManager::GetInst()->SaveStage();
+	StageManager::GetInst()->RegisterStage(Stage::STAGE2, std::make_unique<MapData>(mapData));
+
+
+	mapData=
+	{
+		"Test Map12"
+		,
+	{ //map
+	"000000000000000",//0
+	"0..S.w.......N.",//1
+	"0....w.........",//2
+	"0QQQQ0www000000",//3
+	"0....0...C..c..",//4
+	"0....0.b.C..c.B",//5
+	"0....0...C..c..",//6
+	"0qqqq00000WW000",//7
+	"0....0...0..0.0",//8
+	"0....0.P.0NN0.0",//9
+	"0....0...0000 0",//10
+	"0QQQQ0...0..P.0",//11
+	"0....W...0....0",//12
+	"0....W...0..E.0",//13
+	"000000000000000" //14
+	}
+	};
+	StageManager::GetInst()->RegisterStage(Stage::STAGE3, std::make_unique<MapData>(mapData));
+
+	mapData = 
+	{
+		"Test Map22"
+		,
+	{
+	"000000000000000",//0
+	"0..S.......0.p0",//1
+	"0..........0..0",//2
+	"0CCCBN.....0..0",//3
+	"0..........0u.0",//4
+	"0000000....0..0",//5
+	"0..P..0....0.u0",//6
+	"0WWWWWWU...0QQ0",//7
+	"0......w...0..0",//8
+	"0......w...0..0",//9
+	"0......w...0..0",//10
+	"0......w...0..0",//11
+	"0000000w.b.0..0",//12
+	"0p.q.P0w...0RE0",//13
+	"000000000000000" //14S
+	}
+	};
+	StageManager::GetInst()->RegisterStage(Stage::ENDSTAGE, std::make_unique<MapData>(mapData));
+
 	StageManager::GetInst()->ChangeStage(Stage::STAGE1);
+	StageSaveData& sd = StageManager::GetInst()->GetCurStageSaveData();
+	sd.m_isLock = false;
+
+	StageManager::GetInst()->SaveStage();
+
+
 }
+
 
 void Updatee(GameState& state)
 {
+	SoundManager::GetInst()->Update();
+
+	if (state.curScene == Scene::RESTART)
+	{
+		state.curScene = state.prevScene;
+		state.prevScene = Scene::RESTART;
+	}
+
 	bool sceneChanged = state.prevScene != state.curScene;
 	state.prevScene = state.curScene;
 
@@ -93,15 +167,7 @@ void Updatee(GameState& state)
 	{
 	case Scene::INGAME:
 		if (sceneChanged)
-		{
-			//Init(state);
-			SetConsoleSize(WIDTH, HEIGHT);
-			SetConsoleWindowStyle(true);
-			SetConsoleMouseInputDisabled();
-			SetCursorVisible(false);
 			InitInGame(state);
-			LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
-		}
 		Update(state);
 		break;
 	case Scene::STAGE:
@@ -114,12 +180,6 @@ void Updatee(GameState& state)
 			InitTitle();
 		UpdateTitle(state);
 		break;
-	}
-	if (GetKey('C'))
-	{
-		StageSaveData& stageData = StageManager::GetInst()->GetCurStageSaveData();
-		stageData.m_isLock = !stageData.m_isLock;
-		StageManager::GetInst()->SaveStage();
 	}
 }
 

@@ -14,12 +14,14 @@ void UpdateStage(GameState& state)
 	UpdateInput();
 	if (GetKeyDown(VK_LEFT))
 	{
-		state.curStage = (Stage)std::max(0, (int)state.curMenu - 1);
+		state.curStage = (Stage)std::max(0, (int)state.curStage - 1);
 		StageManager::GetInst()->ChangeStage(state.curStage);
 	}
 	if (GetKeyDown(VK_RIGHT))
 	{
-		state.curStage = (Stage)std::min((int)Stage::ENDSTAGE, (int)state.curMenu + 1);
+		SetDefaultMode();
+
+		state.curStage = (Stage)std::min((int)Stage::ENDSTAGE, (int)state.curStage + 1);
 		StageManager::GetInst()->ChangeStage(state.curStage);
 	}
 	// 엔터					//스페이스
@@ -30,6 +32,7 @@ void UpdateStage(GameState& state)
 		state.curScene = Scene::INGAME;
 		StageManager::GetInst()->ChangeStage(state.curStage);
 	}
+
 
 	if (GetKeyDown(VK_ESCAPE))
 	{

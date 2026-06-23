@@ -3,13 +3,19 @@
 void InitInGame(GameState& state)
 {
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, state.mapBox.m_gameMap2);
+	LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
+	state.clone.Dead();
 }
 
 void ClearStage(GameState& state)
 {
 	//Stage 클리어 처리
 	SoundManager::GetInst()->Play("StageClear");
+
+	Sleep(500);
+	StageManager::GetInst()->Clear(state.curStage);
+	state.curScene = Scene::STAGE;
+	state.prevStage = Stage::NONE;
 }
 
 void LoadMap(GameState& state, const string gameMap[MAP_H])
