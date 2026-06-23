@@ -138,17 +138,16 @@
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="InGameScene.cpp" />
     <ClCompile Include="main.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="MoveData.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ReStartScene.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageScene.cpp" />
     <ClCompile Include="testHJMain.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="testSYMain.cpp">
@@ -174,7 +173,6 @@
     <ClInclude Include="MoveDataRecord.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
-    <ClInclude Include="ReStartScene.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageManager.h" />
