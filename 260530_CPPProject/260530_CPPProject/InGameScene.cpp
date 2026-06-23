@@ -3,19 +3,13 @@
 void InitInGame(GameState& state)
 {
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
-	LoadMap(state, StageManager::GetInst()->GetCurMapData().m_map);
-	state.clone.Dead();
+	LoadMap(state, state.mapBox.m_gameMap2);
 }
 
 void ClearStage(GameState& state)
 {
-	//사운드
-
 	//Stage 클리어 처리
-
-	Sleep(1000);
-	StageManager::GetInst()->Clear(state.curStage);
-	state.curScene = Scene::STAGE;
+	SoundManager::GetInst()->Play("StageClear");
 }
 
 void LoadMap(GameState& state, const string gameMap[MAP_H])
@@ -169,11 +163,6 @@ void DrawUI(GameState& state)
 	cout << " ■";
 	SetColor(Color::WHITE);
 	cout << " : 파란 스위치 벽";
-
-	GotoXY(32, 0);
-	cout << "[ESC] Main Menu";
-	GotoXY(32, 1);
-	cout << "[R] Restart";
 }
 
 bool TryDrawPlayer(GameState& state, int x, int y)
@@ -285,6 +274,7 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 
 					state.uiColor1 = Color::YELLOW;
 					state.uiMessage1 = "플레이어가 워프했습니다.";
+					SoundManager::GetInst()->Play("Teleport");
 				}
 			}
 			cout << endl;
@@ -294,7 +284,6 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 	case BlockType::PORTAL_BLUE:
 	{
 		ShakeConsoleWindow(15, 40, 25);
-
 		for (int _y = 0; _y < MAP_H; _y++)
 		{
 			for (int _x = 0; _x < MAP_W; _x++)
@@ -310,6 +299,7 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 
 					state.uiColor1 = Color::YELLOW;
 					state.uiMessage1 = "플레이어가 워프했습니다. ";
+					SoundManager::GetInst()->Play("Teleport");
 				}
 			}
 			cout << endl;
@@ -392,6 +382,7 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 						cursorPos.y += _y * 2;
 
 						state.clone.SetPos(cursorPos, { _x, _y });
+						SoundManager::GetInst()->Play("Teleport");
 					}
 				}
 				cout << endl;
@@ -414,6 +405,7 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 						cursorPos.y += _y * 2;
 
 						state.clone.SetPos(cursorPos, { _x, _y });
+						SoundManager::GetInst()->Play("Teleport");
 					}
 				}
 				cout << endl;

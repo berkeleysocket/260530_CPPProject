@@ -1,14 +1,12 @@
 ﻿#include "Player.h"
 #include "Console.h"
 
-
 void Player::Render() const
 {
-		SetColor(m_bodyClr);
-		GotoXY(m_cursorPos.x, m_cursorPos.y);
-		cout << m_bodyImg;
+	SetColor(m_bodyClr);
+	GotoXY(m_cursorPos.x, m_cursorPos.y);
+	cout << m_bodyImg;
 }
-
 
 void Player::SetSpawnPos(Position spawnPos, Position spawnMapPos)
 {
@@ -18,9 +16,6 @@ void Player::SetSpawnPos(Position spawnPos, Position spawnMapPos)
 
 void Player::Spawn()
 {
-	//m_prevPos = m_spawnPos;
-	//m_cursorPos = m_spawnPos;
-	//m_mapPos = m_spawnMapPos;
 	m_bodyClr = Color::WHITE;
 	m_bodyImg = "★";
 	m_isActive = true;
@@ -32,11 +27,13 @@ void Player::Dead()
 	m_isActive = false;
 	m_bodyClr = Color::RED;
 	m_bodyImg = "☆";
+	SoundManager::GetInst()->Play("PlayerDeath");
 	Render();
 }
 
 void Player::Move(Dir dir)
 {
+	SoundManager::GetInst()->Play("PlayerMovement");
 	m_prevPos = m_cursorPos;
 
 	switch (dir)

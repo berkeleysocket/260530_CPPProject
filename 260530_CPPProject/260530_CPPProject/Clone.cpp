@@ -2,6 +2,7 @@
 #include "Console.h"
 #include "Player.h"
 #include "InGameScene.h"
+#include "SoundManager.h"
 
 void Clone::Render() const
 {
@@ -15,7 +16,7 @@ void Clone::Render() const
 
 void Clone::Move(Dir dir)
 {
-
+	SoundManager::GetInst()->Play("CloneMovement");
 	m_prevPos = m_cursorPos;
 
 	switch (dir)
@@ -55,6 +56,7 @@ void Clone::Dead()
 	m_bodyImg = "＃";
 	Render();
 	m_isActive = false;
+	SoundManager::GetInst()->Play("CloneDeath");
 
 	//밑에거 다른곳에서 할거면 지워도 상관 ㄴ
 	//SetColor();

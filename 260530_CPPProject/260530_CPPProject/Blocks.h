@@ -6,6 +6,7 @@
 #include "Position.h"
 #include "Dir.h"
 #include "Color.h"
+#include "SoundManager.h"
 
 using std::string;
 using std::queue;
