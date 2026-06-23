@@ -273,6 +273,27 @@
 	#pragma endregion
 
 	#pragma region Portal
+
+	void Portal::Warp(GameState& state, Actor& actor, Position portalPosition, BlockType portalType)
+	{
+		for (int _y = 0; _y < MAP_H; _y++)
+		{
+			for (int _x = 0; _x < MAP_W; _x++)
+			{
+				if (state.map[_y][_x] == portalType
+					&& Position{ _x, _y } != portalPosition)
+				{
+					Position cursorPos = { 0,0 };
+					cursorPos.x += _x * 2;
+					cursorPos.y += _y;
+
+					actor.SetPos(cursorPos, { _x, _y });
+					SoundManager::GetInst()->Play("Teleport");
+				}
+			}
+		}
+	}
+
 	RedPortal::RedPortal() 
 	{
 		m_image = "£À";

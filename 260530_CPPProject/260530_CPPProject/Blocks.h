@@ -3,6 +3,7 @@
 #include <string>
 #include <queue>
 
+#include "Actor.h"
 #include "Position.h"
 #include "Dir.h"
 #include "Color.h"
@@ -144,12 +145,19 @@ public:
 #pragma endregion
 
 #pragma region Portal
-class RedPortal : public Block
+class Portal : public Block
+{
+public:
+	void Warp(GameState& state, Actor& actor, Position portalPosition, BlockType portalType);
+};
+
+class RedPortal : public Portal
 {
 public:
 	RedPortal();
 };
-class BluePortal : public Block
+
+class BluePortal : public Portal
 {
 public:
 	BluePortal();

@@ -271,51 +271,16 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
-		for (int _y = 0; _y < MAP_H; _y++)
-		{
-			for (int _x = 0; _x < MAP_W; _x++)
-			{
-				if (state.map[_y][_x] == BlockType::PORTAL_RED
-					&& Position {_x, _y} != blockPos)
-				{
-					Position cursorPos = { 0,0 };
-					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
-					
-					state.player.SetPos(cursorPos, {_x, _y});
-
-					state.uiColor1 = Color::YELLOW;
-					state.uiMessage1 = "플레이어가 워프했습니다.";
-					SoundManager::GetInst()->Play("Teleport");
-				}
-			}
-			cout << endl;
-		}
+		RedPortal* redPortal = (RedPortal*)block;
+		redPortal->Warp(state, state.player, blockPos, BlockType::PORTAL_RED);
 		break;
 	}
 	case BlockType::PORTAL_BLUE:
 	{
 		ShakeConsoleWindow(15, 40, 25);
-		for (int _y = 0; _y < MAP_H; _y++)
-		{
-			for (int _x = 0; _x < MAP_W; _x++)
-			{
-				if (state.map[_y][_x] == BlockType::PORTAL_BLUE
-					&& Position{ _x, _y } != blockPos)
-				{
-					Position cursorPos = { 0,0 };
-					cursorPos.x += _x * 2;
-					cursorPos.y += _y * 2;
 
-					state.player.SetPos(cursorPos, { _x, _y });
-
-					state.uiColor1 = Color::YELLOW;
-					state.uiMessage1 = "플레이어가 워프했습니다. ";
-					SoundManager::GetInst()->Play("Teleport");
-				}
-			}
-			cout << endl;
-		}
+		BluePortal* bluePortal = (BluePortal*)block;
+		bluePortal->Warp(state, state.player, blockPos, BlockType::PORTAL_BLUE);
 		break;
 	}
 	case BlockType::BUTTON_RED:
@@ -382,46 +347,16 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 		{
 			ShakeConsoleWindow(15, 40, 25);
 
-			for (int _y = 0; _y < MAP_H; _y++)
-			{
-				for (int _x = 0; _x < MAP_W; _x++)
-				{
-					if (state.map[_y][_x] == BlockType::PORTAL_RED
-						&& Position{ _x, _y } != blockPos)
-					{
-						Position cursorPos = { 0,0 };
-						cursorPos.x += _x * 2;
-						cursorPos.y += _y * 2;
-
-						state.clone.SetPos(cursorPos, { _x, _y });
-						SoundManager::GetInst()->Play("Teleport");
-					}
-				}
-				cout << endl;
-			}
+			RedPortal* redPortal = (RedPortal*)block;
+			redPortal->Warp(state, state.clone, blockPos, BlockType::PORTAL_RED);
 			break;
 		}
 	case BlockType::PORTAL_BLUE:
 		{
 			ShakeConsoleWindow(15, 40, 25);
 
-			for (int _y = 0; _y < MAP_H; _y++)
-			{
-				for (int _x = 0; _x < MAP_W; _x++)
-				{
-					if (state.map[_y][_x] == BlockType::PORTAL_BLUE
-						&& Position{ _x, _y } != blockPos)
-					{
-						Position cursorPos = { 0,0 };
-						cursorPos.x += _x * 2;
-						cursorPos.y += _y * 2;
-
-						state.clone.SetPos(cursorPos, { _x, _y });
-						SoundManager::GetInst()->Play("Teleport");
-					}
-				}
-				cout << endl;
-			}
+			BluePortal* bluePortal = (BluePortal*)block;
+			bluePortal->Warp(state, state.clone, blockPos, BlockType::PORTAL_BLUE);
 			break;
 		}
 	case BlockType::BUTTON_RED:

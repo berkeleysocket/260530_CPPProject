@@ -22,20 +22,20 @@ void Clone::Move(Dir dir)
 	switch (dir)
 	{
 	case Dir::UP:
-		m_cursorPos.y-=1;
-		m_mapPos.y --;
+		m_mapPos.y--;
+		m_cursorPos.y--;
 		break;
 	case Dir::DOWN:
-		m_cursorPos.y+=1;
-		m_mapPos.y ++;
+		m_mapPos.y++;
+		m_cursorPos.y++;
 		break;
 	case Dir::LEFT:
-		m_cursorPos.x-=2;
 		m_mapPos.x--;
+		m_cursorPos.x -= 2;
 		break;
 	case Dir::RIGHT:
-		m_cursorPos.x+=2;
 		m_mapPos.x++;
+		m_cursorPos.x += 2;
 		break;
 	}
 }
