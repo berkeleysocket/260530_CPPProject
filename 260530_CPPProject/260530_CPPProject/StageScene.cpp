@@ -16,6 +16,7 @@ void UpdateStage(GameState& state)
 	{
 		state.curStage = (Stage)std::max(0, (int)state.curStage - 1);
 		StageManager::GetInst()->ChangeStage(state.curStage);
+		SoundManager::GetInst()->Play("Selecte");
 	}
 	if (GetKeyDown(VK_RIGHT))
 	{
@@ -23,19 +24,25 @@ void UpdateStage(GameState& state)
 
 		state.curStage = (Stage)std::min((int)Stage::ENDSTAGE, (int)state.curStage + 1);
 		StageManager::GetInst()->ChangeStage(state.curStage);
+		SoundManager::GetInst()->Play("Selecte");
 	}
 	// 엔터					//스페이스
 	if (GetKeyDown(VK_RETURN) || GetKeyDown(VK_SPACE))
 	{
 		if (StageManager::GetInst()->GetCurStageSaveData().m_isLock)
-			return;
+		{
+			SoundManager::GetInst()->Play("Lock");
+			return;	
+		}
 		state.curScene = Scene::INGAME;
 		StageManager::GetInst()->ChangeStage(state.curStage);
+		SoundManager::GetInst()->Play("RealSelecte");
 	}
 
 
 	if (GetKeyDown(VK_ESCAPE))
 	{
+		SoundManager::GetInst()->Play("Exit");
 		state.curScene = Scene::TITLE;
 		state.prevStage = Stage::NONE;
 	}
@@ -97,17 +104,12 @@ L"╚═════════════════════════
 		GotoXY(frameX + 14, frameY + 9);
 		wcout << L" ████";
 
-		GotoXY((frameX + 16)-1, frameY + 3);
-		wcout << L"????";
 		GotoXY(frameX + 14, frameY + 11);
 		wcout << L"[LOCK]";
 	}
 	else
 	{
-		GotoXY((frameX + 16) - ((mapData.m_name.size())/2-1), frameY + 3);
-		wcout << wstring(mapData.m_name.begin(), mapData.m_name.end());
-
-		GotoXY(frameX + 12, frameY + 8);
+		GotoXY(frameX + 12, frameY + 7);
 
 		if (stageData.m_isCleared)
 			wcout << L"Clear : O";
@@ -120,12 +122,12 @@ L"╚═════════════════════════
 
 	if ((int)state.curStage > 9)
 	{
-		GotoXY(frameX+13, frameY+2);
+		GotoXY(frameX+13, frameY+3);
 		wcout << L"Stage " << (int)state.curStage;
 	}
 	else
 	{
-		GotoXY(frameX + 14, frameY + 2);
+		GotoXY(frameX + 14, frameY + 3);
 		wcout << L"Stage " << (int)state.curStage;
 	}
 

@@ -38,12 +38,14 @@ void UpdateInGame(GameState& state)
 
 	if (GetKeyDown(VK_ESCAPE))
 	{
+		SoundManager::GetInst()->Play("Exit");
 		state.curScene = Scene::STAGE;
 		state.prevStage = Stage::NONE;
 	}
 
 	if (GetKeyDown('R'))
 	{
+		SoundManager::GetInst()->Play("Restart");
 		state.curScene = Scene::RESTART;
 	}
 

@@ -20,6 +20,11 @@ void Init()
 	SoundManager::GetInst()->Load("PlayerDeath", "Resources/Sounds/PlayerDeath.mp3");
 	SoundManager::GetInst()->Load("CloneDeath", "Resources/Sounds/CloneDeath.mp3");
 	SoundManager::GetInst()->Load("StageClear", "Resources/Sounds/StageClear.mp3");
+	SoundManager::GetInst()->Load("Selecte", "Resources/Sounds/Selecte.wav");
+	SoundManager::GetInst()->Load("Lock", "Resources/Sounds/Lock.wav");
+	SoundManager::GetInst()->Load("RealSelecte", "Resources/Sounds/RealSelecte.wav");
+	SoundManager::GetInst()->Load("Exit", "Resources/Sounds/Exit.wav");
+	SoundManager::GetInst()->Load("Restart", "Resources/Sounds/Restart.wav");
 	LoadMaps();
 }
 
@@ -29,7 +34,7 @@ void LoadMaps()
 
 	MapData mapData
 	{
-		"Default Map"
+		"Easy Map"
 		,
 	{ 
 	"000000000000000",//0
@@ -53,7 +58,7 @@ void LoadMaps()
 
 	mapData =
 	{
-		"Clone Test"
+		"Clone Map"
 		,
 	{ 
 	"000000000000000",//0
@@ -75,9 +80,48 @@ void LoadMaps()
 	};
 	StageManager::GetInst()->RegisterStage(Stage::STAGE2, std::make_unique<MapData>(mapData));
 
+	//"000000000000000",//0
+	//	"0.............0",//1
+	//	"0.............0",//2
+	//	"0.............0",//3
+	//	"0.............0",//4
+	//	"0.............0",//5
+	//	"0.............0",//6
+	//	"0.............0",//7
+	//	"0.............0",//8
+	//	"0.............0",//9
+	//	"0............ 0",//10
+	//	"0.............0",//11
+	//	"0.............0",//12
+	//	"0.............0",//13
+	//	"000000000000000" //14
 	mapData =
 	{
-		"Test Map12"
+		"Clone Map"
+		,
+	{
+	"000000000000000",//0
+	"0.............0",//1
+	"0.............0",//2
+	"0.............0",//3
+	"0.............0",//4
+	"0.............0",//5
+	"0.............0",//6
+	"0.............0",//7
+	"0.............0",//8
+	"0.............0",//9
+	"0............ 0",//10
+	"0.............0",//11
+	"0.............0",//12
+	"0.............0",//13
+	"000000000000000" //14
+	}
+	};
+	StageManager::GetInst()->RegisterStage(Stage::STAGE2, std::make_unique<MapData>(mapData));
+
+	mapData =
+	{
+		"Normal Map"
 		,
 	{ 
 	"000000000000000",//0
@@ -101,7 +145,7 @@ void LoadMaps()
 
 	mapData =
 	{
-		"Test Map22"
+		"Hard Map"
 		,
 	{
 	"000000000000000",//0

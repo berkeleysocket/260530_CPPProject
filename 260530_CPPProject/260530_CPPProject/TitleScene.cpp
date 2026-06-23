@@ -11,15 +11,18 @@ void UpdateTitle(GameState& state)
 	UpdateInput();
 	if (GetKeyDown(VK_UP))
 	{
-		state.curMenu = (Menu)std::max(0, (int)state.curMenu - 1);
+		state.curMenu = (Menu)((((int)state.curMenu - 1) + ((int)Menu::QUIT + 1)) % ((int)Menu::QUIT + 1));
+		SoundManager::GetInst()->Play("Selecte");
 	}
 	if (GetKeyDown(VK_DOWN))
 	{
-		state.curMenu = (Menu)std::min((int)Menu::QUIT, (int)state.curMenu + 1);
+		state.curMenu = (Menu)(((int)state.curMenu +1) % ((int)Menu::QUIT + 1));
+		SoundManager::GetInst()->Play("Selecte");
 	}
 	// 엔터					//스페이스
 	if (GetKeyDown(VK_RETURN) || GetKeyDown(VK_SPACE))
 	{
+		SoundManager::GetInst()->Play("RealSelecte");
 		switch (state.curMenu)
 		{
 		case Menu::START:
@@ -30,6 +33,7 @@ void UpdateTitle(GameState& state)
 			state.isRunning = false;
 			break;
 		}
+
 	}
 }
 void RenderTitle(const GameState& state)
