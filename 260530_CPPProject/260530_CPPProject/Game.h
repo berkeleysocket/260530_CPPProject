@@ -1,8 +1,13 @@
 #pragma once
-#include "Console.h"
-#include "GameState.h"
-#include "InGameScene.h"
+#include"Console.h"
+#include"GameState.h"
+#include"TitleScene.h"
+#include"StageScene.h"
+#include"InGameScene.h"
+#include"StageManager.h"
+#include"SoundManager.h"
 
-void Init(GameState& state);
+void Init();
+void LoadMaps();
 void Update(GameState& state);
 void Render(GameState& state);
