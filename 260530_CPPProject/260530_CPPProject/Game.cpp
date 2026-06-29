@@ -3,7 +3,8 @@
 void Init()
 {
 	SetConsoleSize(WIDTH, HEIGHT);
-	SetConsoleWindowStyle(true);
+	SetConsoleGameTitle(L"DEADPUZZLE");
+	SetConsoleWindowStyle(false);
 	SetConsoleMouseInputDisabled();
 	SetCursorVisible(false);
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
@@ -44,6 +45,7 @@ void LoadMaps()
 	"000000000.....0",//3
 	"0...p...0.....0",//4
 	"0.......0WWWWW0",//5
+
 	"0.......0.....0",//6
 	"0.......0.....0",//7
 	"0.......0QQQQQ0",//8
@@ -101,24 +103,24 @@ void LoadMaps()
 		"Clone Map"
 		,
 	{
-	"000000000000000",//0
-	"0.............0",//1
+ "000000000000000",//0
+	"0..S...d...E..0",//1
 	"0.............0",//2
 	"0.............0",//3
 	"0.............0",//4
 	"0.............0",//5
-	"0.............0",//6
+	"0.......0000000",//6
 	"0.............0",//7
-	"0.............0",//8
+	"0....p...p..b.0",//8
 	"0.............0",//9
-	"0............ 0",//10
-	"0.............0",//11
-	"0.............0",//12
+	"0QQQQQQQQQQQQQ0",//10
+	"0cccccc.......0",//11
+	"0..B.......N..0",//12
 	"0.............0",//13
-	"000000000000000" //14
+	"000000000000000" //14S
 	}
 	};
-	StageManager::GetInst()->RegisterStage(Stage::STAGE2, std::make_unique<MapData>(mapData));
+	StageManager::GetInst()->RegisterStage(Stage::STAGE3, std::make_unique<MapData>(mapData));
 
 	mapData =
 	{
@@ -142,7 +144,7 @@ void LoadMaps()
 	"000000000000000" //14
 	}
 	};
-	StageManager::GetInst()->RegisterStage(Stage::STAGE3, std::make_unique<MapData>(mapData));
+	StageManager::GetInst()->RegisterStage(Stage::STAGE4, std::make_unique<MapData>(mapData));
 
 	mapData =
 	{

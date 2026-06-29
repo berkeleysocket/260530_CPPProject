@@ -94,39 +94,6 @@ void RenderTitle(const GameState& state)
 
 }
 
-void UpdateInfo(GameState& state)
-{
-	if (GetKeyDown(VK_ESCAPE))
-		state.curScene = Scene::TITLE;
-}
-
-void RenderInfo(const GameState& state)
-{
-	COORD res = GetConsoleResolution();
-	int x = res.X / 2;
-	int y = res.Y / 3;
-	const string infoLabel[] =
-	{
-		"[ 조작 방법 ]",
-		"방향키 : 이동",
-		"SPACE : 폭탄 설치",
-		"Z     : 스킬",
-		"ESC   : 돌아가기"
-	};
-	for (int i = 0; i < 5; ++i)
-	{
-		GotoXY(x, y + i);
-		if (i == 0)
-			SetColor(Color::LIGHT_YELLOW);
-		else if (i == 4)
-			SetColor(Color::LIGHT_GRAY);
-		else
-			SetColor();
-		cout << infoLabel[i];
-
-	}
-}
-
 void PlayTransition()
 {
 	COORD res = GetConsoleResolution();

@@ -6,6 +6,8 @@ void InitStage()
 {
 	SetConsoleSize(80, 25);
 	SetCursorVisible(false);
+	SetConsoleWindowStyle(true);
+	SetConsoleMouseInputDisabled();
 	SoundManager::GetInst()->PlayBGM("Resources/Sounds/StageSelecte.wav");
 }
 
@@ -159,8 +161,4 @@ L"╚═════════════════════════
 		wcout << L" ";
 	}
 
-}
-
-void SelecteStageAni(const StageSaveData& stageData, const MapData& mapData)
-{
 }
