@@ -49,7 +49,7 @@
 	{
 		if (!m_isActive) return;
 
-		Position dir = DirToMapPosition(m_dir);
+		Position dir = DirToScreenPosition(m_dir);
 		Position createLaserPos = m_position + dir;
 		BlockType laserBeamType = BlockType::EMPTY;
 		if (m_dir == Dir::UP)
@@ -657,7 +657,6 @@
 			block = new EmptyBlock();
 			break;
 		}
-
 		return block;
 	}
 
