@@ -3,8 +3,7 @@
 void Init()
 {
 	SetConsoleSize(WIDTH, HEIGHT);
-	SetConsoleGameTitle(L"DEADPUZZLE");
-	SetConsoleWindowStyle(false);
+	SetConsoleWindowStyle(true);
 	SetConsoleMouseInputDisabled();
 	SetCursorVisible(false);
 	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
@@ -30,7 +29,7 @@ void Init()
 	LoadMaps();
 }
 
-void LoadMaps()
+void LoadMaps()		
 {
 	StageManager::GetInst()->LoadStage();
 
@@ -45,7 +44,6 @@ void LoadMaps()
 	"000000000.....0",//3
 	"0...p...0.....0",//4
 	"0.......0WWWWW0",//5
-
 	"0.......0.....0",//6
 	"0.......0.....0",//7
 	"0.......0QQQQQ0",//8
@@ -98,29 +96,6 @@ void LoadMaps()
 	//	"0.............0",//12
 	//	"0.............0",//13
 	//	"000000000000000" //14
-	mapData =
-	{
-		"Clone Map"
-		,
-	{
- "000000000000000",//0
-	"0..S...d...E..0",//1
-	"0.............0",//2
-	"0.............0",//3
-	"0.............0",//4
-	"0.............0",//5
-	"0.......0000000",//6
-	"0.............0",//7
-	"0....p...p..b.0",//8
-	"0.............0",//9
-	"0QQQQQQQQQQQQQ0",//10
-	"0cccccc.......0",//11
-	"0..B.......N..0",//12
-	"0.............0",//13
-	"000000000000000" //14S
-	}
-	};
-	StageManager::GetInst()->RegisterStage(Stage::STAGE3, std::make_unique<MapData>(mapData));
 
 	mapData =
 	{
@@ -128,8 +103,8 @@ void LoadMaps()
 		,
 	{ 
 	"000000000000000",//0
-	"0..S.w.......N.",//1
-	"0....w.........",//2
+	"0..S.w.......No",//1
+	"0....w........o",//2
 	"0QQQQ0www000000",//3
 	"0....0...C..c..",//4
 	"0....0.b.C..c.B",//5
@@ -142,6 +117,30 @@ void LoadMaps()
 	"0....W...0....0",//12
 	"0....W...0..E.0",//13
 	"000000000000000" //14
+	}
+	};
+	StageManager::GetInst()->RegisterStage(Stage::STAGE3, std::make_unique<MapData>(mapData));
+
+	mapData =
+	{
+		"Hard Map"
+		,
+	{
+	"000000000000000",//0
+	"0..S...d...E..0",//1
+	"0.............0",//2
+	"0.............0",//3
+	"0.............0",//4
+	"0.............0",//5
+	"0.......0000000",//6
+	"0.............0",//7
+	"0....p...p..b.0",//8
+	"0.............0",//9
+	"0QQQQQQ.QQQQQQ0",//10
+	"0cccccc.......0",//11
+	"0..B.......N..0",//12
+	"0.............0",//13
+	"000000000000000" //14S
 	}
 	};
 	StageManager::GetInst()->RegisterStage(Stage::STAGE4, std::make_unique<MapData>(mapData));
@@ -175,6 +174,9 @@ void LoadMaps()
 	sd.m_isLock = false;
 
 	StageManager::GetInst()->SaveStage();
+
+
+
 }
 
 void Update(GameState& state)
