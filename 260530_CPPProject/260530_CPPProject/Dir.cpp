@@ -1,6 +1,6 @@
 #include "Dir.h"
 
-Position DirToMapPosition(Dir dir)
+Position DirToScreenPosition(Dir dir)
 {
 	switch (dir)
 	{

@@ -124,7 +124,7 @@ void DrawMap(GameState& state)
 		{
 			if (Position{ x,y } == state.player.GetMapPos())
 			{
-				GotoXY(x * 2, y);
+				//GotoXY(x * 2, y);
 				switch (state.map[y][x])
 				{
 				case BlockType::LASERBEAM_UP:
@@ -266,14 +266,12 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	moveData.dir = dir;
 	state.moveDataRecord.Record(moveData);
 
-	Position dirToPos = DirToMapPosition(dir);
+	Position dirToPos = DirToScreenPosition(dir);
 	Position playerPos = state.player.GetMapPos();
 	Position nextPos = playerPos + dirToPos;
 
 	if (IsEdge(nextPos.x, nextPos.y))
-	{
 		return false;
-	}
 
 	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
 	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
@@ -288,7 +286,7 @@ bool TryPlayerMove(GameState& state, Dir dir)
 
 bool TryCloneMove(GameState& state, Dir dir)
 {
-	Position dirToPos = DirToMapPosition(dir);
+	Position dirToPos = DirToScreenPosition(dir);
 	Position clonePos = state.clone.GetMapPos();
 	Position nextPos = clonePos + dirToPos;
 
