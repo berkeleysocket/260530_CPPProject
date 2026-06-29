@@ -112,19 +112,48 @@ void DrawMap(GameState& state)
 			if (TryDrawClone(state, x, y))
 				continue;
 
+			PreDrawBlock(state, x, y);
 			DrawBlock(state, x, y);
 		}
 		SetDefaultMode();
 		cout << endl;
 	}
 
+	PostDrawBlock(state);
+}
+
+void PreDrawBlock(GameState& state, int x, int y)
+{
+	BlockType blockType = state.map[y][x];
+	Block* block = state.blocks[y][x];
+
+	if (block == nullptr) return;
+
+	switch (blockType)
+	{
+	case BlockType::LASERCORE_UP_AUTO:
+	case BlockType::LASERCORE_UP_STATIC_ON:
+	case BlockType::LASERCORE_DOWN_AUTO:
+	case BlockType::LASERCORE_DOWN_STATIC_ON:
+	case BlockType::LASERCORE_LEFT_AUTO:
+	case BlockType::LASERCORE_LEFT_STATIC_ON:
+	case BlockType::LASERCORE_RIGHT_AUTO:
+	case BlockType::LASERCORE_RIGHT_STATIC_ON:
+	{
+		((LaserCore*)block)->TryDrawCast(state);
+		break;
+	}
+	}
+}
+
+void PostDrawBlock(GameState& state)
+{
 	for (int y = 0; y < MAP_H; ++y)
 	{
 		for (int x = 0; x < MAP_W; ++x)
 		{
 			if (Position{ x,y } == state.player.GetMapPos())
 			{
-				//GotoXY(x * 2, y);
 				switch (state.map[y][x])
 				{
 				case BlockType::LASERBEAM_UP:
@@ -143,26 +172,9 @@ void DrawMap(GameState& state)
 
 void DrawBlock(GameState& state, int x, int y)
 {
-	BlockType blockType = state.map[y][x];
 	Block* block = state.blocks[y][x];
 
 	if (block == nullptr) return;
-	  
-	switch (blockType)
-	{
-	case BlockType::LASERCORE_UP_AUTO:
-	case BlockType::LASERCORE_UP_STATIC_ON:
-	case BlockType::LASERCORE_DOWN_AUTO:
-	case BlockType::LASERCORE_DOWN_STATIC_ON:
-	case BlockType::LASERCORE_LEFT_AUTO:
-	case BlockType::LASERCORE_LEFT_STATIC_ON:
-	case BlockType::LASERCORE_RIGHT_AUTO:
-	case BlockType::LASERCORE_RIGHT_STATIC_ON:
-	{
-		((LaserCore*)block)-> TryDrawCast(state);
-		break;
-	}
-	}
 
 	SetColor(block->GetColor());
 	cout << (block->GetImage());

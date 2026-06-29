@@ -163,6 +163,7 @@
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="IButtonInteractable.h" />
     <ClInclude Include="IMoveable.h" />
     <ClInclude Include="InGameScene.h" />
     <ClInclude Include="MoveData.h" />

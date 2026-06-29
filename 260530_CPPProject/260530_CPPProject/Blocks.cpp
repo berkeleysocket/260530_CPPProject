@@ -2,6 +2,10 @@
 #include "GameState.h"
 
 	#pragma region Block
+	Block::Block(BlockAffiliation affiliation)
+	{
+		m_affiliation = affiliation;
+	}
 	const string Block::GetImage() const
 	{
 		return m_image;
@@ -10,10 +14,14 @@
 	{
 		return m_color;
 	}
+	const BlockAffiliation Block::GetAffiliation() const
+	{
+		return m_affiliation;
+	}
 	#pragma endregion
 
 	#pragma region Empty Block
-	EmptyBlock::EmptyBlock()
+	EmptyBlock::EmptyBlock(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "  ";
 		m_color = Color::WHITE;
@@ -21,13 +29,13 @@
 	#pragma endregion
 
 	#pragma region Brick
-	Brick::Brick()
+	Brick::Brick(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "¡á";
 		m_color = Color::GRAY;
 	}
 
-	KillBrick::KillBrick()
+	KillBrick::KillBrick(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "¢Ã";
 		m_color = Color::LIGHT_VIOLET;
@@ -35,7 +43,8 @@
 	#pragma endregion
 
 	#pragma region LaserCore
-	LaserCore::LaserCore(bool autoRotation, bool isActive, Dir castingDir)
+	LaserCore::LaserCore(BlockAffiliation affiliation, bool autoRotation, 
+		bool isActive, Dir castingDir) : Block(affiliation)
 	{
 		m_image = "¡Ø";
 		m_color = isActive ? Color::RED : Color::LIGHT_GRAY;
@@ -165,36 +174,88 @@
 	#pragma endregion
 
 	#pragma region LaserBeam
-	LaserBeamUp::LaserBeamUp()
+	LaserBeam::LaserBeam(BlockAffiliation affiliation, Dir beamDirection) : Block(affiliation)
 	{
-		m_image = "¡è";
-		m_color = Color::RED;
-	}
-
-	LaserBeamDown::LaserBeamDown()
-	{
-		m_image = "¡é";
-		m_color = Color::RED;
-	}
-
-	LaserBeamRight::LaserBeamRight()
-	{
-		m_image = "¡æ";
-		m_color = Color::RED;
-	}
-
-	LaserBeamLeft::LaserBeamLeft()
-	{
-		m_image = "¡ç";
+		switch (beamDirection)
+		{
+		case Dir::UP:
+		{
+			m_image = "¡è";
+			break;
+		}
+		case Dir::DOWN:
+		{
+			m_image = "¡é";
+			break;
+		}
+		case Dir::LEFT:
+		{
+			m_image = "¡ç";
+			break;
+		}
+		case Dir::RIGHT:
+		{
+			m_image = "¡æ";
+			break;
+		}
+		}
 		m_color = Color::RED;
 	}
 	#pragma endregion
 
 	#pragma region Button
-	RedButton::RedButton() 
+	Button::Button(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "¢Á";
-		m_color = Color::RED;
+
+		switch (affiliation)
+		{
+		case BlockAffiliation::RED:
+		{
+			m_color = Color::RED;
+			break;
+		}
+		case BlockAffiliation::BLUE:
+		{
+			m_color = Color::BLUE;
+			break;
+		}
+		case BlockAffiliation::CLONE:
+		{
+			m_color = Color::GREEN;
+			break;
+		}
+		}
+	}
+
+	void Button::Press(GameState& state)
+	{
+		SoundManager::GetInst()->Play("ButtonClick");
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				Block* block = state.blocks[y][x];
+				if(m_affiliation ==  block->GetAffiliation())
+				if (blockType == BlockType::SWITCHABLEBRICK_RED_ON
+					|| blockType == BlockType::SWITCHABLEBRICK_RED_OFF)
+					((RedSwitchableBrick*)(state.blocks[y][x]))->Toggle(state);
+				else if (blockType == BlockType::LASERCORE_UP_AUTO
+					|| blockType == BlockType::LASERCORE_DOWN_AUTO
+					|| blockType == BlockType::LASERCORE_LEFT_AUTO
+					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
+					((LaserCore*)(state.blocks[y][x]))->ChangeDirection(state);
+				else if (blockType == BlockType::LASERCORE_UP_STATIC_ON
+					|| blockType == BlockType::LASERCORE_UP_STATIC_OFF
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC_ON
+					|| blockType == BlockType::LASERCORE_DOWN_STATIC_OFF
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC_ON
+					|| blockType == BlockType::LASERCORE_LEFT_STATIC_OFF
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_ON
+					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_OFF)
+					((LaserCore*)(state.blocks[y][x]))->Toggle(state);
+			}
+		}
 	}
 
 	void RedButton::Press(GameState& state)
@@ -227,7 +288,7 @@
 		}
 	}
 
-	BlueButton::BlueButton()
+	BlueButton::BlueButton(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "¢Á";
 		m_color = Color::BLUE;
@@ -251,7 +312,7 @@
 		}
 	}
 
-	CloneButton::CloneButton()
+	CloneButton::CloneButton(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "¢Á";
 		m_color = Color::LIGHT_GREEN;
@@ -277,6 +338,24 @@
 	#pragma endregion
 
 	#pragma region Portal
+	Portal::Portal(BlockAffiliation affiliation) : Block(affiliation)
+	{
+		m_image = "£À";
+
+		switch (affiliation)
+		{
+		case BlockAffiliation::RED:
+		{
+			m_color = Color::LIGHT_RED;
+			break;
+		}
+		case BlockAffiliation::BLUE:
+		{
+			m_color = Color::LIGHT_BLUE;
+			break;
+		}
+		}
+	}
 
 	void Portal::Warp(GameState& state, Actor& actor, Position portalPosition, BlockType portalType)
 	{
@@ -297,162 +376,75 @@
 			}
 		}
 	}
-
-	RedPortal::RedPortal() 
-	{
-		m_image = "£À";
-		m_color = Color::LIGHT_RED;
-	}
-
-	BluePortal::BluePortal()
-	{
-		m_image = "£À";
-		m_color = Color::LIGHT_BLUE;
-	}
 	#pragma endregion
 
 	#pragma region SwitchableBrick
-	RedSwitchableBrick::RedSwitchableBrick(bool isActive)
+	SwitchableBrick::SwitchableBrick(BlockAffiliation affiliation,
+		bool isActive) : Block(affiliation)
 	{
 		m_image = isActive ? "¡á" : "¡à";
-		m_color = Color::LIGHT_RED;
 		m_isActive = isActive;
+
+		switch (affiliation)
+		{
+		case BlockAffiliation::RED:
+		{
+			m_color = Color::LIGHT_RED;
+			break;
+		}
+		case BlockAffiliation::BLUE:
+		{
+			m_color = Color::LIGHT_BLUE;
+			break;
+		}
+		case BlockAffiliation::CLONE:
+		{
+			m_color = Color::LIGHT_GREEN;
+		}
+		}
 	}
 
-	bool RedSwitchableBrick::GetIsActive()
+	void SwitchableBrick::OnLaserBrickMode(GameState& state)
 	{
-		return m_isActive;
+		if (!m_isActive)
+		{
+			m_image = "¢Ì";
+			//state.map[m_position.y][m_position.y] = BlockType::Sw
+		}
 	}
 
-	void RedSwitchableBrick::Toggle(GameState& state)
+	void SwitchableBrick::OffLaserBrickMode(GameState& state)
+	{
+		m_image = m_isActive ? "¡á" : "¡à";
+	}
+
+	void SwitchableBrick::Toggle(GameState& state)
 	{
 		m_isActive = !m_isActive;
 
 		if (m_isActive)
 		{
-			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_ON;
 			m_image = "¡á";
 			SoundManager::GetInst()->Play("SwitchableBrick_ON");
+
+			if(m_affiliation == BlockAffiliation::RED)
+				state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_ON;
+			else if(m_affiliation == BlockAffiliation::BLUE)
+				state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_ON;
+			else if (m_affiliation == BlockAffiliation::CLONE)
+				state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_CLONE_ON;
 		}
 		else
 		{
-			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_OFF;
 			m_image = "¡à";
 			SoundManager::GetInst()->Play("SwitchableBrick_OFF");
-		}
 
-		BlockType blockType;
-		for (int y = 0; y < MAP_H; ++y)
-		{
-			for (int x = 0; x < MAP_W; ++x)
-			{
-				blockType = state.map[y][x];
-				if (blockType == BlockType::LASERCORE_UP_AUTO
-					|| blockType == BlockType::LASERCORE_DOWN_AUTO
-					|| blockType == BlockType::LASERCORE_LEFT_AUTO
-					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
-				{
-					LaserCore* laserCore = ((LaserCore*)(state.blocks[y][x]));
-					((LaserCore*)(state.blocks[y][x]))->Clear(state);
-					((LaserCore*)(state.blocks[y][x]))->TryDrawCast(state);
-				}
-				else if (blockType == BlockType::LASERCORE_UP_STATIC_ON
-					|| blockType == BlockType::LASERCORE_DOWN_STATIC_ON
-					|| blockType == BlockType::LASERCORE_LEFT_STATIC_ON
-					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_ON)
-				{
-					LaserCore* laserCore = ((LaserCore*)(state.blocks[y][x]));
-					((LaserCore*)(state.blocks[y][x]))->Clear(state);
-					((LaserCore*)(state.blocks[y][x]))->TryDrawCast(state);
-				}
-			}
-		}
-	}
-
-	BlueSwitchableBrick::BlueSwitchableBrick(bool isActive)
-	{
-		m_image = isActive ? "¡á" : "¡à";
-		m_color = Color::LIGHT_BLUE;
-		m_isActive = isActive;
-	}
-
-	bool BlueSwitchableBrick::GetIsActive()
-	{
-		return m_isActive;
-	}
-
-	void BlueSwitchableBrick::Toggle(GameState& state)
-	{
-		m_isActive = !m_isActive;
-
-		if (m_isActive)
-		{
-			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_ON;
-			m_image = "¡á";
-			SoundManager::GetInst()->Play("SwitchableBrick_ON");
-		}
-		else
-		{
-			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_OFF;
-			m_image = "¡à";
-			SoundManager::GetInst()->Play("SwitchableBrick_OFF");
-		}
-
-		BlockType blockType;
-		for (int y = 0; y < MAP_H; ++y)
-		{
-			for (int x = 0; x < MAP_W; ++x)
-			{
-				blockType = state.map[y][x];
-				if (blockType == BlockType::LASERCORE_UP_AUTO
-					|| blockType == BlockType::LASERCORE_DOWN_AUTO
-					|| blockType == BlockType::LASERCORE_LEFT_AUTO
-					|| blockType == BlockType::LASERCORE_RIGHT_AUTO)
-				{
-					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-					laserCore->Clear(state);
-					laserCore->TryDrawCast(state);
-				}
-				else if (blockType == BlockType::LASERCORE_UP_STATIC_ON
-					|| blockType == BlockType::LASERCORE_DOWN_STATIC_ON
-					|| blockType == BlockType::LASERCORE_LEFT_STATIC_ON
-					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_ON)
-				{
-					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-					laserCore->Clear(state);
-					laserCore->TryDrawCast(state);
-				}
-			}
-		}
-	}
-
-	CloneSwitchableBrick::CloneSwitchableBrick(bool isActive)
-	{
-		m_image = isActive ? "¡á" : "¡à";
-		m_color = Color::LIGHT_GREEN;
-		m_isActive = isActive;
-	}
-
-	bool CloneSwitchableBrick::GetIsActive()
-	{
-		return m_isActive;
-	}
-
-	void CloneSwitchableBrick::Toggle(GameState& state)
-	{
-		m_isActive = !m_isActive;
-
-		if (m_isActive)
-		{
-			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_CLONE_ON;
-			m_image = "¡á";
-			SoundManager::GetInst()->Play("SwitchableBrick_ON");
-		}
-		else
-		{
-			state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_CLONE_OFF;
-			m_image = "¡à";
-			SoundManager::GetInst()->Play("SwitchableBrick_OFF");
+			if (m_affiliation == BlockAffiliation::RED)
+				state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_RED_OFF;
+			else if (m_affiliation == BlockAffiliation::BLUE)
+				state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_BLUE_OFF;
+			else if (m_affiliation == BlockAffiliation::CLONE)
+				state.map[m_position.y][m_position.x] = BlockType::SWITCHABLEBRICK_CLONE_OFF;
 		}
 
 		BlockType blockType;
@@ -470,9 +462,9 @@
 					|| blockType == BlockType::LASERCORE_LEFT_STATIC_ON
 					|| blockType == BlockType::LASERCORE_RIGHT_STATIC_ON)
 				{
-					LaserCore* laserCore = (LaserCore*)(state.blocks[y][x]);
-					laserCore->Clear(state);
-					laserCore->TryDrawCast(state);
+					LaserCore* laserCore = ((LaserCore*)(state.blocks[y][x]));
+					((LaserCore*)(state.blocks[y][x]))->Clear(state);
+					((LaserCore*)(state.blocks[y][x]))->TryDrawCast(state);
 				}
 			}
 		}
@@ -480,7 +472,7 @@
 	#pragma endregion
 
 	#pragma region EndBlock
-	EndBlock::EndBlock()
+	EndBlock::EndBlock(BlockAffiliation affiliation)
 	{
 		m_image = "¢Â";
 		m_color = Color::YELLOW;
@@ -575,22 +567,22 @@
 		}
 		case BlockType::LASERBEAM_UP:
 		{
-			block = new LaserBeamUp();
+			block = new LaserBeam(Dir::UP);
 			break;
 		}
 		case BlockType::LASERBEAM_DOWN:
 		{
-			block = new LaserBeamDown();
+			block = new LaserBeam(Dir::DOWN);
 			break;
 		}
 		case BlockType::LASERBEAM_RIGHT:
 		{
-			block = new LaserBeamRight();
+			block = new LaserBeam(Dir::RIGHT);
 			break;
 		}
 		case BlockType::LASERBEAM_LEFT:
 		{
-			block = new LaserBeamLeft();
+			block = new LaserBeam(Dir::LEFT);
 			break;
 		}
 		case BlockType::PORTAL_RED:

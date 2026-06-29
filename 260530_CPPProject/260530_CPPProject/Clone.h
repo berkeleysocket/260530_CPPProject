@@ -13,7 +13,7 @@ public:
 
 private:
 	bool m_isActive = false;
-	Color m_bodyClr = Color::YELLOW;
+	Color m_bodyClr = Color::LIGHT_GREEN;
 	std::string m_bodyImg = "¡×";
 	std::queue<MoveData> m_moveRecord;
 

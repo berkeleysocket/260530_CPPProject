@@ -22,6 +22,8 @@ void ClearStage(GameState& state);
 
 //render
 void DrawMap(GameState& state);
+void PreDrawBlock(GameState& state, int x, int y);
+void PostDrawBlock(GameState& state);
 void DrawBlock(GameState& state, int x, int y);
 void DrawUI(GameState& state);
 bool TryDrawPlayer(GameState& state, int x, int y);

@@ -38,65 +38,82 @@ enum class BlockType
 	LASERCORE_RIGHT_STATIC_ON = 'r',
 	LASERCORE_RIGHT_STATIC_OFF = 'O',
 
-	//LaserBeam은 렌더링 용이므로 사용할 필요 없음.
-	LASERBEAM_UP = 'K',
-	LASERBEAM_DOWN = 'k',
-	LASERBEAM_RIGHT = 'V',
-	LASERBEAM_LEFT = 'v',
 
 	PORTAL_RED = 'P',	//빨간색 포탈 - 빨간색 포탈이랑 연결됨. 맵에 딱 두 개만 존재가능.
 	PORTAL_BLUE = 'p',	//파란색 포탈 - 파란색 포탈이랑 연결됨. 맵에 딱 두 개만 존재가능.
 
 	BUTTON_RED = 'B',	//빨간색 버튼 - 레이저, 빨간색 벽이랑 상호작용함.
 	BUTTON_BLUE = 'b',	//파란색 버튼 - 파란색 벽이랑 상호작용함.
-	BUTTON_CLONE = 'N',
+	BUTTON_CLONE = 'N', //클론 버튼 - 클론 관련 기믹과 상호작용함.
 
 	SWITCHABLEBRICK_RED_ON = 'W',	//빨간색 벽이 켜져있는 버전.
 	SWITCHABLEBRICK_RED_OFF = 'w',	//빨간색 벽이 꺼져있는 버전.
 	SWITCHABLEBRICK_BLUE_ON = 'Q',	//파란색 벽이 켜져있는 버전.
 	SWITCHABLEBRICK_BLUE_OFF = 'q',	//파란색 벽이 꺼져있는 버전.
-	SWITCHABLEBRICK_CLONE_ON = 'C', //클론 벽이 꺼져있는 버전.
+	SWITCHABLEBRICK_CLONE_ON = 'C',  //클론 벽이 꺼져있는 버전.
 	SWITCHABLEBRICK_CLONE_OFF = 'c', //클론 벽이 꺼져있는 버전.
 
-	BRICK_KILL = 'o',
+	BRICK_KILL = 'o', //상호작용하면 죽이는 블록
+
+	//렌더링 용
+	LASERBEAM_UP = 'K',
+	LASERBEAM_DOWN = 'k',
+	LASERBEAM_RIGHT = 'V',
+	LASERBEAM_LEFT = 'v',
+	SWITCHABLEBRICK_RED_OFF_BEAM = 'A',
+	SWITCHABLEBRICK_BLUE_OFF_BEAM = 'a',
+	SWITCHABLEBRICK_CLONE_OFF_BEAM = 'F',
+};
+
+enum class BlockAffiliation
+{
+	NONE = 0,
+	RED = 1,
+	BLUE = 2,
+	CLONE = 3,
+	PLAYER = 4
 };
 
 class Block
 {
+public:
+	Block(BlockAffiliation affiliation);
 protected:
 	string m_image;
 	Color m_color;
+	BlockAffiliation m_affiliation;
 public:
 	Position m_position;
 	const string GetImage() const;
 	const Color GetColor() const;
+	const BlockAffiliation GetAffiliation() const;
 };
 
 class EmptyBlock : public Block
 {
 public:
-	EmptyBlock();
+	EmptyBlock(BlockAffiliation affiliation);
 };
 
 #pragma region Brick
 class Brick : public Block
 {
 public:
-	Brick();
+	Brick(BlockAffiliation affiliation);
 };
 
 class KillBrick : public Block
 {
 public:
-	KillBrick();
+	KillBrick(BlockAffiliation affiliation);
 };
 #pragma endregion
 
-
+#pragma region Laser
 class LaserCore : public Block
 {
 public:
-	LaserCore(bool autoRotation, bool isActive, Dir castingDir);
+	LaserCore(BlockAffiliation affiliation, bool autoRotation, bool isActive, Dir castingDir);
 private:
 	bool m_isActive;
 	bool m_autoRotation;
@@ -110,31 +127,23 @@ public:
 	const Dir GetBeamDirection() const;
 };
 
-class LaserBeamUp : public Block
+class LaserBeam : public Block
 {
 public:
-	LaserBeamUp();
-};
+	LaserBeam(BlockAffiliation affiliation, Dir beamDirection);
+#pragma endregion
 
-class LaserBeamDown : public Block
-{
-public:
-	LaserBeamDown();
-};
-
-class LaserBeamRight : public Block
-{
-public:
-	LaserBeamRight();
-};
-
-class LaserBeamLeft : public Block
-{
-public:
-	LaserBeamLeft();
 };
 
 #pragma region Button
+class Button : public Block
+{
+public:
+	Button(BlockAffiliation affiliation);
+public:
+	void Press(GameState& state);
+};
+
 class RedButton : public Block
 {
 public:
@@ -154,7 +163,7 @@ public:
 class CloneButton : public Block
 {
 public:
-	CloneButton();
+	CloneButton(BlockAffiliation affiliation);
 public:
 	void Press(GameState& state);
 };
@@ -164,53 +173,30 @@ public:
 class Portal : public Block
 {
 public:
+	Portal(BlockAffiliation affiliation);
+public:
 	void Warp(GameState& state, Actor& actor, Position portalPosition, BlockType portalType);
-};
-
-class RedPortal : public Portal
-{
-public:
-	RedPortal();
-};
-
-class BluePortal : public Portal
-{
-public:
-	BluePortal();
 };
 #pragma endregion
 
 #pragma region SwitchableBrick
-class RedSwitchableBrick : public Block
+class SwitchableBrick : public Block
 {
 public:
-	RedSwitchableBrick(bool isActive);
+	SwitchableBrick(BlockAffiliation affiliation, bool isActive);
 private:
 	bool m_isActive;
 public:
-	bool GetIsActive();
+	void OnLaserBrickMode(GameState& state);
+	void OffLaserBrickMode(GameState& state);
 	void Toggle(GameState& state);
 };
 
-class BlueSwitchableBrick : public Block
-{
-public:
-	BlueSwitchableBrick(bool isActive);
-private:
-	bool m_isActive;
-public:
-	bool GetIsActive();
-	void Toggle(GameState& state);
-};
-
-class CloneSwitchableBrick : public Block
+class CloneSwitchableBrick : public SwitchableBrick
 {
 public: 
-	CloneSwitchableBrick(bool isActive);
-private:
-	bool m_isActive;
+	CloneSwitchableBrick(BlockAffiliation affiliation, bool isActive);
 public:
-	bool GetIsActive();
 	void Toggle(GameState& state);
 };
 #pragma endregion
@@ -218,7 +204,7 @@ public:
 class EndBlock : public Block
 {
 public:
-	EndBlock();
+	EndBlock(BlockAffiliation affiliation);
 };
 
 Block* GenerateBlock(BlockType type);
