@@ -396,16 +396,29 @@
 	#pragma endregion
 
 	#pragma region EndBlock
-	EndBlock::EndBlock(BlockAffiliation affiliation) : Block(affiliation)
+	PlayerEndBlock::PlayerEndBlock(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "¢Â";
 		m_color = Color::YELLOW;
-		m_type = BlockType::END;
+		m_type = BlockType::END_PLAYER;
 	}
 
-	bool EndBlock::IsPassable(Actor& actor)
+	bool PlayerEndBlock::IsPassable(Actor& actor)
 	{
 		return false;
+	}
+
+	CloneEndBlock::CloneEndBlock(BlockAffiliation affiliation) : Block(affiliation)
+	{
+		m_image = "¢Â";
+		m_color = Color::LIGHT_GREEN;
+		m_type = BlockType::END_PLAYER;
+	}
+
+	bool CloneEndBlock::IsPassable(Actor& actor)
+	{
+		Clone* clone = dynamic_cast<Clone*>(&actor);
+		return clone == nullptr;
 	}
 	#pragma endregion
 
@@ -430,9 +443,9 @@
 			block = new EmptyBlock(BlockAffiliation::NONE);
 			break;
 		}
-		case GenerateBlockType::END:
+		case GenerateBlockType::END_PLAYER:
 		{
-			block = new EndBlock(BlockAffiliation::NONE);
+			block = new PlayerEndBlock(BlockAffiliation::NONE);
 			break;
 		}
 		case GenerateBlockType::LASERCORE_UP_AUTO:

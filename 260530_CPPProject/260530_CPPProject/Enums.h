@@ -13,6 +13,7 @@ enum class Scene
 enum class Stage
 {
 	NONE = -1,
+	TUTORIAL1,
 	STAGE1,
 	STAGE2,
 	STAGE3,

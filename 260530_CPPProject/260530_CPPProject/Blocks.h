@@ -17,10 +17,11 @@ struct GameState;
 
 enum class GenerateBlockType
 {
-	EMPTY = '.', //빈 공간.
-	START = 'S', //스타트 지점.
-	BRICK = '0', //일반 벽.
-	END = 'E',	//종착점.
+	EMPTY = '.',		//빈 공간.
+	START = 'S',		//스타트 지점.
+	BRICK = '0',		//일반 벽.
+	END_PLAYER = 'E',	//플레이어 종착점.
+	END_CLONE = 'G',	//클론 종착점
 
 	//static : 안 돌아가는 레이저.
 	//auto : 돌아가는 레이저.
@@ -39,22 +40,24 @@ enum class GenerateBlockType
 	LASERCORE_RIGHT_STATIC_ON = 'r',
 	LASERCORE_RIGHT_STATIC_OFF = 'O',
 
+	PORTAL_RED = 'P',				 //빨간색 포탈 - 빨간색 포탈이랑 연결됨. 맵에 딱 두 개만 존재가능.
+	PORTAL_BLUE = 'p',				 //파란색 포탈 - 파란색 포탈이랑 연결됨. 맵에 딱 두 개만 존재가능.
 
-	PORTAL_RED = 'P',	//빨간색 포탈 - 빨간색 포탈이랑 연결됨. 맵에 딱 두 개만 존재가능.
-	PORTAL_BLUE = 'p',	//파란색 포탈 - 파란색 포탈이랑 연결됨. 맵에 딱 두 개만 존재가능.
+	BUTTON_RED = 'B',				 //빨간색 버튼 - 레이저, 빨간색 벽이랑 상호작용함.
+	BUTTON_BLUE = 'b',				 //파란색 버튼 - 파란색 벽이랑 상호작용함.
+	BUTTON_CLONE = 'N',				 //클론 버튼 - 클론 관련 기믹과 상호작용함.
+	//BUTTON_RED_PASSABLE = 'e',		 //지나갈 수 있는 빨간색 버튼
+	//BUTTON_BLUE_PASSABLE = 'g',		 //지나갈 수 있는 파란색 버튼
+	//BUTTON_CLONE_PASSABLE = 'n',	 //지나갈 수 있는 클론 버튼
 
-	BUTTON_RED = 'B',	//빨간색 버튼 - 레이저, 빨간색 벽이랑 상호작용함.
-	BUTTON_BLUE = 'b',	//파란색 버튼 - 파란색 벽이랑 상호작용함.
-	BUTTON_CLONE = 'N', //클론 버튼 - 클론 관련 기믹과 상호작용함.
-
-	SWITCHABLEBRICK_RED_ON = 'W',	//빨간색 벽이 켜져있는 버전.
-	SWITCHABLEBRICK_RED_OFF = 'w',	//빨간색 벽이 꺼져있는 버전.
-	SWITCHABLEBRICK_BLUE_ON = 'Q',	//파란색 벽이 켜져있는 버전.
-	SWITCHABLEBRICK_BLUE_OFF = 'q',	//파란색 벽이 꺼져있는 버전.
+	SWITCHABLEBRICK_RED_ON = 'W',	 //빨간색 벽이 켜져있는 버전.
+	SWITCHABLEBRICK_RED_OFF = 'w',	 //빨간색 벽이 꺼져있는 버전.
+	SWITCHABLEBRICK_BLUE_ON = 'Q',	 //파란색 벽이 켜져있는 버전.
+	SWITCHABLEBRICK_BLUE_OFF = 'q',	 //파란색 벽이 꺼져있는 버전.
 	SWITCHABLEBRICK_CLONE_ON = 'C',  //클론 벽이 꺼져있는 버전.
 	SWITCHABLEBRICK_CLONE_OFF = 'c', //클론 벽이 꺼져있는 버전.
 
-	BRICK_KILL = 'o', //상호작용하면 죽이는 블록
+	BRICK_KILL = 'o',				 //상호작용하면 죽이는 블록
 
 	//렌더링 용
 	LASERBEAM_UP = 'K',
@@ -71,7 +74,8 @@ enum class BlockType
 	EMPTY = '.', //빈 공간.
 	START = 'S', //스타트 지점.
 	BRICK = '0', //일반 벽.
-	END = 'E',	//종착점.
+	END_PLAYER = 'E',	//종착점.
+	END_CLONE = 'G',
 
 	LASERCORE = 'L',
 	PORTAL = 'P',
@@ -211,13 +215,25 @@ public:
 };
 #pragma endregion
 
-class EndBlock : public Block
+#pragma region EndBlock
+class PlayerEndBlock : public Block
 {
 public:
-	EndBlock(BlockAffiliation affiliation);
+	PlayerEndBlock(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
 };
+
+class CloneEndBlock : public Block
+{
+public:
+	CloneEndBlock(BlockAffiliation affiliation);
+public:
+	bool IsPassable(Actor& actor) override;
+};
+#pragma endregion
+
+
 
 Block* GenerateBlock(GenerateBlockType type);
 

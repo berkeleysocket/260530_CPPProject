@@ -333,7 +333,7 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block)
 		state.uiMessage1 = "플레이어가 빨간 버튼을 눌렀습니다.";
 		break;
 	}
-	case BlockType::END:
+	case BlockType::END_PLAYER:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
@@ -357,6 +357,11 @@ void HandleCloneBlockInteraction(GameState& state, Block* block)
 
 	switch (blockType)
 	{
+	case BlockType::END_CLONE:
+	{
+		ClearStage(state);
+		break;
+	}
 	case BlockType::LASERBEAM:
 	{
 		HandleCloneDead(state);
@@ -378,7 +383,7 @@ void HandleCloneBlockInteraction(GameState& state, Block* block)
 		button->Press(state);
 		break;
 	}
-	case BlockType::END:
+	case BlockType::END_PLAYER:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
