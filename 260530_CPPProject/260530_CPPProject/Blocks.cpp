@@ -15,6 +15,11 @@
 		m_color = Color::WHITE;
 		m_type = BlockType::EMPTY;
 	}
+
+	bool EmptyBlock::IsPassable(Actor& actor)
+	{
+		return true;
+	}
 	#pragma endregion
 
 	#pragma region Brick
@@ -25,11 +30,21 @@
 		m_type = BlockType::BRICK;
 	}
 
+	bool Brick::IsPassable(Actor& actor)
+	{
+		return false;
+	}
+
 	KillBrick::KillBrick(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "¢Ã";
 		m_color = Color::LIGHT_VIOLET;
 		m_type = BlockType::BRICK_KILL;
+	}
+
+	bool KillBrick::IsPassable(Actor& actor)
+	{
+		return false;
 	}
 	#pragma endregion
 
@@ -52,7 +67,7 @@
 
 		Position dir = DirToScreenPosition(m_dir);
 		Position createLaserPos = m_position + dir;
-		Block* blockPtr = nullptr;
+		BlockType nextBlockType = BlockType::EMPTY;
 		GenerateBlockType laserBeamType = GenerateBlockType::EMPTY;
 		if (m_dir == Dir::UP)
 			laserBeamType = GenerateBlockType::LASERBEAM_UP;
@@ -65,7 +80,7 @@
 
 		while (!IsEdge(createLaserPos.x, createLaserPos.y))
 		{
-			BlockType nextBlockType = state.map[createLaserPos.y][createLaserPos.x]->GetType();
+			nextBlockType = state.map[createLaserPos.y][createLaserPos.x]->GetType();
 
 			if (nextBlockType == BlockType::SWITCHABLEBRICK)
 			{
@@ -77,13 +92,11 @@
 					createLaserPos += dir;
 					continue;
 				}
-				if (nextBlockType != BlockType::EMPTY || nextBlockType != BlockType::LASERBEAM)
-					return;
 			}
+			else if (nextBlockType != BlockType::EMPTY && nextBlockType != BlockType::LASERBEAM)
+				return;
 
-			blockPtr = state.map[createLaserPos.y][createLaserPos.x];
-			blockPtr->SetType(BlockType::LASERBEAM);
-			blockPtr = GenerateBlock(laserBeamType);
+			state.map[createLaserPos.y][createLaserPos.x] = GenerateBlock(laserBeamType);
 			m_beamPosQueue.push({ createLaserPos.x, createLaserPos.y });
 
 			createLaserPos += dir;
@@ -129,18 +142,16 @@
 	void LaserCore::Clear(GameState& state)
 	{
 		Position pos{ 0,0 };
-		BlockType blockType = BlockType::EMPTY;
-		GenerateBlockType generateBlockType = GenerateBlockType::EMPTY;
 		Block* blockPtr = nullptr;
 
 		while (!m_beamPosQueue.empty())
 		{
 			pos = m_beamPosQueue.front();
-			m_beamPosQueue.pop();
 
 			blockPtr = state.map[pos.y][pos.x];
-			blockPtr->SetType(blockType);
-			blockPtr = GenerateBlock(generateBlockType);
+			blockPtr->SetType(BlockType::EMPTY);
+			*blockPtr = *GenerateBlock(GenerateBlockType::EMPTY);
+			m_beamPosQueue.pop();
 		}
 	}
 
@@ -165,13 +176,16 @@
 		else
 			Toggle(state);
 	}
+
+	bool LaserCore::IsPassable(Actor& actor)
+	{
+		return false;
+	}
 	#pragma endregion
 
 	#pragma region LaserBeam
 	LaserBeam::LaserBeam(BlockAffiliation affiliation, Dir beamDirection) : Block(affiliation)
 	{
-		m_type = BlockType::LASERBEAM;
-
 		switch (beamDirection)
 		{
 		case Dir::UP:
@@ -194,8 +208,19 @@
 			m_image = "¡æ";
 			break;
 		}
+		default:
+		{
+			m_image = "£¦";
+			break;
+		}
 		}
 		m_color = Color::RED;
+		m_type = BlockType::LASERBEAM;
+	}
+
+	bool LaserBeam::IsPassable(Actor& actor)
+	{
+		return false;
 	}
 	#pragma endregion
 
@@ -228,6 +253,11 @@
 					buttonInteractable->Interaction(state);
 			}
 		}
+	}
+
+	bool Button::IsPassable(Actor& actor)
+	{
+		return false;
 	}
 	#pragma endregion
 
@@ -266,6 +296,11 @@
 				}
 			}
 		}
+	}
+
+	bool Portal::IsPassable(Actor& actor)
+	{
+		return false;
 	}
 	#pragma endregion
 
@@ -347,6 +382,17 @@
 	{
 		Toggle(state);
 	}
+
+	bool SwitchableBrick::IsPassable(Actor& actor)
+	{
+		Player* player = dynamic_cast<Player*>(&actor);
+		
+		if (player != nullptr 
+			&& m_affiliation == BlockAffiliation::CLONE)
+			return false;
+
+		return !m_isActive;
+	}
 	#pragma endregion
 
 	#pragma region EndBlock
@@ -355,6 +401,11 @@
 		m_image = "¢Â";
 		m_color = Color::YELLOW;
 		m_type = BlockType::END;
+	}
+
+	bool EndBlock::IsPassable(Actor& actor)
+	{
+		return false;
 	}
 	#pragma endregion
 
@@ -529,52 +580,4 @@
 			break;
 		}
 		return block;
-	}
-
-	bool IsPlayerPassable(Block* block)
-	{
-		switch (block -> GetType())
-		{
-		case BlockType::EMPTY:
-		{
-			return true;
-			break;
-		}
-		case BlockType::SWITCHABLEBRICK:
-		{
-			SwitchableBrick* swBrick = (SwitchableBrick*)block;
-			if (swBrick->GetAffiliation() != BlockAffiliation::CLONE)
-				return !(swBrick->GetIsActive());
-			else 
-				return false;
-			break;
-		}
-		default:
-		{
-			return false;
-			break;
-		}
-		}
-	}
-
-	bool IsClonePassable(Block* block)
-	{
-		switch (block -> GetType())
-		{
-		case BlockType::EMPTY:
-		{
-			return true;
-			break;
-		}
-		case BlockType::SWITCHABLEBRICK:
-		{
-			return !(((SwitchableBrick*)(block)) -> GetIsActive());
-			break;
-		}
-		default:
-		{
-			return false;
-			break;
-		}
-		}
 	}

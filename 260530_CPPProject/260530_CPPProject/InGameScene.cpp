@@ -124,15 +124,14 @@ void DrawMap(GameState& state)
 void PreDrawBlock(GameState& state, int x, int y)
 {
 	Block* blockPtr = state.map[y][x];
-	BlockType blockType = blockPtr -> GetType();
-
 	if (blockPtr == nullptr) return;
+	BlockType blockType = blockPtr->GetType();
 
 	switch (blockType)
 	{
 	case BlockType::LASERCORE:
 	{
-		((LaserCore*)blockPtr) -> TryDrawCast(state);
+		((LaserCore*)blockPtr)->TryDrawCast(state);
 		break;
 	}
 	}
@@ -162,11 +161,10 @@ void PostDrawBlock(GameState& state)
 void DrawBlock(GameState& state, int x, int y)
 {
 	Block* block = state.map[y][x];
-
 	if (block == nullptr) return;
 
-	SetColor(block -> GetColor());
-	cout << (block -> GetImage());
+	SetColor(block->GetColor());
+	cout << (block->GetImage());
 }
 
 void DrawUI(GameState& state)
@@ -176,7 +174,7 @@ void DrawUI(GameState& state)
 		SetColor();
 	else
 		SetColor(state.uiColor1);
-	cout << state.uiMessage1 << "              ";
+	cout << state.uiMessage1 << "               ";
 
 	GotoXY(0, 16);
 	SetColor(Color::RED);
@@ -229,7 +227,7 @@ void DrawUI(GameState& state)
 	cout << " : 파란 스위치 벽";
 
 	GotoXY(32, 0);
-	cout << "[ESC] Selecte Stage";
+	cout << "[ESC] Select Stage";
 	GotoXY(32, 1);
 	cout << "[R] Restart";
 
@@ -272,7 +270,7 @@ bool TryPlayerMove(GameState& state, Dir dir)
 		return false;
 
 	Block* nextBlock = state.map[nextPos.y][nextPos.x];
-	if (!IsPlayerPassable(nextBlock))
+	if (!(nextBlock->IsPassable(state.player)))
 	{
 		HandlePlayerBlockInteraction(state, nextBlock);
 		return false;
@@ -291,13 +289,7 @@ bool TryCloneMove(GameState& state, Dir dir)
 		return false;
 
 	Block* nextBlock = state.map[nextPos.y][nextPos.x];
-
-	if (state.map[nextPos.y][nextPos.x]->GetType() == BlockType::SWITCHABLEBRICK)
-	{
-
-		return true;
-	}
-	if (!IsClonePassable(nextBlock))
+	if (!(nextBlock->IsPassable(state.clone)))
 	{
 		HandleCloneBlockInteraction(state, nextBlock);
 		return false;
