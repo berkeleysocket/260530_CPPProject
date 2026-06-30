@@ -147,10 +147,7 @@
 		while (!m_beamPosQueue.empty())
 		{
 			pos = m_beamPosQueue.front();
-
-			blockPtr = state.map[pos.y][pos.x];
-			blockPtr->SetType(BlockType::EMPTY);
-			*blockPtr = *GenerateBlock(GenerateBlockType::EMPTY);
+			state.map[pos.y][pos.x] = GenerateBlock(GenerateBlockType::EMPTY);
 			m_beamPosQueue.pop();
 		}
 	}

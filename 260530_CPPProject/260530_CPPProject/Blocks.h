@@ -46,8 +46,8 @@ enum class GenerateBlockType
 	BUTTON_RED = 'B',				 //빨간색 버튼 - 레이저, 빨간색 벽이랑 상호작용함.
 	BUTTON_BLUE = 'b',				 //파란색 버튼 - 파란색 벽이랑 상호작용함.
 	BUTTON_CLONE = 'N',				 //클론 버튼 - 클론 관련 기믹과 상호작용함.
-	//BUTTON_RED_PASSABLE = 'e',		 //지나갈 수 있는 빨간색 버튼
-	//BUTTON_BLUE_PASSABLE = 'g',		 //지나갈 수 있는 파란색 버튼
+	//BUTTON_RED_PASSABLE = 'e',	 //지나갈 수 있는 빨간색 버튼
+	//BUTTON_BLUE_PASSABLE = 'g',	 //지나갈 수 있는 파란색 버튼
 	//BUTTON_CLONE_PASSABLE = 'n',	 //지나갈 수 있는 클론 버튼
 
 	SWITCHABLEBRICK_RED_ON = 'W',	 //빨간색 벽이 켜져있는 버전.

@@ -20,7 +20,7 @@ struct GameState
 	Scene			prevScene = Scene::NONE;
 	Scene			curScene = Scene::TITLE;
 	Menu			curMenu = Menu::START;
-	Stage			curStage = Stage::STAGE1;
+	Stage			curStage = Stage::STAGE_1;
 	Stage			prevStage = Stage::NONE;
 	Block*			map[MAP_H][MAP_W] = {};
 	bool			isRunning = true;

@@ -139,7 +139,7 @@ L"╚═════════════════════════
 	//옆에 있는 버튼들
 	wstring leftBtn = L"<";
 	wstring rightBtn = L">";
-	if (state.curStage != Stage::STAGE1)
+	if (state.curStage != Stage::STAGE_1)
 	{
 		GotoXY(0, res.Y / 2);
 		wcout << leftBtn;
