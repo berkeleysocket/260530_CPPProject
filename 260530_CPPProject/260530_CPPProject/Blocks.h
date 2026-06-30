@@ -132,7 +132,7 @@ public:
 #pragma endregion
 
 #pragma region Laser
-class LaserCore : public Block, IButtonInteractable
+class LaserCore : public Block, public IButtonInteractable
 {
 public:
 	LaserCore(BlockAffiliation affiliation, bool autoRotation, bool isActive, Dir castingDir);
@@ -180,7 +180,7 @@ public:
 #pragma endregion
 
 #pragma region SwitchableBrick
-class SwitchableBrick : public Block, IButtonInteractable
+class SwitchableBrick : public Block, public IButtonInteractable
 {
 public:
 	SwitchableBrick(BlockAffiliation affiliation, bool isActive);
