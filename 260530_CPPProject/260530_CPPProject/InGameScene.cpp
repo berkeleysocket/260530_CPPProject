@@ -79,13 +79,13 @@ void GenerateMap(GameState& state, const string gameMap[MAP_H])
 		for (int x = 0; x < MAP_W; ++x)
 		{
 			int data = gameMap[y][x];
+			GenerateBlockType generateBlockType = (GenerateBlockType)data;
 			BlockType blockType = (BlockType)data;
-			Block* block = GenerateBlock((BlockType)data);
+			Block* block = GenerateBlock((GenerateBlockType)data);
 
-			block->m_position = { x, y };
+			block->SetPosition({x,y});
 			
-			state.blocks[y][x] = block;
-			state.map[y][x] = blockType; 
+			state.map[y][x] = block;
 
 			if (blockType == BlockType::START)
 			{
@@ -93,7 +93,6 @@ void GenerateMap(GameState& state, const string gameMap[MAP_H])
 				Position mapPos = { x, y };
 				state.player.SetSpawnPos(cursorPos, mapPos);
 				state.player.SetPos(cursorPos, mapPos);
-				state.map[y][x] = BlockType::EMPTY;
 			}
 		}
 	}
@@ -124,23 +123,16 @@ void DrawMap(GameState& state)
 
 void PreDrawBlock(GameState& state, int x, int y)
 {
-	BlockType blockType = state.map[y][x];
-	Block* block = state.blocks[y][x];
+	Block* blockPtr = state.map[y][x];
+	BlockType blockType = blockPtr -> GetType();
 
-	if (block == nullptr) return;
+	if (blockPtr == nullptr) return;
 
 	switch (blockType)
 	{
-	case BlockType::LASERCORE_UP_AUTO:
-	case BlockType::LASERCORE_UP_STATIC_ON:
-	case BlockType::LASERCORE_DOWN_AUTO:
-	case BlockType::LASERCORE_DOWN_STATIC_ON:
-	case BlockType::LASERCORE_LEFT_AUTO:
-	case BlockType::LASERCORE_LEFT_STATIC_ON:
-	case BlockType::LASERCORE_RIGHT_AUTO:
-	case BlockType::LASERCORE_RIGHT_STATIC_ON:
+	case BlockType::LASERCORE:
 	{
-		((LaserCore*)block)->TryDrawCast(state);
+		((LaserCore*)blockPtr) -> TryDrawCast(state);
 		break;
 	}
 	}
@@ -154,12 +146,9 @@ void PostDrawBlock(GameState& state)
 		{
 			if (Position{ x,y } == state.player.GetMapPos())
 			{
-				switch (state.map[y][x])
+				switch (state.map[y][x] -> GetType())
 				{
-				case BlockType::LASERBEAM_UP:
-				case BlockType::LASERBEAM_DOWN:
-				case BlockType::LASERBEAM_RIGHT:
-				case BlockType::LASERBEAM_LEFT:
+				case BlockType::LASERCORE:
 				{
 					HandlePlayerDead(state);
 					break;
@@ -172,12 +161,12 @@ void PostDrawBlock(GameState& state)
 
 void DrawBlock(GameState& state, int x, int y)
 {
-	Block* block = state.blocks[y][x];
+	Block* block = state.map[y][x];
 
 	if (block == nullptr) return;
 
-	SetColor(block->GetColor());
-	cout << (block->GetImage());
+	SetColor(block -> GetColor());
+	cout << (block -> GetImage());
 }
 
 void DrawUI(GameState& state)
@@ -251,9 +240,6 @@ bool TryDrawPlayer(GameState& state, int x, int y)
 	if (state.player.GetMapPos() == Position{ x, y } )
 	{
 		state.player.Render();
-		//SetColor(state.player.GetColor());
-		//cout << state.player.GetImage();
-		//SetColor();
 		return true;
 	}
 
@@ -285,11 +271,10 @@ bool TryPlayerMove(GameState& state, Dir dir)
 	if (IsEdge(nextPos.x, nextPos.y))
 		return false;
 
-	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
-	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
-	if (!IsPassable(nextBlock, nextBlockType))
+	Block* nextBlock = state.map[nextPos.y][nextPos.x];
+	if (!IsPlayerPassable(nextBlock))
 	{
-		HandlePlayerBlockInteraction(state, nextBlock, nextBlockType);
+		HandlePlayerBlockInteraction(state, nextBlock);
 		return false;
 	}
 
@@ -305,87 +290,55 @@ bool TryCloneMove(GameState& state, Dir dir)
 	if (IsEdge(nextPos.x, nextPos.y))
 		return false;
 
-	Block* nextBlock = state.blocks[nextPos.y][nextPos.x];
-	BlockType nextBlockType = state.map[nextPos.y][nextPos.x];
+	Block* nextBlock = state.map[nextPos.y][nextPos.x];
 
-	if (nextBlockType == BlockType::SWITCHABLEBRICK_CLONE_ON)
-		return true;
-	if (!IsPassable(nextBlock, nextBlockType))
+	if (state.map[nextPos.y][nextPos.x]->GetType() == BlockType::SWITCHABLEBRICK)
 	{
-		HandleCloneBlockInteraction(state, nextBlock, nextBlockType);
+
+		return true;
+	}
+	if (!IsClonePassable(nextBlock))
+	{
+		HandleCloneBlockInteraction(state, nextBlock);
 		return false;
 	}
 
 	return true;
 }
 
-void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blockType)
+void HandlePlayerBlockInteraction(GameState& state, Block* block)
 {
-	Position blockPos = block-> m_position;
+	BlockType blockType = block->GetType();
+	Position blockPosition = block->GetPosition();
 
 	switch (blockType)
 	{
-	case BlockType::LASERBEAM_UP:
-	case BlockType::LASERBEAM_DOWN:
-	case BlockType::LASERBEAM_RIGHT:
-	case BlockType::LASERBEAM_LEFT:
+	case BlockType::LASERBEAM:
 	{
 		state.uiColor1 = Color::RED;
 		state.uiMessage1 = "플레이어가 죽었습니다.";
+
 		HandlePlayerDead(state);
 		break;
 	}
-	case BlockType::PORTAL_RED:
+	case BlockType::PORTAL:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
-		RedPortal* redPortal = (RedPortal*)block;
-		redPortal-> Warp(state, state.player, blockPos, BlockType::PORTAL_RED);
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "플레이어가 빨간 포탈에 들어갔습니다.";
-		break;
-	}
-	case BlockType::PORTAL_BLUE:
-	{
-		ShakeConsoleWindow(15, 40, 25);
+		((Portal*)block)->Warp(state, state.player);
 
-		BluePortal* bluePortal = (BluePortal*)block;
-		bluePortal-> Warp(state, state.player, blockPos, BlockType::PORTAL_BLUE);
 		state.uiColor1 = Color::YELLOW;
 		state.uiMessage1 = "플레이어가 파란 포탈에 들어갔습니다.";
 		break;
 	}
-	case BlockType::BUTTON_RED:
+	case BlockType::BUTTON:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
-		RedButton* redButton = (RedButton*)block;
-		redButton->Press(state);
+		((Button*)block)->Press(state);
 
 		state.uiColor1 = Color::YELLOW;
 		state.uiMessage1 = "플레이어가 빨간 버튼을 눌렀습니다.";
-		break;
-	}
-	case BlockType::BUTTON_BLUE:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		BlueButton* blueButton = (BlueButton*)block;
-		blueButton->Press(state);
-
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "플레이어가 파란 버튼을 눌렀습니다.";
-		break;
-	}
-	case BlockType::BUTTON_CLONE:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		CloneButton* cloneButton = (CloneButton*)block;
-		cloneButton->Press(state);
-
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "플레이어가 클론 버튼을 눌렀습니다.";
 		break;
 	}
 	case BlockType::END:
@@ -400,64 +353,37 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block , BlockType blo
 	}
 	case BlockType::BRICK_KILL:
 	{
-		ShakeConsoleWindow(15, 40, 25);
 		HandlePlayerDead(state);
 	}
 	}
 }
 
-void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType)
+void HandleCloneBlockInteraction(GameState& state, Block* block)
 {
-	Position blockPos = block->m_position;
+	BlockType blockType = block->GetType();
+	Position blockPos = block->GetPosition();
 
 	switch (blockType)
 	{
-	case BlockType::LASERBEAM_UP:
-	case BlockType::LASERBEAM_DOWN:
-	case BlockType::LASERBEAM_LEFT:
-	case BlockType::LASERBEAM_RIGHT:
-		{
-			HandleCloneDead(state);
-			break;
-		}
-	case BlockType::PORTAL_RED:
-		{
-			ShakeConsoleWindow(15, 40, 25);
-
-			RedPortal* redPortal = (RedPortal*)block;
-			redPortal->Warp(state, state.clone, blockPos, BlockType::PORTAL_RED);
-			break;
-		}
-	case BlockType::PORTAL_BLUE:
-		{
-			ShakeConsoleWindow(15, 40, 25);
-
-			BluePortal* bluePortal = (BluePortal*)block;
-			bluePortal->Warp(state, state.clone, blockPos, BlockType::PORTAL_BLUE);
-			break;
-		}
-	case BlockType::BUTTON_RED:
-		{
-			ShakeConsoleWindow(15, 40, 25);
-
-			RedButton* redButton = (RedButton*)block;
-			redButton->Press(state);
-			break;
-		}
-	case BlockType::BUTTON_BLUE:
-		{
-			ShakeConsoleWindow(15, 40, 25);
-
-			BlueButton* blueButton = (BlueButton*)block;
-			blueButton->Press(state);
-			break;
-		}
-	case BlockType::BUTTON_CLONE:
+	case BlockType::LASERBEAM:
+	{
+		HandleCloneDead(state);
+		break;
+	}
+	case BlockType::PORTAL:
 	{
 		ShakeConsoleWindow(15, 40, 25);
 
-		CloneButton* cloneButton = (CloneButton*)block;
-		cloneButton->Press(state);
+		Portal* portal = (Portal*)block;
+		portal->Warp(state, state.clone);
+		break;
+	}
+	case BlockType::BUTTON:
+	{
+		ShakeConsoleWindow(15, 40, 25);
+
+		Button* button = (Button*)block;
+		button->Press(state);
 		break;
 	}
 	case BlockType::END:
@@ -469,7 +395,6 @@ void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType block
 	}
 	case BlockType::BRICK_KILL:
 	{
-		ShakeConsoleWindow(15, 40, 25);
 		HandleCloneDead(state);
 	}
 	}

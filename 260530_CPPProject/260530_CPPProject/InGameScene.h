@@ -6,8 +6,9 @@
 #include "Console.h"
 #include "GameState.h"
 #include "Position.h"
-#include "Dir.h";
+#include "Dir.h"
 #include "StageManager.h"
+#include "Blocks.h"
 
 using std::string;
 using std::cout;
@@ -32,7 +33,7 @@ bool TryDrawClone(GameState& state, int x, int y);
 //player & clone actions
 bool TryPlayerMove(GameState& state, Dir dir);
 bool TryCloneMove(GameState& state, Dir dir);
-void HandlePlayerBlockInteraction(GameState& state, Block* block, BlockType blockType);
-void HandleCloneBlockInteraction(GameState& state, Block* block, BlockType blockType);
+void HandlePlayerBlockInteraction(GameState& state, Block* block);
+void HandleCloneBlockInteraction(GameState& state, Block* block);
 void HandlePlayerDead(GameState& state);
 void HandleCloneDead(GameState& state);

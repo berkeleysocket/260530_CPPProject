@@ -8,13 +8,14 @@
 #include "Dir.h"
 #include "Color.h"
 #include "SoundManager.h"
+#include "IButtonInteractable.h"
 
 using std::string;
 using std::queue;
 
 struct GameState;
 
-enum class BlockType
+enum class GenerateBlockType
 {
 	EMPTY = '.', //빈 공간.
 	START = 'S', //스타트 지점.
@@ -65,6 +66,21 @@ enum class BlockType
 	SWITCHABLEBRICK_CLONE_OFF_BEAM = 'F',
 };
 
+enum class BlockType
+{
+	EMPTY = '.', //빈 공간.
+	START = 'S', //스타트 지점.
+	BRICK = '0', //일반 벽.
+	END = 'E',	//종착점.
+
+	LASERCORE = 'L',
+	PORTAL = 'P',
+	BUTTON = 'B',
+	SWITCHABLEBRICK = 'W',
+	BRICK_KILL = 'K', 
+	LASERBEAM = 'V',
+};
+
 enum class BlockAffiliation
 {
 	NONE = 0,
@@ -78,15 +94,21 @@ class Block
 {
 public:
 	Block(BlockAffiliation affiliation);
+	virtual ~Block() = default;
 protected:
 	string m_image;
 	Color m_color;
 	BlockAffiliation m_affiliation;
-public:
+	BlockType m_type;
 	Position m_position;
-	const string GetImage() const;
-	const Color GetColor() const;
-	const BlockAffiliation GetAffiliation() const;
+public:
+	void SetPosition(Position position) { m_position = position; }
+	void SetType(BlockType type) { m_type = type; }
+	const string GetImage() const { return m_image; }
+	const Color GetColor() const { return m_color; };
+	const BlockAffiliation GetAffiliation() const { return m_affiliation; };;
+	const BlockType GetType() const { return m_type; }
+	const Position GetPosition() const { return m_position; }
 };
 
 class EmptyBlock : public Block
@@ -110,7 +132,7 @@ public:
 #pragma endregion
 
 #pragma region Laser
-class LaserCore : public Block
+class LaserCore : public Block, IButtonInteractable
 {
 public:
 	LaserCore(BlockAffiliation affiliation, bool autoRotation, bool isActive, Dir castingDir);
@@ -120,11 +142,13 @@ private:
 	Dir m_dir;
 	queue<Position> m_beamPosQueue;
 public:
+	const Dir GetBeamDirection() const { return m_dir; }
+public:
 	void TryDrawCast(GameState& state);
 	void ChangeDirection(GameState& state);
 	void Toggle(GameState& state);
 	void Clear(GameState& state);
-	const Dir GetBeamDirection() const;
+	void Interaction(GameState& state) override;
 };
 
 class LaserBeam : public Block
@@ -143,30 +167,6 @@ public:
 public:
 	void Press(GameState& state);
 };
-
-class RedButton : public Block
-{
-public:
-	RedButton();
-public:
-	void Press(GameState& state);
-};
-
-class BlueButton : public Block
-{
-public:
-	BlueButton();
-public:
-	void Press(GameState& state);
-};
-
-class CloneButton : public Block
-{
-public:
-	CloneButton(BlockAffiliation affiliation);
-public:
-	void Press(GameState& state);
-};
 #pragma endregion
 
 #pragma region Portal
@@ -175,29 +175,25 @@ class Portal : public Block
 public:
 	Portal(BlockAffiliation affiliation);
 public:
-	void Warp(GameState& state, Actor& actor, Position portalPosition, BlockType portalType);
+	void Warp(GameState& state, Actor& actor);
 };
 #pragma endregion
 
 #pragma region SwitchableBrick
-class SwitchableBrick : public Block
+class SwitchableBrick : public Block, IButtonInteractable
 {
 public:
 	SwitchableBrick(BlockAffiliation affiliation, bool isActive);
 private:
 	bool m_isActive;
 public:
+	bool GetIsActive() { return m_isActive; }
+private:
+	void Toggle(GameState& state);
+public:
 	void OnLaserBrickMode(GameState& state);
 	void OffLaserBrickMode(GameState& state);
-	void Toggle(GameState& state);
-};
-
-class CloneSwitchableBrick : public SwitchableBrick
-{
-public: 
-	CloneSwitchableBrick(BlockAffiliation affiliation, bool isActive);
-public:
-	void Toggle(GameState& state);
+	void Interaction(GameState& state) override;
 };
 #pragma endregion
 
@@ -207,6 +203,7 @@ public:
 	EndBlock(BlockAffiliation affiliation);
 };
 
-Block* GenerateBlock(BlockType type);
-bool IsPassable(Block* block, BlockType blockType);
+Block* GenerateBlock(GenerateBlockType type);
+bool IsPlayerPassable(Block* block);
+bool IsClonePassable(Block* block);
 
