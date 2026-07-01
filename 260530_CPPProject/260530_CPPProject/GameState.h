@@ -29,8 +29,13 @@ struct GameState
     Clone			clone;
     MoveDataRecord  moveDataRecord;
 	ULONGLONG		curTime;
-    string			uiMessage1;
-    Color			uiColor1;
+    string			actionUIMessage;
+    Color			actionUIColor;
+	string			descriptionUIMessage1;
+	string			descriptionUIMessage2;
+	string			descriptionUIMessage3;
+	string			descriptionUIMessage4;
+	Color			descriptionUIColor;
 };
     
 bool IsEdge(int x, int y);

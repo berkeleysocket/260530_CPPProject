@@ -7,6 +7,36 @@ void InitInStage(GameState& state)
 	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 	state.clone.Init();
 	state.moveDataRecord.ReSet();
+
+	if (state.curStage == Stage::TUTORIAL_1)
+	{
+		state.descriptionUIColor = Color::SKYBLUE;
+		state.descriptionUIMessage1 = "<스테이지 클리어 방법에 대하여..>";
+		state.descriptionUIMessage2 = "- W,A,S,D로 움직여라.";
+		state.descriptionUIMessage3 = "- 목적지(◈)에 도달하라.";
+	}
+	else if (state.curStage == Stage::TUTORIAL_2)
+	{
+		state.descriptionUIColor = Color::SKYBLUE;
+		state.descriptionUIMessage1 = "<버튼(⊙)과 스위치 블럭(■)에 대하여..>";
+		state.descriptionUIMessage2 = "- 충돌해서 기믹 블럭들과 상호작용 해라.";
+	}
+	else if (state.curStage == Stage::TUTORIAL_3)
+	{
+
+	}
+	else if (state.curStage == Stage::TUTORIAL_4)
+	{
+
+	}
+	else if (state.curStage == Stage::TUTORIAL_5)
+	{
+
+	}
+	else if (state.curStage == Stage::TUTORIAL_6)
+	{
+
+	}
 }
 
 void UpdateInGame(GameState& state)
@@ -170,66 +200,88 @@ void DrawBlock(GameState& state, int x, int y)
 void DrawUI(GameState& state)
 {
 	GotoXY(0, 15);
-	if (state.uiMessage1.empty())
+	if (state.actionUIMessage.empty())
 		SetColor();
 	else
-		SetColor(state.uiColor1);
-	cout << state.uiMessage1 << "               ";
+	{
+		SetColor(state.actionUIColor);
+		SetDefaultMode();
+		cout << state.actionUIMessage;
+		SetColor();
+		cout << "         ";
+	}
 
-	GotoXY(0, 16);
-	SetColor(Color::RED);
-	cout << "@";
-	SetColor(Color::WHITE);
-	cout << " : 빨간 포탈";
-	SetColor(Color::BLUE);
-	cout << " @";
-	SetColor(Color::WHITE);
-	cout << " : 파란 포탈";
+	if (state.descriptionUIMessage1.empty())
+		SetColor();
+	else
+	{
+		GotoXY(32, 5);
+		SetColor(state.descriptionUIColor);
+		SetDefaultMode();
+		cout << state.descriptionUIMessage1;
+		GotoXY(32, 6);
+		cout << state.descriptionUIMessage2;
+		GotoXY(32, 7);
+		cout << state.descriptionUIMessage3;
+		SetColor();
+	}
 
-	GotoXY(0, 17);
-	SetColor(Color::RED);
-	cout << "⊙";
-	SetColor(Color::WHITE);
-	cout << " : 빨간 버튼";
-	SetColor(Color::BLUE);
-	cout << " ⊙";
-	SetColor(Color::WHITE);
-	cout << " : 파란 버튼";
+	//GotoXY(0, 16);
+	//SetColor(Color::RED);
+	//cout << "@";
+	//SetColor(Color::WHITE);
+	//cout << " : 빨간 포탈";
+	//SetColor(Color::BLUE);
+	//cout << " @";
+	//SetColor(Color::WHITE);
+	//cout << " : 파란 포탈";
 
-	GotoXY(0, 18);
-	SetColor(Color::RED);
-	cout << "※";
-	SetColor(Color::WHITE);
-	cout << " : 레이저 코어";
-	SetColor(Color::RED);
-	cout << " ↑";
-	SetColor(Color::WHITE);
-	cout << " : 레이저";
+	//GotoXY(0, 17);
+	//SetColor(Color::RED);
+	//cout << "⊙";
+	//SetColor(Color::WHITE);
+	//cout << " : 빨간 버튼";
+	//SetColor(Color::BLUE);
+	//cout << " ⊙";
+	//SetColor(Color::WHITE);
+	//cout << " : 파란 버튼";
 
-	GotoXY(0, 19);
-	SetColor(Color::LIGHT_GREEN);
-	cout << "⊙";
-	SetColor(Color::WHITE);
-	cout << " : 클론 버튼";
-	SetColor(Color::LIGHT_GREEN);
-	cout << " ■";
-	SetColor(Color::WHITE);
-	cout << " : 클론 스위치 벽";
+	//GotoXY(0, 18);
+	//SetColor(Color::RED);
+	//cout << "※";
+	//SetColor(Color::WHITE);
+	//cout << " : 레이저 코어";
+	//SetColor(Color::RED);
+	//cout << " ↑";
+	//SetColor(Color::WHITE);
+	//cout << " : 레이저";
 
-	GotoXY(0, 20);
-	SetColor(Color::LIGHT_RED);
-	cout << "■";
-	SetColor(Color::WHITE);
-	cout << " : 빨간 스위치 벽";
-	SetColor(Color::BLUE);
-	cout << " ■";
-	SetColor(Color::WHITE);
-	cout << " : 파란 스위치 벽";
+	//GotoXY(0, 19);
+	//SetColor(Color::LIGHT_GREEN);
+	//cout << "⊙";
+	//SetColor(Color::WHITE);
+	//cout << " : 클론 버튼";
+	//SetColor(Color::LIGHT_GREEN);
+	//cout << " ■";
+	//SetColor(Color::WHITE);
+	//cout << " : 클론 스위치 벽";
+
+	//GotoXY(0, 20);
+	//SetColor(Color::LIGHT_RED);
+	//cout << "■";
+	//SetColor(Color::WHITE);
+	//cout << " : 빨간 스위치 벽";
+	//SetColor(Color::BLUE);
+	//cout << " ■";
+	//SetColor(Color::WHITE);
+	//cout << " : 파란 스위치 벽";
 
 	GotoXY(32, 0);
 	cout << "[ESC] Select Stage";
 	GotoXY(32, 1);
 	cout << "[R] Restart";
+
+
 
 }
 

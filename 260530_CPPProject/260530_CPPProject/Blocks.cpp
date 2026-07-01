@@ -248,8 +248,8 @@
 		Clone* clone = dynamic_cast<Clone*>(&actor);
 		if (player != nullptr)
 		{
-			state.uiColor1 = Color::RED;
-			state.uiMessage1 = "플레이어가 죽었습니다.";
+			state.actionUIColor = Color::RED;
+			state.actionUIMessage = "플레이어가 죽었습니다.";
 			HandlePlayerDead(state);
 		}
 		else if (clone != nullptr)

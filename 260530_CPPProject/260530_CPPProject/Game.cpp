@@ -169,7 +169,7 @@ void LoadMaps()
 	}
 	};
 	StageManager::GetInst()->RegisterStage(Stage::TUTORIAL_6, std::make_unique<MapData>(mapData));
-
+	
 	mapData =
 	{
 		"Stage 1",
