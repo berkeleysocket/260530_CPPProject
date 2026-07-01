@@ -5,7 +5,6 @@ void Init()
 	SetConsoleWindowStyle(true);
 	SetConsoleMouseInputDisabled();
 	SetCursorVisible(false);
-	//SetConsoleSize(MAP_W * 7, MAP_H * 2.5);
 
 	SoundManager::GetInst()->Init();
 	SoundManager::GetInst()->Init();
@@ -81,7 +80,7 @@ void LoadMaps()
 
 	mapData =
 	{
-				3,
+		3,
 		"Tutorial 3",
 	{
 	"000000000000000",//0
@@ -105,7 +104,7 @@ void LoadMaps()
 
 	mapData =
 	{
-						4,
+		4,
 		"Tutorial 4",
 	{
 	"000000000000000",//0
@@ -129,7 +128,7 @@ void LoadMaps()
 
 	mapData =
 	{
-						5,
+		5,
 		"Tutorial 5",
 	{
 	"000000000000000",//0
@@ -153,7 +152,7 @@ void LoadMaps()
 	
 	mapData =
 	{
-								6,
+		6,
 		"Stage 1",
 	{ 
 	"000000000000000",//0
@@ -177,7 +176,7 @@ void LoadMaps()
 
 	mapData =
 	{
-										7,
+		7,
 		"Stage 2",
 	{ 
 	"000000000000000",//0
@@ -217,7 +216,7 @@ void LoadMaps()
 
 	mapData =
 	{
-												8,
+		8,
 		"Stage 3",
 	{ 
 	"000000000000000",//0
@@ -241,7 +240,7 @@ void LoadMaps()
 
 	mapData =
 	{
-														9,
+		9,
 		"Stage 4",
 	{
 	"000000000000000",//0
@@ -265,7 +264,7 @@ void LoadMaps()
 
 	mapData =
 	{
-																10,
+		10,
 		"Tutorial 6",
 	{
 	"000000000000000",//0
@@ -289,7 +288,7 @@ void LoadMaps()
 
 	mapData =
 	{
-																		11,
+		11,
 		"End Stage",
 	{
 	"000000000000000",//0

@@ -149,7 +149,10 @@
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageScene.cpp" />
-    <ClCompile Include="testHJMain.cpp" />
+    <ClCompile Include="testHJMain.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
