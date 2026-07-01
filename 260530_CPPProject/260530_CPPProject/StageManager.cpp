@@ -85,7 +85,7 @@ void StageManager::RegisterStage(Stage stage, std::unique_ptr<MapData> mapData)
 	m_mapMapData[stage] = std::move(mapData);
 }
 
-void StageManager::Clear(Stage curStage)
+void StageManager::Clear(Stage curStage, ULONGLONG playTime, int deadCount)
 {
 	m_curStageData->m_isCleared = true;
 	Stage nextStage = (Stage)std::min((int)curStage + 1, (int)Stage::ENDSTAGE);
@@ -93,6 +93,8 @@ void StageManager::Clear(Stage curStage)
 	auto iter_map = m_mapMapData.find(nextStage);
 	auto iter_stage = m_mapStageSaveData.find((*iter_map->second.get()).m_id);
 	(*iter_stage->second.get()).m_isLock = false;
+	(*iter_stage->second.get()).m_deadCnt = deadCount;
+	(*iter_stage->second.get()).m_bestTime = (*iter_stage->second.get()).m_bestTime>playTime? playTime: (*iter_stage->second.get()).m_bestTime;
 
 	SaveStage();
 }

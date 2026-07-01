@@ -35,7 +35,7 @@ public:
 		return *m_curStageData;
 	}
 
-	void Clear(Stage curStage);
+	void Clear(Stage curStage, ULONGLONG playTime, int deadCount);
 	const FinalData& GetFinalData(float totalPlayTime);
 private:
 	static StageManager* m_inst;

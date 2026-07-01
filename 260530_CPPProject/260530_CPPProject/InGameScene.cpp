@@ -2,6 +2,9 @@
 
 void InitInStage(GameState& state)
 {
+	state.startTime = state.curTime;
+	state.deadCount = 0;
+
 	SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
 
 	SoundManager::GetInst()->PlayBGM("Resources/Sounds/InGameBGM.wav");
@@ -129,8 +132,10 @@ void ClearStage(GameState& state)
 	//Stage 클리어 처리
 	SoundManager::GetInst()->Play("StageClear");
 
+	ULONGLONG playTime = state.curTime - state.startTime;
+
 	Sleep(500);
-	StageManager::GetInst()->Clear(state.curStage);
+	StageManager::GetInst()->Clear(state.curStage, playTime, state.deadCount);
 	state.curScene = Scene::STAGE;
 	state.prevStage = Stage::NONE;
 }
@@ -389,6 +394,8 @@ void HandlePlayerDead(GameState& state)
 	state.clone.Spawn(state.moveDataRecord.GetRecord());
 	state.player.Spawn();
 	state.moveDataRecord.ReSet();
+
+	state.deadCount++;
 }
 
 void HandleCloneDead(GameState& state)
