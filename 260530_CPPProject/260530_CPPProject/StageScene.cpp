@@ -161,7 +161,7 @@ L"╚═════════════════════════
 		wcout << L" ";
 	}
 
-	if (state.curStage != Stage::STAGE_5)
+	if (state.curStage != Stage::ENDSTAGE)
 	{
 		GotoXY(res.X-1, res.Y / 2);
 		wcout << rightBtn;

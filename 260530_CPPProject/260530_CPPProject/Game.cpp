@@ -28,16 +28,11 @@ void Init()
 	LoadMaps();
 }
 
-void Update()
-{
-}
-
 void LoadMaps()		
 {
 	StageManager::GetInst()->LoadStage();
 	MapData mapData
 	{
-		1,
 		"Tutorial 1",
 	{
 	"000000000000000",//0
@@ -61,7 +56,6 @@ void LoadMaps()
 
 	mapData =
 	{
-		2,
 		"Tutorial 2",
 	{
 	"000000000000000",//0
@@ -85,7 +79,6 @@ void LoadMaps()
 
 	mapData =
 	{
-		3,
 		"Tutorial 3",
 	{
 	"000000000000000",//0
@@ -109,7 +102,6 @@ void LoadMaps()
 
 	mapData =
 	{
-		4,
 		"Tutorial 4",
 	{
 	"000000000000000",//0
@@ -133,7 +125,6 @@ void LoadMaps()
 
 	mapData =
 	{
-		5,
 		"Tutorial 5",
 	{
 	"000000000000000",//0
@@ -157,7 +148,6 @@ void LoadMaps()
 	
 	mapData =
 	{
-		6,
 		"Stage 1",
 	{ 
 	"000000000000000",//0
@@ -181,7 +171,6 @@ void LoadMaps()
 
 	mapData =
 	{
-		7,
 		"Stage 2",
 	{ 
 	"000000000000000",//0
@@ -221,7 +210,6 @@ void LoadMaps()
 
 	mapData =
 	{
-		8,
 		"Stage 3",
 	{ 
 	"000000000000000",//0
@@ -245,7 +233,6 @@ void LoadMaps()
 
 	mapData =
 	{
-		9,
 		"Stage 4",
 	{
 	"000000000000000",//0
@@ -258,42 +245,17 @@ void LoadMaps()
 	"0.............0",//7
 	"0....p...p..b.0",//8
 	"0.............0",//9
-	"0QQQQQQ.QQQQQQ0",//10
-	"0cccccc.......0",//11
+	"0QQQQQQQQQQQQQ0",//10
+	"0CCCCCC.......0",//11
 	"0..B.......N..0",//12
 	"0.............0",//13
-	"000000000000000" //14S
+	"000000000000000" //14
 	}
 	};
 	StageManager::GetInst()->RegisterStage(Stage::STAGE_4, std::make_unique<MapData>(mapData));
 
 	mapData =
 	{
-		10,
-		"Stage 5",
-	{
-	"000000000000000",//0
-	"0..S.......0.p0",//1
-	"0..........0..0",//2
-	"0CCCBN.....0..0",//3
-	"0..........0u.0",//4
-	"0000000....0..0",//5
-	"0..P..0....0.u0",//6
-	"0WWWWWWU...0QQ0",//7
-	"0......w...0..0",//8
-	"0......w...0..0",//9
-	"0......w...0..0",//10
-	"0......w...0..0",//11
-	"0000000w.b.0..0",//12
-	"0p.q.P0w...0RE0",//13
-	"000000000000000" //14S
-	}
-	};
-	StageManager::GetInst()->RegisterStage(Stage::STAGE_5, std::make_unique<MapData>(mapData));
-
-	mapData =
-	{
-		11,
 		"Tutorial 6",
 	{
 	"000000000000000",//0
@@ -317,7 +279,6 @@ void LoadMaps()
 
 	mapData =
 	{
-		12,
 		"End Stage",
 	{
 	"000000000000000",//0
@@ -334,10 +295,10 @@ void LoadMaps()
 	"0.............0",//11
 	"0.............0",//12
 	"0.............0",//13
-	"000000000000000" //14S
+	"000000000000000" //14
 	}
 	};
-	StageManager::GetInst()->RegisterStage(Stage::STAGE_5, std::make_unique<MapData>(mapData));
+	StageManager::GetInst()->RegisterStage(Stage::ENDSTAGE, std::make_unique<MapData>(mapData));
 
 	StageManager::GetInst()->ChangeStage(Stage::TUTORIAL_1);
 	StageSaveData& sd = StageManager::GetInst()->GetCurStageSaveData();

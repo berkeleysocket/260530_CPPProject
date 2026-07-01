@@ -23,7 +23,6 @@ enum class Stage
 	STAGE_2,
 	STAGE_3,
 	STAGE_4,
-	STAGE_5,
 	TUTORIAL_6,
 	ENDSTAGE
 };
