@@ -29,11 +29,16 @@ void Init()
 	LoadMaps();
 }
 
+void Update()
+{
+}
+
 void LoadMaps()		
 {
 	StageManager::GetInst()->LoadStage();
 	MapData mapData
 	{
+		1,
 		"Tutorial 1",
 	{
 	"000000000000000",//0
@@ -57,6 +62,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		2,
 		"Tutorial 2",
 	{
 	"000000000000000",//0
@@ -80,6 +86,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		3,
 		"Tutorial 3",
 	{
 	"000000000000000",//0
@@ -103,6 +110,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		4,
 		"Tutorial 4",
 	{
 	"000000000000000",//0
@@ -126,6 +134,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		5,
 		"Tutorial 5",
 	{
 	"000000000000000",//0
@@ -149,6 +158,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		6,
 		"Stage 1",
 	{ 
 	"000000000000000",//0
@@ -172,6 +182,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		7,
 		"Stage 2",
 	{ 
 	"000000000000000",//0
@@ -211,6 +222,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		8,
 		"Stage 3",
 	{ 
 	"000000000000000",//0
@@ -234,6 +246,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		9,
 		"Stage 4",
 	{
 	"000000000000000",//0
@@ -257,6 +270,7 @@ void LoadMaps()
 
 	mapData =
 	{
+		10,
 		"Stage 5",
 	{
 	"000000000000000",//0

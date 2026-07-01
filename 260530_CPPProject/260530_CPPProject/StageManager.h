@@ -2,8 +2,8 @@
 #include<map>
 #include<memory>
 #include"Enums.h"
-#include"StageData.h"
 #include"Defines.h"
+#include"StageData.h"
 
 class StageManager
 {
@@ -36,9 +36,10 @@ public:
 	}
 
 	void Clear(Stage curStage);
+	const FinalData& GetFinalData(float totalPlayTime);
 private:
 	static StageManager* m_inst;
-	std::map<Stage, std::unique_ptr<StageSaveData>> m_mapStageSaveData;
+	std::map<int, std::unique_ptr<StageSaveData>> m_mapStageSaveData;
 	std::map<Stage, std::unique_ptr< MapData>> m_mapMapData;
 	StageSaveData* m_curStageData;
 	MapData* m_curMapData;

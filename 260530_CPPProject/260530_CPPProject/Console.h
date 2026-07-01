@@ -22,7 +22,11 @@ void SetDefaultMode();
 
 // 다이얼 로그
 void RenderDialogue(const string& text, int delayTime);
+void RenderDialogue(const wstring& text, int delayTime);
 void RenderChar(char ch, int delayTime, bool isSkip);
+wstring WFormatTime(float sec);
+string FormatTime(float sec);
+
 
 // 창
 void SetConsoleGameTitle(const wstring& title);

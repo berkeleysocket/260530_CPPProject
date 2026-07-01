@@ -7,7 +7,8 @@ enum class Scene
 	TITLE,
 	STAGE,
 	INGAME,
-	RESTART
+	RESTART,
+	END
 };
 
 enum class Stage
