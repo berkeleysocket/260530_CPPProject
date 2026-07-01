@@ -3,6 +3,7 @@
 #include"StageScene.h"
 #include"StageManager.h"
 #include"SoundManager.h"
+#include"EndScene.h"
 #include"Game.h"
 
 void Initt();
@@ -16,7 +17,7 @@ int main()
 	GameState state;
 	Initt();
 	ULONGLONG prevTick = 0;
-	state.curScene = Scene::TITLE;
+	state.curScene = Scene::END;
 
 	while (state.isRunning)
 	{
@@ -42,6 +43,31 @@ void Initt()
 
 void SoundInit()
 {
+	MapData mapData
+	{
+		1,
+		"Tutorial 1",
+	{
+	"000000000000000",//0
+	"0.............0",//1
+	"0......S......0",//2
+	"0.............0",//3
+	"0.............0",//4
+	"0.............0",//5
+	"0.............0",//6
+	"0.............0",//7
+	"0.............0",//8
+	"0.............0",//9
+	"0............ 0",//10
+	"0.............0",//11
+	"0......E......0",//12
+	"0.............0",//13
+	"000000000000000" //14
+	}
+	};
+	StageManager::GetInst()->RegisterStage(Stage::TUTORIAL_1, std::make_unique<MapData>(mapData));
+	StageManager::GetInst()->ChangeStage(Stage::TUTORIAL_1);
+
 	SoundManager::GetInst()->Init();
 	SoundManager::GetInst()->Load("Laser", "Resources/Sounds/Laser.mp3");
 	SoundManager::GetInst()->Load("PlayerMovement", "Resources/Sounds/PlayerMovement.mp3");
@@ -72,9 +98,6 @@ void Updatee(GameState& state)
 	switch (state.curScene)
 	{
 	case Scene::INGAME:
-		if (sceneChanged)
-			//InitInGame(state);
-		Update(state);
 			break;
 	case Scene::STAGE:
 		if (sceneChanged)
@@ -85,6 +108,11 @@ void Updatee(GameState& state)
 		if (sceneChanged)
 			InitTitle();
 		UpdateTitle(state);
+		break;
+	case Scene::END:
+		if(sceneChanged)
+			InitEnd(state);
+		UpdateEnd(state);
 		break;
 	}
  }
@@ -109,5 +137,6 @@ void Renderr( GameState& state)
 	case Scene::TITLE:
 		RenderTitle(state);
 		break;
+
 	}
 }

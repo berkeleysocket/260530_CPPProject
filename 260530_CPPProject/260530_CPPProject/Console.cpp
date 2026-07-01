@@ -17,7 +17,7 @@ void RenderChar(char ch, int delayTime, bool isSkip)
 	{
 		if (!isSkip)
 			Sleep(200);
-		cout << "\b \b";
+		wcout << L"\b \b";
 		if (!isSkip)
 			Sleep(100);
 	}
@@ -60,6 +60,65 @@ void RenderDialogue(const string& text, int delayTime)
 		}
 		RenderChar(text[i], delayTime, isSkip);
 	}
+}
+
+void RenderDialogue(const wstring& text, int delayTime)
+{
+	bool isSkip = false;
+	for (int i = 0; i < text.size(); ++i)
+	{
+		// 스킵기능 추가
+		if (!isSkip && _kbhit())
+		{
+			(void)_getch();
+			isSkip = true;
+		}
+		RenderChar(text[i], delayTime, isSkip);
+	}
+}
+
+wstring WFormatTime(float sec)
+{
+	int totalSec = (int)sec;
+
+	int minute = totalSec / 60;
+	int second = totalSec % 60;
+
+	wstring result;
+
+	if (minute < 10)
+		result += L"0";
+	result += std::to_wstring(minute);
+
+	result += L":";
+
+	if (second < 10)
+		result += L"0";
+	result += std::to_wstring(second);
+
+	return result;
+}
+
+string FormatTime(float sec)
+{
+	int totalSec = (int)sec;
+
+	int minute = totalSec / 60;
+	int second = totalSec % 60;
+
+	string result;
+
+	if (minute < 10)
+		result += "0";
+	result += std::to_string(minute);
+
+	result += ":";
+
+	if (second < 10)
+		result += "0";
+	result += std::to_string(second);
+
+	return result;
 }
 
 void SetConsoleGameTitle(const wstring& title)

@@ -111,12 +111,23 @@ L"╚═════════════════════════
 	}
 	else
 	{
-		GotoXY(frameX + 12, frameY + 7);
+		GotoXY(frameX + 12, frameY + 6);
 
 		if (stageData.m_isCleared)
+		{
 			wcout << L"Clear : O";
+
+			GotoXY(frameX + 12, frameY + 8);
+			wcout << L"Best Time : " << WFormatTime(stageData.m_bestTime);
+
+
+			GotoXY(frameX + 12, frameY + 10);
+			wcout << L"DeadCount : " << WFormatTime(stageData.m_deadCnt);
+		}
 		else
 			wcout << L"Clear : X";
+
+
 
 		GotoXY(frameX + 10, frameY + 10);
 		wcout << L"[SPACE] to play";
