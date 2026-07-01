@@ -54,8 +54,11 @@
 	void KillBrick::Interaction(GameState& state, Actor& actor)
 	{
 		Player* player = dynamic_cast<Player*>(&actor);
+		Clone* clone = dynamic_cast<Clone*>(&actor);
 		if (player != nullptr)
 			HandlePlayerDead(state);
+		else if (clone != nullptr)
+			HandleCloneDead(state);
 	}
 	#pragma endregion
 
@@ -242,12 +245,15 @@
 	void LaserBeam::Interaction(GameState& state, Actor& actor)
 	{
 		Player* player = dynamic_cast<Player*>(&actor);
+		Clone* clone = dynamic_cast<Clone*>(&actor);
 		if (player != nullptr)
 		{
 			state.uiColor1 = Color::RED;
 			state.uiMessage1 = "플레이어가 죽었습니다.";
 			HandlePlayerDead(state);
 		}
+		else if (clone != nullptr)
+			HandleCloneDead(state);
 	}
 	#pragma endregion
 
@@ -423,13 +429,14 @@
 
 	bool SwitchableBrick::IsPassable(Actor& actor)
 	{
+		Player* player = dynamic_cast<Player*>(&actor);
 		Clone* clone = dynamic_cast<Clone*>(&actor);
 		
-		if (clone != nullptr && m_affiliation == BlockAffiliation::CLONE)
-			return true;
-		else if (m_isLaserPassing)
+		if (player != nullptr && m_affiliation == BlockAffiliation::CLONE
+			|| m_isLaserPassing)
 			return false;
-		return !m_isActive;
+		else
+			return !m_isActive;
 	}
 
 	void SwitchableBrick::Interaction(GameState& state, Actor& actor) { }
