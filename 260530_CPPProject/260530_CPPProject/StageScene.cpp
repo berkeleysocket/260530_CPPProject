@@ -24,7 +24,7 @@ void UpdateStage(GameState& state)
 	{
 		SetDefaultMode();
 
-		state.curStage = (Stage)std::min((int)Stage::STAGE_5, (int)state.curStage + 1);
+		state.curStage = (Stage)std::min((int)Stage::ENDSTAGE, (int)state.curStage + 1);
 		StageManager::GetInst()->ChangeStage(state.curStage);
 		SoundManager::GetInst()->Play("Selecte");
 	}
