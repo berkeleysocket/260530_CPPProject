@@ -88,7 +88,7 @@ void StageManager::RegisterStage(Stage stage, std::unique_ptr<MapData> mapData)
 void StageManager::Clear(Stage curStage)
 {
 	m_curStageData->m_isCleared = true;
-	Stage nextStage = (Stage)std::min((int)curStage + 1, (int)Stage::ENDSTAGE);
+	Stage nextStage = (Stage)std::min((int)curStage + 1, (int)Stage::STAGE_5);
 
 	auto iter_map = m_mapMapData.find(nextStage);
 	auto iter_stage = m_mapStageSaveData.find((*iter_map->second.get()).m_id);

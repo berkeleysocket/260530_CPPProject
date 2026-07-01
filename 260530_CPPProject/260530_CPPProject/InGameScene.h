@@ -33,7 +33,5 @@ bool TryDrawClone(GameState& state, int x, int y);
 //player & clone actions
 bool TryPlayerMove(GameState& state, Dir dir);
 bool TryCloneMove(GameState& state, Dir dir);
-void HandlePlayerBlockInteraction(GameState& state, Block* block);
-void HandleCloneBlockInteraction(GameState& state, Block* block);
 void HandlePlayerDead(GameState& state);
 void HandleCloneDead(GameState& state);

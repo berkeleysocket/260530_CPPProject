@@ -20,6 +20,8 @@
 	{
 		return true;
 	}
+
+	void EmptyBlock::Interaction(GameState& state, Actor& actor) { }
 	#pragma endregion
 
 	#pragma region Brick
@@ -35,6 +37,8 @@
 		return false;
 	}
 
+	void Brick::Interaction(GameState& state, Actor& actor) { }
+
 	KillBrick::KillBrick(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "▣";
@@ -45,6 +49,16 @@
 	bool KillBrick::IsPassable(Actor& actor)
 	{
 		return false;
+	}
+
+	void KillBrick::Interaction(GameState& state, Actor& actor)
+	{
+		Player* player = dynamic_cast<Player*>(&actor);
+		Clone* clone = dynamic_cast<Clone*>(&actor);
+		if (player != nullptr)
+			HandlePlayerDead(state);
+		else if (clone != nullptr)
+			HandleCloneDead(state);
 	}
 	#pragma endregion
 
@@ -172,7 +186,7 @@
 		}
 	}
 
-	void LaserCore::Interaction(GameState& state)
+	void LaserCore::OnButtonPressed(GameState& state)
 	{
 		if (m_autoRotation)
 			ChangeDirection(state);
@@ -184,6 +198,8 @@
 	{
 		return false;
 	}
+
+	void LaserCore::Interaction(GameState& state, Actor& actor) { }
 	#pragma endregion
 
 	#pragma region LaserBeam
@@ -225,6 +241,20 @@
 	{
 		return false;
 	}
+
+	void LaserBeam::Interaction(GameState& state, Actor& actor)
+	{
+		Player* player = dynamic_cast<Player*>(&actor);
+		Clone* clone = dynamic_cast<Clone*>(&actor);
+		if (player != nullptr)
+		{
+			state.actionUIColor = Color::RED;
+			state.actionUIMessage = "플레이어가 죽었습니다.";
+			HandlePlayerDead(state);
+		}
+		else if (clone != nullptr)
+			HandleCloneDead(state);
+	}
 	#pragma endregion
 
 	#pragma region Button
@@ -253,7 +283,7 @@
 
 				if (buttonInteractable != nullptr 
 					&& m_affiliation == blockPtr->GetAffiliation())
-					buttonInteractable->Interaction(state);
+					buttonInteractable->OnButtonPressed(state);
 			}
 		}
 	}
@@ -261,6 +291,12 @@
 	bool Button::IsPassable(Actor& actor)
 	{
 		return false;
+	}
+
+	void Button::Interaction(GameState& state, Actor& actor)
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		Press(state);
 	}
 	#pragma endregion
 
@@ -305,6 +341,12 @@
 	{
 		return false;
 	}
+
+	void Portal::Interaction(GameState& state, Actor& actor)
+	{
+		ShakeConsoleWindow(15, 40, 25);
+		Warp(state, actor);
+	}
 	#pragma endregion
 
 	#pragma region SwitchableBrick
@@ -330,6 +372,7 @@
 		}
 		}
 		m_isActive = isActive;
+		m_isLaserPassing = false;
 		m_type = BlockType::SWITCHABLEBRICK;
 	}
 
@@ -379,7 +422,7 @@
 		}
 	}
 
-	void SwitchableBrick::Interaction(GameState& state)
+	void SwitchableBrick::OnButtonPressed(GameState& state)
 	{
 		Toggle(state);
 	}
@@ -387,41 +430,99 @@
 	bool SwitchableBrick::IsPassable(Actor& actor)
 	{
 		Player* player = dynamic_cast<Player*>(&actor);
+		Clone* clone = dynamic_cast<Clone*>(&actor);
 		
-		if (player != nullptr && m_affiliation == BlockAffiliation::CLONE)
+		if (player != nullptr && m_affiliation == BlockAffiliation::CLONE
+			|| m_isLaserPassing)
 			return false;
-		else if (m_isLaserPassing)
-			return false;
-		return !m_isActive;
+		else
+			return !m_isActive;
 	}
+
+	void SwitchableBrick::Interaction(GameState& state, Actor& actor) { }
 	#pragma endregion
 
 	#pragma region EndBlock
-	PlayerEndBlock::PlayerEndBlock(BlockAffiliation affiliation) : Block(affiliation)
+	EndBlock::EndBlock(BlockAffiliation affiliation) : Block(affiliation)
 	{
 		m_image = "◈";
-		m_color = Color::YELLOW;
-		m_type = BlockType::END_PLAYER;
+
+		switch (affiliation)
+		{
+		case BlockAffiliation::PLAYER:
+		{
+			m_color = Color::YELLOW;
+			m_type = BlockType::END_PLAYER;
+			break;
+		}
+		case BlockAffiliation::CLONE:
+		{
+			m_color = Color::LIGHT_GREEN;
+			m_type = BlockType::END_CLONE;
+			break;
+		}
+		}
 	}
 
-	bool PlayerEndBlock::IsPassable(Actor& actor)
+	bool EndBlock::IsPassable(Actor& actor)
 	{
 		return false;
 	}
 
-	CloneEndBlock::CloneEndBlock(BlockAffiliation affiliation) : Block(affiliation)
+	void EndBlock::Interaction(GameState& state, Actor& actor)
 	{
-		m_image = "◈";
-		m_color = Color::LIGHT_GREEN;
-		m_type = BlockType::END_PLAYER;
-	}
-
-	bool CloneEndBlock::IsPassable(Actor& actor)
-	{
+		Player* player = dynamic_cast<Player*>(&actor);
 		Clone* clone = dynamic_cast<Clone*>(&actor);
-		return clone == nullptr;
+		if (m_type == BlockType::END_PLAYER && player != nullptr)
+		{
+			ShakeConsoleWindow(15, 40, 25);
+			ClearStage(state);
+		}
+		else if (m_type == BlockType::END_CLONE && clone != nullptr)
+		{
+			ShakeConsoleWindow(15, 40, 25);
+			ClearStage(state);
+		}
 	}
 	#pragma endregion
+
+	#pragma region PassableButton
+	PressableButton::PressableButton(BlockAffiliation affiliation) : Block(affiliation)
+	{
+		m_image = "◎";
+		if (affiliation == BlockAffiliation::RED)
+			m_color = Color::RED;
+		else if (affiliation == BlockAffiliation::BLUE)
+			m_color = Color::BLUE;
+		else if (affiliation == BlockAffiliation::CLONE)
+			m_color = Color::LIGHT_GREEN;
+		m_type = BlockType::BUTTON;
+	}
+	
+	bool PressableButton::IsPassable(Actor& actor)
+	{
+		return true;
+	}
+
+	void PressableButton::Interaction(GameState& state, Actor& actor)
+	{
+		SoundManager::GetInst()->Play("ButtonClick");
+		Block* blockPtr = nullptr;
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				blockPtr = state.map[y][x];
+				IButtonInteractable* buttonInteractable = dynamic_cast<IButtonInteractable*>(blockPtr);
+
+				if (buttonInteractable != nullptr
+					&& m_affiliation == blockPtr->GetAffiliation())
+					buttonInteractable->OnButtonPressed(state);
+			}
+		}
+	}
+	#pragma endregion
+
 
 	Block* GenerateBlock(GenerateBlockType type)
 	{
@@ -446,7 +547,12 @@
 		}
 		case GenerateBlockType::END_PLAYER:
 		{
-			block = new PlayerEndBlock(BlockAffiliation::NONE);
+			block = new EndBlock(BlockAffiliation::PLAYER);
+			break;
+		}
+		case GenerateBlockType::END_CLONE:
+		{
+			block = new EndBlock(BlockAffiliation::CLONE);
 			break;
 		}
 		case GenerateBlockType::LASERCORE_UP_AUTO:
@@ -587,6 +693,21 @@
 		case GenerateBlockType::BRICK_KILL:
 		{
 			block = new KillBrick(BlockAffiliation::NONE);
+			break;
+		}
+		case GenerateBlockType::BUTTON_RED_PASSABLE:
+		{
+			block = new PressableButton(BlockAffiliation::RED);
+			break;
+		}
+		case GenerateBlockType::BUTTON_BLUE_PASSABLE:
+		{
+			block = new PressableButton(BlockAffiliation::BLUE);
+			break;
+		}
+		case GenerateBlockType::BUTTON_CLONE_PASSABLE:
+		{
+			block = new PressableButton(BlockAffiliation::CLONE);
 			break;
 		}
 		default:

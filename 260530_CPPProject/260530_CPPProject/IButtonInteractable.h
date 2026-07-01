@@ -6,5 +6,5 @@ class IButtonInteractable
 public:
 	virtual ~IButtonInteractable() = default;
 public:
-	virtual void Interaction(GameState& state) = 0;
+	virtual void OnButtonPressed(GameState& state) = 0;
 };

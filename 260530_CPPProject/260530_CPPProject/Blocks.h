@@ -9,6 +9,7 @@
 #include "Color.h"
 #include "SoundManager.h"
 #include "IButtonInteractable.h"
+#include "InGameScene.h"
 
 using std::string;
 using std::queue;
@@ -46,9 +47,9 @@ enum class GenerateBlockType
 	BUTTON_RED = 'B',				 //빨간색 버튼 - 레이저, 빨간색 벽이랑 상호작용함.
 	BUTTON_BLUE = 'b',				 //파란색 버튼 - 파란색 벽이랑 상호작용함.
 	BUTTON_CLONE = 'N',				 //클론 버튼 - 클론 관련 기믹과 상호작용함.
-	//BUTTON_RED_PASSABLE = 'e',	 //지나갈 수 있는 빨간색 버튼
-	//BUTTON_BLUE_PASSABLE = 'g',	 //지나갈 수 있는 파란색 버튼
-	//BUTTON_CLONE_PASSABLE = 'n',	 //지나갈 수 있는 클론 버튼
+	BUTTON_RED_PASSABLE = 'e',	 //지나갈 수 있는 빨간색 버튼
+	BUTTON_BLUE_PASSABLE = 'g',	 //지나갈 수 있는 파란색 버튼
+	BUTTON_CLONE_PASSABLE = 'n',	 //지나갈 수 있는 클론 버튼
 
 	SWITCHABLEBRICK_RED_ON = 'W',	 //빨간색 벽이 켜져있는 버전.
 	SWITCHABLEBRICK_RED_OFF = 'w',	 //빨간색 벽이 꺼져있는 버전.
@@ -77,6 +78,7 @@ enum class BlockType
 	LASERCORE = 'L',
 	PORTAL = 'P',
 	BUTTON = 'B',
+	BUTTON_PRESSABLE = 'p',
 	SWITCHABLEBRICK = 'W',
 	BRICK_KILL = 'K', 
 	LASERBEAM = 'V',
@@ -112,6 +114,7 @@ public:
 	const Position GetPosition() const { return m_position; }
 public:
 	virtual bool IsPassable(Actor& actor) = 0;
+	virtual void Interaction(GameState& state, Actor& actor) = 0;
 };
 
 class EmptyBlock : public Block
@@ -120,6 +123,7 @@ public:
 	EmptyBlock(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 
 #pragma region Brick
@@ -129,6 +133,7 @@ public:
 	Brick(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 
 class KillBrick : public Block
@@ -137,6 +142,7 @@ public:
 	KillBrick(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 
@@ -157,8 +163,9 @@ public:
 	void ChangeDirection(GameState& state);
 	void Toggle(GameState& state);
 	void Clear(GameState& state);
-	void Interaction(GameState& state) override;
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
+	void OnButtonPressed(GameState& state) override;
 };
 
 class LaserBeam : public Block
@@ -167,6 +174,7 @@ public:
 	LaserBeam(BlockAffiliation affiliation, Dir beamDirection);
 public:
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 
@@ -179,6 +187,7 @@ public:
 public:
 	void Press(GameState& state);
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 
@@ -190,6 +199,7 @@ public:
 public:
 	void Warp(GameState& state, Actor& actor);
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 
@@ -209,28 +219,35 @@ private:
 public:
 	void OnBeamMode();
 	void OffBeamMode();
-	void Interaction(GameState& state) override;
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
+	void OnButtonPressed(GameState& state) override;
 };
 #pragma endregion
 
 #pragma region EndBlock
-class PlayerEndBlock : public Block
+class EndBlock : public Block
 {
 public:
-	PlayerEndBlock(BlockAffiliation affiliation);
+	EndBlock(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
-};
-
-class CloneEndBlock : public Block
-{
-public:
-	CloneEndBlock(BlockAffiliation affiliation);
-public:
-	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
+
+#pragma region PassableButton
+class PressableButton : public Block
+{
+public:
+	PressableButton(BlockAffiliation affiliation);
+public:
+	void Press(GameState& state);
+	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
+};
+#pragma endregion
+
 
 
 

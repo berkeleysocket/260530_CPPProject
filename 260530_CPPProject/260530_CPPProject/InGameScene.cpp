@@ -2,11 +2,69 @@
 
 void InitInStage(GameState& state)
 {
-	SetConsoleSize(MAP_W * 4, MAP_H * 1.5);
+	SetConsoleSize(MAP_W * 3.5, MAP_H * 1.5);
+
 	SoundManager::GetInst()->PlayBGM("Resources/Sounds/InGameBGM.wav");
 	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
 	state.clone.Init();
 	state.moveDataRecord.ReSet();
+
+	state.descriptionUITitleColor = Color::LIGHT_YELLOW;
+	state.descriptionUIMessageColor = Color::SKYBLUE;
+
+	if (state.curStage == Stage::TUTORIAL_1)
+	{
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
+		state.descriptionUITitle = "<튜토리얼 1>                                                     ";
+		state.descriptionUIMessage1 = "W,A,S,D로 플레이어를 움직일 수 있다.                           ";
+		state.descriptionUIMessage2 = "목적지(◈)에 도달해서 스테이지를 클리어할 수 있다.               ";
+		state.descriptionUIMessage3 = "                                                             ";
+		state.descriptionUIMessage4 = "                                                             ";
+	}
+	else if (state.curStage == Stage::TUTORIAL_2)
+	{
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
+		state.descriptionUITitle = "<튜토리얼 2>                                                     ";
+		state.descriptionUIMessage1 = "충돌해서 기믹들과 상호작용할 수 있다.                           ";
+		state.descriptionUIMessage2 = "색깔 버튼(⊙)은 똑같은 색의 모든 오브젝트들에 신호를 줍니다.      ";
+		state.descriptionUIMessage3 = "스위치 블럭(■,□)은 꺼진 상태에서만 지나갈 수 있다.               ";
+		state.descriptionUIMessage4 = "                                                             ";
+	}
+	else if (state.curStage == Stage::TUTORIAL_3)
+	{
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
+		state.descriptionUITitle = "<튜토리얼 3>                                                     ";
+		state.descriptionUIMessage1 = "레이저 코어는 레이저를 발사한다.                                ";
+		state.descriptionUIMessage2 = "레이저 코어는 돌아갈 수 있고 켜졌다가 꺼질 수 있다.              ";
+		state.descriptionUIMessage3 = "                                                             ";
+		state.descriptionUIMessage4 = "                                                             ";
+	}
+	else if (state.curStage == Stage::TUTORIAL_4)
+	{
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
+		state.descriptionUITitle = "<튜토리얼 4>                                                   ";
+		state.descriptionUIMessage1 = "레이저(↑)와 킬 블록(▣)은 플레이어가 충돌하면 죽게된다.         ";
+		state.descriptionUIMessage2 = "플레이어가 죽으면 클론이 생성되어 플레이어를 따라한다.          ";
+		state.descriptionUIMessage4 = "클론 블럭(■)은 꺼져있는 상태에서 클론만 지나갈 수 있다.         ";
+	}
+	else if (state.curStage == Stage::TUTORIAL_5)
+	{
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
+		state.descriptionUITitle = "<튜토리얼 5>                                                    ";
+		state.descriptionUIMessage1 = "포탈은 맵에 존재하는 같은 색깔의 다른 포탈로 이동시킨다.         ";
+		state.descriptionUIMessage2 = "패널은(◎) 버튼 기능을 하지만, 지나갈 수 있다.                  ";
+		state.descriptionUIMessage3 = "                                                             ";
+		state.descriptionUIMessage4 = "                                                             ";
+	}
+	else if (state.curStage == Stage::TUTORIAL_6)
+	{
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
+		state.descriptionUITitle = "<튜토리얼 6>                                                    ";
+		state.descriptionUIMessage1 = "가끔은.. 플레이어가 아니라 클론이 종착점에 도달해야 할 때도 있다.";
+		state.descriptionUIMessage2 = "                                                             ";
+		state.descriptionUIMessage3 = "                                                             ";
+		state.descriptionUIMessage4 = "                                                             ";
+	}
 }
 
 void UpdateInGame(GameState& state)
@@ -170,66 +228,91 @@ void DrawBlock(GameState& state, int x, int y)
 void DrawUI(GameState& state)
 {
 	GotoXY(0, 15);
-	if (state.uiMessage1.empty())
+	if (state.actionUIMessage.empty())
 		SetColor();
 	else
-		SetColor(state.uiColor1);
-	cout << state.uiMessage1 << "               ";
+	{
+		SetColor(state.actionUIColor);
+		SetDefaultMode();
+		cout << state.actionUIMessage;
+		SetColor();
+		cout << "         ";
+	}
 
-	GotoXY(0, 16);
-	SetColor(Color::RED);
-	cout << "@";
-	SetColor(Color::WHITE);
-	cout << " : 빨간 포탈";
-	SetColor(Color::BLUE);
-	cout << " @";
-	SetColor(Color::WHITE);
-	cout << " : 파란 포탈";
+	SetDefaultMode();
+	SetColor(state.descriptionUITitleColor);
+	GotoXY(32, 5);
+	cout << state.descriptionUITitle;
+	SetColor(state.descriptionUIMessageColor);
+	GotoXY(32, 6);
+	cout << state.descriptionUIMessage1;
+	GotoXY(32, 7);
+	cout << state.descriptionUIMessage2;
+	GotoXY(32, 8);
+	cout << state.descriptionUIMessage3;
+	GotoXY(32, 9);
+	cout << state.descriptionUIMessage4;
+	GotoXY(32, 10);
+	cout << state.descriptionUIMessage5;
+	SetColor();
+	
 
-	GotoXY(0, 17);
-	SetColor(Color::RED);
-	cout << "⊙";
-	SetColor(Color::WHITE);
-	cout << " : 빨간 버튼";
-	SetColor(Color::BLUE);
-	cout << " ⊙";
-	SetColor(Color::WHITE);
-	cout << " : 파란 버튼";
+	//GotoXY(0, 16);
+	//SetColor(Color::RED);
+	//cout << "@";
+	//SetColor(Color::WHITE);
+	//cout << " : 빨간 포탈";
+	//SetColor(Color::BLUE);
+	//cout << " @";
+	//SetColor(Color::WHITE);
+	//cout << " : 파란 포탈";
 
-	GotoXY(0, 18);
-	SetColor(Color::RED);
-	cout << "※";
-	SetColor(Color::WHITE);
-	cout << " : 레이저 코어";
-	SetColor(Color::RED);
-	cout << " ↑";
-	SetColor(Color::WHITE);
-	cout << " : 레이저";
+	//GotoXY(0, 17);
+	//SetColor(Color::RED);
+	//cout << "⊙";
+	//SetColor(Color::WHITE);
+	//cout << " : 빨간 버튼";
+	//SetColor(Color::BLUE);
+	//cout << " ⊙";
+	//SetColor(Color::WHITE);
+	//cout << " : 파란 버튼";
 
-	GotoXY(0, 19);
-	SetColor(Color::LIGHT_GREEN);
-	cout << "⊙";
-	SetColor(Color::WHITE);
-	cout << " : 클론 버튼";
-	SetColor(Color::LIGHT_GREEN);
-	cout << " ■";
-	SetColor(Color::WHITE);
-	cout << " : 클론 스위치 벽";
+	//GotoXY(0, 18);
+	//SetColor(Color::RED);
+	//cout << "※";
+	//SetColor(Color::WHITE);
+	//cout << " : 레이저 코어";
+	//SetColor(Color::RED);
+	//cout << " ↑";
+	//SetColor(Color::WHITE);
+	//cout << " : 레이저";
 
-	GotoXY(0, 20);
-	SetColor(Color::LIGHT_RED);
-	cout << "■";
-	SetColor(Color::WHITE);
-	cout << " : 빨간 스위치 벽";
-	SetColor(Color::BLUE);
-	cout << " ■";
-	SetColor(Color::WHITE);
-	cout << " : 파란 스위치 벽";
+	//GotoXY(0, 19);
+	//SetColor(Color::LIGHT_GREEN);
+	//cout << "⊙";
+	//SetColor(Color::WHITE);
+	//cout << " : 클론 버튼";
+	//SetColor(Color::LIGHT_GREEN);
+	//cout << " ■";
+	//SetColor(Color::WHITE);
+	//cout << " : 클론 스위치 벽";
+
+	//GotoXY(0, 20);
+	//SetColor(Color::LIGHT_RED);
+	//cout << "■";
+	//SetColor(Color::WHITE);
+	//cout << " : 빨간 스위치 벽";
+	//SetColor(Color::BLUE);
+	//cout << " ■";
+	//SetColor(Color::WHITE);
+	//cout << " : 파란 스위치 벽";
 
 	GotoXY(32, 0);
 	cout << "[ESC] Select Stage";
 	GotoXY(32, 1);
 	cout << "[R] Restart";
+
+
 
 }
 
@@ -270,13 +353,8 @@ bool TryPlayerMove(GameState& state, Dir dir)
 		return false;
 
 	Block* nextBlock = state.map[nextPos.y][nextPos.x];
-	if (!(nextBlock->IsPassable(state.player)))
-	{
-		HandlePlayerBlockInteraction(state, nextBlock);
-		return false;
-	}
-
-	return true;
+	nextBlock->Interaction(state, state.player);
+	return (nextBlock->IsPassable(state.player));
 }
 
 bool TryCloneMove(GameState& state, Dir dir)
@@ -289,129 +367,8 @@ bool TryCloneMove(GameState& state, Dir dir)
 		return false;
 
 	Block* nextBlock = state.map[nextPos.y][nextPos.x];
-	if (!(nextBlock->IsPassable(state.clone)))
-	{
-		HandleCloneBlockInteraction(state, nextBlock);
-		return false;
-	}
-
-	return true;
-}
-
-void HandlePlayerBlockInteraction(GameState& state, Block* block)
-{
-	BlockType blockType = block->GetType();
-	Position blockPosition = block->GetPosition();
-
-	switch (blockType)
-	{
-	case BlockType::LASERBEAM:
-	{
-		state.uiColor1 = Color::RED;
-		state.uiMessage1 = "플레이어가 죽었습니다.";
-
-		HandlePlayerDead(state);
-		break;
-	}
-	case BlockType::SWITCHABLEBRICK:
-	{
-		if (((SwitchableBrick*)block)->GetIsLaserPassing())
-		{
-			state.uiColor1 = Color::RED;
-			state.uiMessage1 = "플레이어가 죽었습니다.";
-
-			HandlePlayerDead(state);
-		}
-		break;
-	}
-	case BlockType::PORTAL:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		((Portal*)block)->Warp(state, state.player);
-
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "플레이어가 파란 포탈에 들어갔습니다.";
-		break;
-	}
-	case BlockType::BUTTON:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		((Button*)block)->Press(state);
-
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "플레이어가 빨간 버튼을 눌렀습니다.";
-		break;
-	}
-	case BlockType::END_PLAYER:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		ClearStage(state);
-
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "스테이지 클리어!";
-		break;
-	}
-	case BlockType::BRICK_KILL:
-	{
-		HandlePlayerDead(state);
-	}
-	}
-}
-
-void HandleCloneBlockInteraction(GameState& state, Block* block)
-{
-	BlockType blockType = block->GetType();
-	Position blockPos = block->GetPosition();
-
-	switch (blockType)
-	{
-	case BlockType::END_CLONE:
-	{
-		ClearStage(state);
-		break;
-	}
-	case BlockType::LASERBEAM:
-	{
-		HandleCloneDead(state);
-		break;
-	}
-	case BlockType::SWITCHABLEBRICK:
-	{
-		if (((SwitchableBrick*)block)->GetIsLaserPassing())
-			HandleCloneDead(state);
-		break;
-	}
-	case BlockType::PORTAL:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		Portal* portal = (Portal*)block;
-		portal->Warp(state, state.clone);
-		break;
-	}
-	case BlockType::BUTTON:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		Button* button = (Button*)block;
-		button->Press(state);
-		break;
-	}
-	case BlockType::END_PLAYER:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		ClearStage(state);
-		break;
-	}
-	case BlockType::BRICK_KILL:
-	{
-		HandleCloneDead(state);
-	}
-	}
+	nextBlock->Interaction(state, state.clone);
+	return (nextBlock->IsPassable(state.clone));
 }
 
 void HandlePlayerDead(GameState& state)
