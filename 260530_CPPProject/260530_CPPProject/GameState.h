@@ -39,6 +39,8 @@ struct GameState
 	string			descriptionUIMessage5;
 	Color			descriptionUITitleColor;
 	Color			descriptionUIMessageColor;
+	int				deadCount = 0;
+	ULONGLONG		startTime;
 };
     
 bool IsEdge(int x, int y);

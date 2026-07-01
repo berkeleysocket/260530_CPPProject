@@ -6,6 +6,7 @@
 #include"InGameScene.h"
 #include"StageManager.h"
 #include"SoundManager.h"
+#include"EndScene.h"
 
 void Init();
 void LoadMaps();
