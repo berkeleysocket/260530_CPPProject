@@ -12,6 +12,7 @@ void InitInStage(GameState& state)
 	state.clone.Init();
 	state.moveDataRecord.ReSet();
 
+	state.actionUIMessage = " ";
 	state.descriptionUITitleColor = Color::LIGHT_YELLOW;
 	state.descriptionUIMessageColor = Color::SKYBLUE;
 	state.descriptionUITitle = " ";
@@ -266,7 +267,6 @@ void DrawUI(GameState& state)
 	cout << state.descriptionUIMessage5;
 	SetColor();
 	
-
 	//GotoXY(0, 16);
 	//SetColor(Color::RED);
 	//cout << "@";
