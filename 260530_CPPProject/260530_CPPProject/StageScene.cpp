@@ -24,7 +24,7 @@ void UpdateStage(GameState& state)
 	{
 		SetDefaultMode();
 
-		state.curStage = (Stage)std::min((int)Stage::STAGE_5, (int)state.curStage + 1);
+		state.curStage = (Stage)std::min((int)Stage::ENDSTAGE, (int)state.curStage + 1);
 		StageManager::GetInst()->ChangeStage(state.curStage);
 		SoundManager::GetInst()->Play("Selecte");
 	}
@@ -150,7 +150,7 @@ L"╚═════════════════════════
 		wcout << L" ";
 	}
 
-	if (state.curStage != Stage::STAGE_5)
+	if (state.curStage != Stage::ENDSTAGE)
 	{
 		GotoXY(res.X-1, res.Y / 2);
 		wcout << rightBtn;

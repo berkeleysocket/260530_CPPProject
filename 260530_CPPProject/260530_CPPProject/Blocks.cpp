@@ -439,7 +439,18 @@
 			return !m_isActive;
 	}
 
-	void SwitchableBrick::Interaction(GameState& state, Actor& actor) { }
+	void SwitchableBrick::Interaction(GameState& state, Actor& actor)
+	{
+		if (m_isLaserPassing)
+		{
+			Player* player = dynamic_cast<Player*>(&actor);
+			Clone* clone = dynamic_cast<Clone*>(&actor);
+			if (player != nullptr)
+				HandlePlayerDead(state);
+			else if (clone != nullptr)
+				HandleCloneDead(state);
+		}
+	}
 	#pragma endregion
 
 	#pragma region EndBlock

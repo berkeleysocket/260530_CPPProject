@@ -2,7 +2,7 @@
 
 void InitInStage(GameState& state)
 {
-	SetConsoleSize(MAP_W * 3.5, MAP_H * 1.5);
+	SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
 
 	SoundManager::GetInst()->PlayBGM("Resources/Sounds/InGameBGM.wav");
 	GenerateMap(state, StageManager::GetInst()->GetCurMapData().m_map);
@@ -11,6 +11,11 @@ void InitInStage(GameState& state)
 
 	state.descriptionUITitleColor = Color::LIGHT_YELLOW;
 	state.descriptionUIMessageColor = Color::SKYBLUE;
+	state.descriptionUITitle = " ";
+	state.descriptionUIMessage1 = " ";
+	state.descriptionUIMessage2 = " ";
+	state.descriptionUIMessage3 = " ";
+	state.descriptionUIMessage4 = " ";
 
 	if (state.curStage == Stage::TUTORIAL_1)
 	{
