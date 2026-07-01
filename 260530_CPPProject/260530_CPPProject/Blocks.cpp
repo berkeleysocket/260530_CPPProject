@@ -486,6 +486,44 @@
 	}
 	#pragma endregion
 
+	#pragma region PassableButton
+	PressableButton::PressableButton(BlockAffiliation affiliation) : Block(affiliation)
+	{
+		m_image = "¡Ý";
+		if (affiliation == BlockAffiliation::RED)
+			m_color = Color::RED;
+		else if (affiliation == BlockAffiliation::BLUE)
+			m_color = Color::BLUE;
+		else if (affiliation == BlockAffiliation::CLONE)
+			m_color = Color::LIGHT_GREEN;
+		m_type = BlockType::BUTTON;
+	}
+	
+	bool PressableButton::IsPassable(Actor& actor)
+	{
+		return true;
+	}
+
+	void PressableButton::Interaction(GameState& state, Actor& actor)
+	{
+		SoundManager::GetInst()->Play("ButtonClick");
+		Block* blockPtr = nullptr;
+		for (int y = 0; y < MAP_H; ++y)
+		{
+			for (int x = 0; x < MAP_W; ++x)
+			{
+				blockPtr = state.map[y][x];
+				IButtonInteractable* buttonInteractable = dynamic_cast<IButtonInteractable*>(blockPtr);
+
+				if (buttonInteractable != nullptr
+					&& m_affiliation == blockPtr->GetAffiliation())
+					buttonInteractable->OnButtonPressed(state);
+			}
+		}
+	}
+	#pragma endregion
+
+
 	Block* GenerateBlock(GenerateBlockType type)
 	{
 		Block* block = nullptr;
@@ -655,6 +693,21 @@
 		case GenerateBlockType::BRICK_KILL:
 		{
 			block = new KillBrick(BlockAffiliation::NONE);
+			break;
+		}
+		case GenerateBlockType::BUTTON_RED_PASSABLE:
+		{
+			block = new PressableButton(BlockAffiliation::RED);
+			break;
+		}
+		case GenerateBlockType::BUTTON_BLUE_PASSABLE:
+		{
+			block = new PressableButton(BlockAffiliation::BLUE);
+			break;
+		}
+		case GenerateBlockType::BUTTON_CLONE_PASSABLE:
+		{
+			block = new PressableButton(BlockAffiliation::CLONE);
 			break;
 		}
 		default:

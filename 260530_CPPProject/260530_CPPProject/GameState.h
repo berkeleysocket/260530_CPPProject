@@ -31,11 +31,14 @@ struct GameState
 	ULONGLONG		curTime;
     string			actionUIMessage;
     Color			actionUIColor;
+	string			descriptionUITitle;
 	string			descriptionUIMessage1;
 	string			descriptionUIMessage2;
 	string			descriptionUIMessage3;
 	string			descriptionUIMessage4;
-	Color			descriptionUIColor;
+	string			descriptionUIMessage5;
+	Color			descriptionUITitleColor;
+	Color			descriptionUIMessageColor;
 };
     
 bool IsEdge(int x, int y);

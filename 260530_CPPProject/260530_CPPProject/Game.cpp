@@ -2,11 +2,10 @@
 
 void Init()
 {
-	SetConsoleSize(WIDTH, HEIGHT);
 	SetConsoleWindowStyle(true);
 	SetConsoleMouseInputDisabled();
 	SetCursorVisible(false);
-	SetConsoleSize(MAP_W * 3, MAP_H * 1.5);
+	//SetConsoleSize(MAP_W * 7, MAP_H * 2.5);
 
 	SoundManager::GetInst()->Init();
 	SoundManager::GetInst()->Init();
@@ -146,29 +145,6 @@ void LoadMaps()
 	}
 	};
 	StageManager::GetInst()->RegisterStage(Stage::TUTORIAL_5, std::make_unique<MapData>(mapData));
-
-	mapData =
-	{
-		"Tutorial 6",
-	{
-	"000000000000000",//0
-	"000000000000000",//1
-	"000000000000000",//2
-	"000000000000000",//3
-	"000000000000000",//4
-	"0ooooooooooooo0",//5
-	"0.............0",//6
-	"0.S.........G.0",//7
-	"0.............0",//8
-	"0ooooooooooooo0",//9
-	"000000000000000",//10
-	"000000000000000",//11
-	"000000000000000",//12
-	"000000000000000",//13
-	"000000000000000" //14
-	}
-	};
-	StageManager::GetInst()->RegisterStage(Stage::TUTORIAL_6, std::make_unique<MapData>(mapData));
 	
 	mapData =
 	{
@@ -299,7 +275,53 @@ void LoadMaps()
 	"000000000000000" //14S
 	}
 	};
-	StageManager::GetInst()->RegisterStage(Stage::ENDSTAGE, std::make_unique<MapData>(mapData));
+	StageManager::GetInst()->RegisterStage(Stage::STAGE_5, std::make_unique<MapData>(mapData));
+
+	mapData =
+	{
+		"Tutorial 6",
+	{
+	"000000000000000",//0
+	"000000000000000",//1
+	"000000000000000",//2
+	"000000000000000",//3
+	"000000000000000",//4
+	"0ooooooooooooo0",//5
+	"0.......gQ....0",//6
+	"0.S.....gQ..G.0",//7
+	"0.......gQ....0",//8
+	"0ooooooooooooo0",//9
+	"000000000000000",//10
+	"000000000000000",//11
+	"000000000000000",//12
+	"000000000000000",//13
+	"000000000000000" //14
+	}
+	};
+	StageManager::GetInst()->RegisterStage(Stage::TUTORIAL_6, std::make_unique<MapData>(mapData));
+
+	mapData =
+	{
+		"End Stage",
+	{
+	"000000000000000",//0
+	"0.............0",//1
+	"0.............0",//2
+	"0.............0",//3
+	"0.............0",//4
+	"0.............0",//5
+	"0.............0",//6
+	"0.............0",//7
+	"0.............0",//8
+	"0.............0",//9
+	"0.............0",//10
+	"0.............0",//11
+	"0.............0",//12
+	"0.............0",//13
+	"000000000000000" //14S
+	}
+	};
+	StageManager::GetInst()->RegisterStage(Stage::STAGE_5, std::make_unique<MapData>(mapData));
 
 	StageManager::GetInst()->ChangeStage(Stage::TUTORIAL_1);
 	StageSaveData& sd = StageManager::GetInst()->GetCurStageSaveData();
