@@ -313,6 +313,17 @@ void HandlePlayerBlockInteraction(GameState& state, Block* block)
 		HandlePlayerDead(state);
 		break;
 	}
+	case BlockType::SWITCHABLEBRICK:
+	{
+		if (((SwitchableBrick*)block)->GetIsLaserPassing())
+		{
+			state.uiColor1 = Color::RED;
+			state.uiMessage1 = "플레이어가 죽었습니다.";
+
+			HandlePlayerDead(state);
+		}
+		break;
+	}
 	case BlockType::PORTAL:
 	{
 		ShakeConsoleWindow(15, 40, 25);
@@ -365,6 +376,12 @@ void HandleCloneBlockInteraction(GameState& state, Block* block)
 	case BlockType::LASERBEAM:
 	{
 		HandleCloneDead(state);
+		break;
+	}
+	case BlockType::SWITCHABLEBRICK:
+	{
+		if (((SwitchableBrick*)block)->GetIsLaserPassing())
+			HandleCloneDead(state);
 		break;
 	}
 	case BlockType::PORTAL:

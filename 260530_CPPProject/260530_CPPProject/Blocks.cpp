@@ -89,6 +89,8 @@
 					return;
 				else
 				{
+					swBrick->OnBeamMode();
+					m_beamPosQueue.push({ createLaserPos.x, createLaserPos.y });
 					createLaserPos += dir;
 					continue;
 				}
@@ -147,7 +149,11 @@
 		while (!m_beamPosQueue.empty())
 		{
 			pos = m_beamPosQueue.front();
-			state.map[pos.y][pos.x] = GenerateBlock(GenerateBlockType::EMPTY);
+			blockPtr = state.map[pos.y][pos.x];
+			if (blockPtr->GetType() == BlockType::SWITCHABLEBRICK)
+				((SwitchableBrick*)blockPtr)->OffBeamMode();
+			else
+				state.map[pos.y][pos.x] = GenerateBlock(GenerateBlockType::EMPTY);
 			m_beamPosQueue.pop();
 		}
 	}
@@ -327,18 +333,16 @@
 		m_type = BlockType::SWITCHABLEBRICK;
 	}
 
-	void SwitchableBrick::OnLaserBrickMode(GameState& state)
+	void SwitchableBrick::OnBeamMode()
 	{
-		if (!m_isActive)
-		{
-			m_image = "в╠";
-			//state.map[m_position.y][m_position.y] = BlockType::Sw
-		}
+		m_image = "в╠";
+		m_isLaserPassing = true;
 	}
 
-	void SwitchableBrick::OffLaserBrickMode(GameState& state)
+	void SwitchableBrick::OffBeamMode()
 	{
 		m_image = m_isActive ? "бс" : "бр";
+		m_isLaserPassing = false;
 	}
 
 	void SwitchableBrick::Toggle(GameState& state)
@@ -384,10 +388,10 @@
 	{
 		Player* player = dynamic_cast<Player*>(&actor);
 		
-		if (player != nullptr 
-			&& m_affiliation == BlockAffiliation::CLONE)
+		if (player != nullptr && m_affiliation == BlockAffiliation::CLONE)
 			return false;
-
+		else if (m_isLaserPassing)
+			return false;
 		return !m_isActive;
 	}
 	#pragma endregion

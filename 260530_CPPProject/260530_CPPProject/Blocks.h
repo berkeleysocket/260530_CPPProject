@@ -64,9 +64,6 @@ enum class GenerateBlockType
 	LASERBEAM_DOWN = 'k',
 	LASERBEAM_RIGHT = 'V',
 	LASERBEAM_LEFT = 'v',
-	SWITCHABLEBRICK_RED_OFF_BEAM = 'A',
-	SWITCHABLEBRICK_BLUE_OFF_BEAM = 'a',
-	SWITCHABLEBRICK_CLONE_OFF_BEAM = 'F',
 };
 
 enum class BlockType
@@ -203,13 +200,15 @@ public:
 	SwitchableBrick(BlockAffiliation affiliation, bool isActive);
 private:
 	bool m_isActive;
+	bool m_isLaserPassing;
 public:
 	bool GetIsActive() { return m_isActive; }
+	bool GetIsLaserPassing() { return m_isLaserPassing; }
 private:
 	void Toggle(GameState& state);
 public:
-	void OnLaserBrickMode(GameState& state);
-	void OffLaserBrickMode(GameState& state);
+	void OnBeamMode();
+	void OffBeamMode();
 	void Interaction(GameState& state) override;
 	bool IsPassable(Actor& actor) override;
 };
