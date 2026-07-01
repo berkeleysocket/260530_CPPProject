@@ -14,7 +14,7 @@ void InitInStage(GameState& state)
 
 	if (state.curStage == Stage::TUTORIAL_1)
 	{
-		SetConsoleSize(MAP_W * 6, MAP_H * 1.5);
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
 		state.descriptionUITitle = "<튜토리얼 1>                                                     ";
 		state.descriptionUIMessage1 = "W,A,S,D로 플레이어를 움직일 수 있다.                           ";
 		state.descriptionUIMessage2 = "목적지(◈)에 도달해서 스테이지를 클리어할 수 있다.               ";
@@ -23,7 +23,7 @@ void InitInStage(GameState& state)
 	}
 	else if (state.curStage == Stage::TUTORIAL_2)
 	{
-		SetConsoleSize(MAP_W * 6, MAP_H * 1.5);
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
 		state.descriptionUITitle = "<튜토리얼 2>                                                     ";
 		state.descriptionUIMessage1 = "충돌해서 기믹들과 상호작용할 수 있다.                           ";
 		state.descriptionUIMessage2 = "색깔 버튼(⊙)은 똑같은 색의 모든 오브젝트들에 신호를 줍니다.      ";
@@ -32,7 +32,7 @@ void InitInStage(GameState& state)
 	}
 	else if (state.curStage == Stage::TUTORIAL_3)
 	{
-		SetConsoleSize(MAP_W * 6, MAP_H * 1.5);
+		SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
 		state.descriptionUITitle = "<튜토리얼 3>                                                     ";
 		state.descriptionUIMessage1 = "레이저 코어는 레이저를 발사한다.                                ";
 		state.descriptionUIMessage2 = "레이저 코어는 돌아갈 수 있고 켜졌다가 꺼질 수 있다.              ";
