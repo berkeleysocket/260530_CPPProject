@@ -9,6 +9,7 @@
 #include "Color.h"
 #include "SoundManager.h"
 #include "IButtonInteractable.h"
+#include "InGameScene.h"
 
 using std::string;
 using std::queue;
@@ -112,6 +113,7 @@ public:
 	const Position GetPosition() const { return m_position; }
 public:
 	virtual bool IsPassable(Actor& actor) = 0;
+	virtual void Interaction(GameState& state, Actor& actor) = 0;
 };
 
 class EmptyBlock : public Block
@@ -120,6 +122,7 @@ public:
 	EmptyBlock(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 
 #pragma region Brick
@@ -129,6 +132,7 @@ public:
 	Brick(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 
 class KillBrick : public Block
@@ -137,6 +141,7 @@ public:
 	KillBrick(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 
@@ -157,8 +162,9 @@ public:
 	void ChangeDirection(GameState& state);
 	void Toggle(GameState& state);
 	void Clear(GameState& state);
-	void Interaction(GameState& state) override;
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
+	void OnButtonPressed(GameState& state) override;
 };
 
 class LaserBeam : public Block
@@ -167,6 +173,7 @@ public:
 	LaserBeam(BlockAffiliation affiliation, Dir beamDirection);
 public:
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 
@@ -179,6 +186,7 @@ public:
 public:
 	void Press(GameState& state);
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 
@@ -190,6 +198,7 @@ public:
 public:
 	void Warp(GameState& state, Actor& actor);
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 
@@ -209,26 +218,20 @@ private:
 public:
 	void OnBeamMode();
 	void OffBeamMode();
-	void Interaction(GameState& state) override;
 	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
+	void OnButtonPressed(GameState& state) override;
 };
 #pragma endregion
 
 #pragma region EndBlock
-class PlayerEndBlock : public Block
+class EndBlock : public Block
 {
 public:
-	PlayerEndBlock(BlockAffiliation affiliation);
+	EndBlock(BlockAffiliation affiliation);
 public:
 	bool IsPassable(Actor& actor) override;
-};
-
-class CloneEndBlock : public Block
-{
-public:
-	CloneEndBlock(BlockAffiliation affiliation);
-public:
-	bool IsPassable(Actor& actor) override;
+	void Interaction(GameState& state, Actor& actor) override;
 };
 #pragma endregion
 

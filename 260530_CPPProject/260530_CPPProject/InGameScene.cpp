@@ -270,13 +270,8 @@ bool TryPlayerMove(GameState& state, Dir dir)
 		return false;
 
 	Block* nextBlock = state.map[nextPos.y][nextPos.x];
-	if (!(nextBlock->IsPassable(state.player)))
-	{
-		HandlePlayerBlockInteraction(state, nextBlock);
-		return false;
-	}
-
-	return true;
+	nextBlock->Interaction(state, state.player);
+	return (nextBlock->IsPassable(state.player));
 }
 
 bool TryCloneMove(GameState& state, Dir dir)
@@ -289,129 +284,8 @@ bool TryCloneMove(GameState& state, Dir dir)
 		return false;
 
 	Block* nextBlock = state.map[nextPos.y][nextPos.x];
-	if (!(nextBlock->IsPassable(state.clone)))
-	{
-		HandleCloneBlockInteraction(state, nextBlock);
-		return false;
-	}
-
-	return true;
-}
-
-void HandlePlayerBlockInteraction(GameState& state, Block* block)
-{
-	BlockType blockType = block->GetType();
-	Position blockPosition = block->GetPosition();
-
-	switch (blockType)
-	{
-	case BlockType::LASERBEAM:
-	{
-		state.uiColor1 = Color::RED;
-		state.uiMessage1 = "플레이어가 죽었습니다.";
-
-		HandlePlayerDead(state);
-		break;
-	}
-	case BlockType::SWITCHABLEBRICK:
-	{
-		if (((SwitchableBrick*)block)->GetIsLaserPassing())
-		{
-			state.uiColor1 = Color::RED;
-			state.uiMessage1 = "플레이어가 죽었습니다.";
-
-			HandlePlayerDead(state);
-		}
-		break;
-	}
-	case BlockType::PORTAL:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		((Portal*)block)->Warp(state, state.player);
-
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "플레이어가 파란 포탈에 들어갔습니다.";
-		break;
-	}
-	case BlockType::BUTTON:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		((Button*)block)->Press(state);
-
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "플레이어가 빨간 버튼을 눌렀습니다.";
-		break;
-	}
-	case BlockType::END_PLAYER:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		ClearStage(state);
-
-		state.uiColor1 = Color::YELLOW;
-		state.uiMessage1 = "스테이지 클리어!";
-		break;
-	}
-	case BlockType::BRICK_KILL:
-	{
-		HandlePlayerDead(state);
-	}
-	}
-}
-
-void HandleCloneBlockInteraction(GameState& state, Block* block)
-{
-	BlockType blockType = block->GetType();
-	Position blockPos = block->GetPosition();
-
-	switch (blockType)
-	{
-	case BlockType::END_CLONE:
-	{
-		ClearStage(state);
-		break;
-	}
-	case BlockType::LASERBEAM:
-	{
-		HandleCloneDead(state);
-		break;
-	}
-	case BlockType::SWITCHABLEBRICK:
-	{
-		if (((SwitchableBrick*)block)->GetIsLaserPassing())
-			HandleCloneDead(state);
-		break;
-	}
-	case BlockType::PORTAL:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		Portal* portal = (Portal*)block;
-		portal->Warp(state, state.clone);
-		break;
-	}
-	case BlockType::BUTTON:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		Button* button = (Button*)block;
-		button->Press(state);
-		break;
-	}
-	case BlockType::END_PLAYER:
-	{
-		ShakeConsoleWindow(15, 40, 25);
-
-		ClearStage(state);
-		break;
-	}
-	case BlockType::BRICK_KILL:
-	{
-		HandleCloneDead(state);
-	}
-	}
+	nextBlock->Interaction(state, state.clone);
+	return (nextBlock->IsPassable(state.clone));
 }
 
 void HandlePlayerDead(GameState& state)
