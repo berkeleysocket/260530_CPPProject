@@ -346,6 +346,7 @@ void Update(GameState& state)
 		if (sceneChanged)
 			InitTitle();
 		UpdateTitle(state);
+		break;
 	case Scene::END:
 		if(sceneChanged)
 			InitEnd(state);
