@@ -12,14 +12,14 @@ void InitInStage(GameState& state)
 	state.clone.Init();
 	state.moveDataRecord.ReSet();
 
-	state.actionUIMessage = " ";
+	state.actionUIMessage = "";
 	state.descriptionUITitleColor = Color::LIGHT_YELLOW;
 	state.descriptionUIMessageColor = Color::SKYBLUE;
-	state.descriptionUITitle = " ";
-	state.descriptionUIMessage1 = " ";
-	state.descriptionUIMessage2 = " ";
-	state.descriptionUIMessage3 = " ";
-	state.descriptionUIMessage4 = " ";
+	state.descriptionUITitle = "";
+	state.descriptionUIMessage1 = "";
+	state.descriptionUIMessage2 = "";
+	state.descriptionUIMessage3 = "";
+	state.descriptionUIMessage4 = "";
 
 	if (state.curStage == Stage::TUTORIAL_1)
 	{
