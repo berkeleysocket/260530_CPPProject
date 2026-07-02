@@ -131,6 +131,7 @@ void RenderInGame(GameState& state)
 void ClearStage(GameState& state)
 {
 	//Stage 클리어 처리
+
 	SoundManager::GetInst()->Play("StageClear");
 
 	ULONGLONG playTime = state.curTime - state.startTime;
@@ -139,6 +140,9 @@ void ClearStage(GameState& state)
 	StageManager::GetInst()->Clear(state.curStage, playTime, state.deadCount);
 	state.curScene = Scene::STAGE;
 	state.prevStage = Stage::NONE;
+
+	if (state.curStage == Stage::ENDSTAGE)
+		state.curScene = Scene::END;
 }
 
 void GenerateMap(GameState& state, const string gameMap[MAP_H])

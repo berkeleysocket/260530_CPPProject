@@ -293,9 +293,9 @@ void LoadMaps()
 	{
 	"000000000000000",//0
 	"0o.........Q..0",//1
-	"0o.b....S..Q..0",//2
+	"0o.b....S..Q.B0",//2
 	"0o.........Q..0",//3
-	"0r............0",//4
+	"0R............0",//4
 	"0.............0",//5
 	"0.............0",//6
 	"0.............0",//7
@@ -346,6 +346,7 @@ void Update(GameState& state)
 		if (sceneChanged)
 			InitTitle();
 		UpdateTitle(state);
+		break;
 	case Scene::END:
 		if(sceneChanged)
 			InitEnd(state);
