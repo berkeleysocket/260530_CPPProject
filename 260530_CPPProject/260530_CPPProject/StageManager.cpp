@@ -94,7 +94,10 @@ void StageManager::Clear(Stage curStage, ULONGLONG playTime, int deadCount)
 	auto iter_stage = m_mapStageSaveData.find((*iter_map->second.get()).m_id);
 	(*iter_stage->second.get()).m_isLock = false;
 	(*iter_stage->second.get()).m_deadCnt = deadCount;
-	(*iter_stage->second.get()).m_bestTime = (*iter_stage->second.get()).m_bestTime>playTime? playTime: (*iter_stage->second.get()).m_bestTime;
+	if((*iter_stage->second.get()).m_bestTime == -1)
+		(*iter_stage->second.get()).m_bestTime = playTime;
+	else
+		(*iter_stage->second.get()).m_bestTime = (*iter_stage->second.get()).m_bestTime>playTime? playTime: (*iter_stage->second.get()).m_bestTime;
 
 	SaveStage();
 }
@@ -113,7 +116,7 @@ const FinalData& StageManager::GetFinalData(float totalPlayTime)
 			finalData.maxDeadCount = stageData->m_deadCnt;
 			finalData.maxDeadStage = stageData->m_stageNum;
 		}
-		if (finalData.minPlayTime > stageData->m_bestTime)
+		if (finalData.minPlayTime > stageData->m_bestTime&& stageData->m_bestTime != -1)
 		{
 			finalData.minPlayTime = stageData->m_bestTime;
 			finalData.minTimeStage = stageData->m_stageNum;

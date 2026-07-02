@@ -111,18 +111,21 @@ L"╚═════════════════════════
 	}
 	else
 	{
-		GotoXY(frameX + 12, frameY + 4);
+		GotoXY(frameX + 12, frameY + 6);
 
 		if (stageData.m_isCleared)
 		{
 			wcout << L"Clear : O";
 
-			GotoXY(frameX + 12, frameY + 6);
-			wcout << L"Best Time : " << WFormatTime(stageData.m_bestTime);
+			//GotoXY(frameX + 12, frameY + 6);
+			//if(stageData.m_bestTime < 0)
+			//	wcout << L"Best Time : X";
+			//else
+			//	wcout << L"Best Time : " << WFormatTime(stageData.m_bestTime);
 
 
-			GotoXY(frameX + 12, frameY + 8);
-			wcout << L"DeadCount : " << WFormatTime(stageData.m_deadCnt);
+			//GotoXY(frameX + 12, frameY + 8);
+			//wcout << L"DeadCount : " << stageData.m_deadCnt;
 		}
 		else
 			wcout << L"Clear : X";
@@ -135,12 +138,12 @@ L"╚═════════════════════════
 
 	if ((int)state.curStage > 9)
 	{
-		GotoXY(frameX+13, frameY+1);
+		GotoXY(frameX+13, frameY+3);
 		wcout << L"Stage " << (int)state.curStage;
 	}
 	else
 	{
-		GotoXY(frameX + 14, frameY + 1);
+		GotoXY(frameX + 14, frameY + 3);
 		wcout << L"Stage " << (int)state.curStage;
 	}
 

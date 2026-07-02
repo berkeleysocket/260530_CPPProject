@@ -2,7 +2,7 @@
 
 void InitInStage(GameState& state)
 {
-	state.startTime = state.curTime;
+	state.startTime = GetTickCount64();
 	state.deadCount = 0;
 
 	SetConsoleSize(MAP_W * 6.5, MAP_H * 1.5);
@@ -134,15 +134,12 @@ void ClearStage(GameState& state)
 
 	SoundManager::GetInst()->Play("StageClear");
 
-	ULONGLONG playTime = state.curTime - state.startTime;
+	ULONGLONG playTime = GetTickCount64() - state.startTime;
 
 	Sleep(500);
 	StageManager::GetInst()->Clear(state.curStage, playTime, state.deadCount);
 	state.curScene = Scene::STAGE;
 	state.prevStage = Stage::NONE;
-
-	if (state.curStage == Stage::ENDSTAGE)
-		state.curScene = Scene::END;
 }
 
 void GenerateMap(GameState& state, const string gameMap[MAP_H])
